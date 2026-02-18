@@ -39,12 +39,12 @@ professional presentation.
 ---
 
 ## 📁 Repository Structure
-
+```
 /
 ├── index.html      # Main documentation page
 ├── style.css       # Site styling
 └── README.md       # Project overview
-
+```
 Code
 
 Additional pages or sections can be added as needed.
