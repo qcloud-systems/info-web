@@ -8,6 +8,23 @@
   <link rel="stylesheet" href="style.css">
 
   <title>QCloud Systems Docs</title>
+
+  <style>
+    /* Optional quick styling for map + user info */
+    #map {
+      height: 400px;
+      width: 100%;
+      border-radius: 8px;
+      margin-top: 10px;
+    }
+    #map-search {
+      width: 100%;
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      margin-bottom: 10px;
+    }
+  </style>
 </head>
 
 <body>
@@ -20,6 +37,18 @@
       <a href="#architecture">Architecture</a>
       <a href="#api">API</a>
       <a href="#contact">Contact</a>
+
+      <hr>
+      <h3>Other works</h3>
+      <a href="https://reneavila.com" target="_blank">Rene Avila</a>
+      <a href="https://wayofljilla.com" target="_blank">Way Of LJilla</a>
+      <a href="https://earthrhythms.net" target="_blank">Earth Rhythms net</a>
+      <a href="https://earthrhythms.online" target="_blank">Earth Rhythms Online</a>
+      <a href="https://earthrhythms.ai" target="_blank">Earth Rhythms AI</a>
+
+      <hr>
+      <a href="#location">Location Finder</a>
+      <a href="#user-info">Your Info</a>
     </nav>
   </aside>
 
@@ -30,7 +59,7 @@
       <p>
         Welcome to the QCloud Systems documentation hub.  
         This site provides technical notes, architecture references,  
-        and project documentation in a clean, readable format.
+        and project documentation.
       </p>
     </section>
 
@@ -61,6 +90,68 @@
       <p>
         Add your preferred contact information or links to GitHub/LinkedIn.
       </p>
+    </section>
+
+    <!-- 🌍 GOOGLE MAPS LOCATION FINDER -->
+    <section id="location">
+      <h1>Location Finder</h1>
+      <input id="map-search" type="text" placeholder="Search for a place...">
+      <div id="map"></div>
+
+      <script>
+        function initMap() {
+          const map = new google.maps.Map(document.getElementById("map"), {
+            center: { lat: 41.8781, lng: -87.6298 }, // Chicago default
+            zoom: 10,
+          });
+
+          const input = document.getElementById("map-search");
+          const searchBox = new google.maps.places.SearchBox(input);
+
+          map.addListener("bounds_changed", () => {
+            searchBox.setBounds(map.getBounds());
+          });
+
+          searchBox.addListener("places_changed", () => {
+            const places = searchBox.getPlaces();
+            if (!places.length) return;
+
+            const place = places[0];
+            if (!place.geometry) return;
+
+            map.setCenter(place.geometry.location);
+            map.setZoom(14);
+          });
+        }
+      </script>
+
+      <!-- Replace YOUR_API_KEY with your actual Google Maps API key -->
+      <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places&callback=initMap" async defer></script>
+    </section>
+
+    <!-- 🧭 USER IP + TIMESTAMP -->
+    <section id="user-info">
+      <h1>Your Info</h1>
+      <p><strong>Your IP Address:</strong> <span id="user-ip">Loading...</span></p>
+      <p><strong>Timestamp:</strong> <span id="user-time">Loading...</span></p>
+
+      <script>
+        // Fetch IP Address
+        fetch("https://api.ipify.org?format=json")
+          .then(response => response.json())
+          .then(data => {
+            document.getElementById("user-ip").textContent = data.ip;
+          });
+
+        // Live Timestamp
+        function updateTime() {
+          const now = new Date();
+          document.getElementById("user-time").textContent = now.toLocaleString();
+        }
+
+        updateTime();
+        setInterval(updateTime, 1000);
+      </script>
     </section>
 
   </main>
