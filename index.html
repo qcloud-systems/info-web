@@ -10,27 +10,116 @@
   <title>QCloud Systems Docs</title>
 
   <style>
-    /* Optional quick styling for map + user info */
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background: #f5f7fa;
+      color: #333;
+    }
+
+    /* Sidebar with multi-color gradient */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 260px;
+      height: 100%;
+      background: linear-gradient(180deg, #4f46e5, #6366f1, #3b82f6, #06b6d4);
+      color: white;
+      padding: 0;
+      overflow-y: auto;
+      box-shadow: 2px 0 10px rgba(0,0,0,0.25);
+    }
+
+    /* Profile Header */
+    .profile-header {
+      text-align: center;
+      padding: 30px 20px;
+      background: rgba(255,255,255,0.12);
+      border-bottom: 1px solid rgba(255,255,255,0.15);
+    }
+
+    .profile-header img {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      border: 3px solid rgba(255,255,255,0.4);
+      margin-bottom: 10px;
+    }
+
+    .profile-header p {
+      margin: 4px 0;
+      font-size: 14px;
+      color: #e0e7ff;
+    }
+
+    .sidebar nav {
+      padding: 20px;
+    }
+
+    .sidebar nav a {
+      display: block;
+      color: #eef2ff;
+      text-decoration: none;
+      padding: 10px 0;
+      font-size: 15px;
+      transition: 0.2s;
+    }
+
+    .sidebar nav a:hover {
+      color: #ffffff;
+      padding-left: 6px;
+    }
+
+    /* Main content */
+    .content {
+      margin-left: 280px;
+      padding: 40px;
+    }
+
+    section {
+      background: white;
+      padding: 25px;
+      margin-bottom: 25px;
+      border-radius: 12px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    }
+
+    section h1 {
+      margin-top: 0;
+      color: #4f46e5;
+    }
+
+    /* Map styling */
     #map {
       height: 400px;
       width: 100%;
-      border-radius: 8px;
+      border-radius: 10px;
       margin-top: 10px;
     }
+
     #map-search {
       width: 100%;
-      padding: 10px;
-      border-radius: 6px;
+      padding: 12px;
+      border-radius: 8px;
       border: 1px solid #ccc;
       margin-bottom: 10px;
+      font-size: 15px;
     }
   </style>
 </head>
 
 <body>
 
+  <!-- Sidebar with profile header -->
   <aside class="sidebar">
-    <h2 class="logo">QCloud Docs</h2>
+
+    <div class="profile-header">
+      <img src="https://via.placeholder.com/80" alt="Profile">
+      <p><strong>Your IP:</strong> <span id="side-ip">Loading...</span></p>
+      <p><strong>Time:</strong> <span id="side-time">Loading...</span></p>
+    </div>
+
     <nav>
       <a href="#intro">Introduction</a>
       <a href="#setup">Setup</a>
@@ -38,17 +127,18 @@
       <a href="#api">API</a>
       <a href="#contact">Contact</a>
 
-      <hr>
-      <h3>Other works</h3>
-      <a href="https://reneavila.com" target="_blank">Rene Avila</a>
-      <a href="https://wayofljilla.com" target="_blank">Way Of LJilla</a>
-      <a href="https://earthrhythms.net" target="_blank">Earth Rhythms net</a>
-      <a href="https://earthrhythms.online" target="_blank">Earth Rhythms Online</a>
-      <a href="https://earthrhythms.ai" target="_blank">Earth Rhythms AI</a>
+      <hr style="border-color: rgba(255,255,255,0.3);">
 
-      <hr>
+      <h3 style="color:white;">Other Sites</h3>
+      <a href="SITE_1_URL" target="_blank">Project Site 1</a>
+      <a href="SITE_2_URL" target="_blank">Project Site 2</a>
+      <a href="SITE_3_URL" target="_blank">Project Site 3</a>
+      <a href="SITE_4_URL" target="_blank">Project Site 4</a>
+      <a href="SITE_5_URL" target="_blank">Project Site 5</a>
+
+      <hr style="border-color: rgba(255,255,255,0.3);">
+
       <a href="#location">Location Finder</a>
-      <a href="#user-info">Your Info</a>
     </nav>
   </aside>
 
@@ -59,7 +149,7 @@
       <p>
         Welcome to the QCloud Systems documentation hub.  
         This site provides technical notes, architecture references,  
-        and project documentation.
+        and project documentation in a clean, readable format.
       </p>
     </section>
 
@@ -92,7 +182,7 @@
       </p>
     </section>
 
-    <!-- 🌍 GOOGLE MAPS LOCATION FINDER -->
+    <!-- Google Maps -->
     <section id="location">
       <h1>Location Finder</h1>
       <input id="map-search" type="text" placeholder="Search for a place...">
@@ -101,7 +191,7 @@
       <script>
         function initMap() {
           const map = new google.maps.Map(document.getElementById("map"), {
-            center: { lat: 41.8781, lng: -87.6298 }, // Chicago default
+            center: { lat: 41.8781, lng: -87.6298 },
             zoom: 10,
           });
 
@@ -125,36 +215,27 @@
         }
       </script>
 
-      <!-- Replace YOUR_API_KEY with your actual Google Maps API key -->
       <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places&callback=initMap" async defer></script>
     </section>
 
-    <!-- 🧭 USER IP + TIMESTAMP -->
-    <section id="user-info">
-      <h1>Your Info</h1>
-      <p><strong>Your IP Address:</strong> <span id="user-ip">Loading...</span></p>
-      <p><strong>Timestamp:</strong> <span id="user-time">Loading...</span></p>
-
-      <script>
-        // Fetch IP Address
-        fetch("https://api.ipify.org?format=json")
-          .then(response => response.json())
-          .then(data => {
-            document.getElementById("user-ip").textContent = data.ip;
-          });
-
-        // Live Timestamp
-        function updateTime() {
-          const now = new Date();
-          document.getElementById("user-time").textContent = now.toLocaleString();
-        }
-
-        updateTime();
-        setInterval(updateTime, 1000);
-      </script>
-    </section>
-
   </main>
+
+  <!-- Sidebar IP + Time Script -->
+  <script>
+    fetch("https://api.ipify.org?format=json")
+      .then(response => response.json())
+      .then(data => {
+        document.getElementById("side-ip").textContent = data.ip;
+      });
+
+    function updateSidebarTime() {
+      const now = new Date();
+      document.getElementById("side-time").textContent = now.toLocaleString();
+    }
+
+    updateSidebarTime();
+    setInterval(updateSidebarTime, 1000);
+  </script>
 
 </body>
 </html>
