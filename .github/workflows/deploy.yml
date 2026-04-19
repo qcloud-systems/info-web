@@ -16,13 +16,15 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
     
-    - name: Inject password into protected.html
+    - name: Inject passwords into protected documents
       env:
-        PASSWORD: ${{ secrets.PROTECTED_PASSWORD }}
+        INFOWEB_PASS_SA: ${{ secrets.PROTECTED_PASSWORD_SA }}
+        INFOWEB_PASS_NDA: ${{ secrets.PROTECTED_PASSWORD_NDA }}
       run: |
-        sed -i "s|{{ PROTECTED_PASSWORD }}|${PASSWORD}|g" protected.html
-        # Verify injection worked
-        grep -n "CORRECT_PASSWORD" protected.html
+        sed -i "s|{{ PROTECTED_PASSWORD_SA }}|${INFOWEB_PASS_SA}|g" protected.html
+        sed -i "s|{{ PROTECTED_PASSWORD_NDA }}|${INFOWEB_PASS_NDA}|g" protected.html
+        # Verify injections worked
+        grep -n "PASSWORDS" protected.html
     
     - name: Create publish directory with only site files
       run: |
@@ -31,6 +33,7 @@ jobs:
         cp style.css publish/
         cp protected.html publish/
         cp service-agreement.html publish/
+        cp nda-agreement.html publish/
         cp privacy-policy.html publish/
         cp favicon.ico publish/
         cp CNAME publish/
