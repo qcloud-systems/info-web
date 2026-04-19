@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <title>EarthRhythms - Beta Testing Agreement</title>
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #f0f2f5;
+      color: #2d3748;
+      line-height: 1.6;
+    }
+
+    .document-container {
+      max-width: 900px;
+      margin: 0 auto;
+      background: white;
+      padding: 60px 50px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+      min-height: 100vh;
+    }
+
+    .doc-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 30px;
+      border-bottom: 3px solid #2d7a4a;
+    }
+
+    .doc-header h1 {
+      font-size: 32px;
+      color: #1a2332;
+      margin-bottom: 10px;
+    }
+
+    .doc-header p {
+      color: #5a6b7a;
+      font-size: 14px;
+    }
+
+    h2 {
+      font-size: 18px;
+      color: #2d7a4a;
+      margin-top: 30px;
+      margin-bottom: 15px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    p {
+      margin-bottom: 15px;
+      text-align: justify;
+      color: #4a5568;
+    }
+
+    .section-number {
+      font-weight: 600;
+      color: #2d3e50;
+    }
+
+    ul {
+      margin-left: 24px;
+      margin-bottom: 15px;
+    }
+
+    li {
+      margin-bottom: 10px;
+      color: #4a5568;
+    }
+
+    .signature-section {
+      margin-top: 60px;
+      padding-top: 40px;
+      border-top: 1px solid #e2e8f0;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+    }
+
+    .signature-block {
+      text-align: center;
+    }
+
+    .signature-line {
+      border-top: 1px solid #2d3748;
+      margin-top: 60px;
+      margin-bottom: 5px;
+      width: 200px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .signature-label {
+      font-size: 12px;
+      color: #5a6b7a;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .highlight {
+      background-color: #fef3c7;
+      padding: 15px;
+      border-left: 4px solid #f59e0b;
+      margin: 20px 0;
+    }
+
+    @media (max-width: 768px) {
+      .document-container {
+        padding: 30px 20px;
+      }
+
+      .signature-section {
+        grid-template-columns: 1fr;
+      }
+
+      h1 {
+        font-size: 24px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="document-container">
+    <div class="doc-header">
+      <h1>Beta Testing Agreement</h1>
+      <p>Garmin Integration - EarthRhythms Mobile</p>
+      <p>Effective as of April 19, 2026</p>
+    </div>
+
+    <h2><span class="section-number">1.</span> Agreement Overview</h2>
+    <p>
+      This Beta Testing Agreement ("Agreement") is entered into between EarthRhythms ("Company"),
+      a subsidiary of Quintessential Cloud Systems (QCS), and you, the user ("Tester"),
+      for the purpose of testing the Garmin wearable integration feature within the EarthRhythms Mobile application
+      (the "Beta Feature"). By participating in this beta testing program, you agree to the terms and conditions outlined herein.
+    </p>
+
+    <h2><span class="section-number">2.</span> Beta Testing Scope</h2>
+    <p>The Beta Feature includes:</p>
+    <ul>
+      <li>OAuth-based connection to Garmin wearable devices</li>
+      <li>Real-time synchronization of sleep, heart rate, stress, and activity metrics</li>
+      <li>Integration of wearable data into the EarthRhythms circadian rhythm analysis</li>
+      <li>Display of personalized insights based on wearable-derived metrics</li>
+      <li>Automated daily data collection from Garmin Health API</li>
+    </ul>
+
+    <h2><span class="section-number">3.</span> Data Collection and Usage</h2>
+    <p>
+      As a beta tester, you acknowledge that the Company will collect and process the following data:
+    </p>
+    <ul>
+      <li><strong>Wearable Metrics:</strong> Sleep patterns, heart rate, HRV, stress levels, respiration, body battery, activity metrics, and steps</li>
+      <li><strong>OAuth Tokens:</strong> Temporary access and refresh tokens to retrieve data from Garmin Health API</li>
+      <li><strong>Usage Data:</strong> App interaction logs, feature usage patterns, and timing of data syncs</li>
+      <li><strong>Error Logs:</strong> Technical errors, API failures, and system performance metrics</li>
+      <li><strong>User Profile:</strong> Email, location preferences, and account metadata</li>
+    </ul>
+
+    <div class="highlight">
+      <strong>⚠️ Important:</strong> Your wearable data will be stored on secure servers and used solely for improving the Beta Feature.
+      The Company will never sell or share this data with third parties without your explicit consent.
+    </div>
+
+    <h2><span class="section-number">4.</span> Privacy and Data Security</h2>
+    <p>
+      The Company is committed to protecting your privacy. All wearable data will be:
+    </p>
+    <ul>
+      <li>Encrypted in transit (HTTPS) and at rest (AES-256)</li>
+      <li>Stored in secure databases with role-based access control</li>
+      <li>Subject to the EarthRhythms Privacy Policy (available at info.qcloud.systems/privacy-policy.html)</li>
+      <li>Retained only for the duration of the beta testing program plus 30 days after termination</li>
+      <li>Deleted upon your written request at any time</li>
+    </ul>
+
+    <h2><span class="section-number">5.</span> Tester Responsibilities</h2>
+    <p>As a beta tester, you agree to:</p>
+    <ul>
+      <li>Provide honest, constructive feedback on the Beta Feature</li>
+      <li>Report bugs, crashes, and unexpected behavior promptly via the feedback system</li>
+      <li>Test the feature regularly during the beta testing period</li>
+      <li>Maintain the confidentiality of any pre-release information shared with you</li>
+      <li>Not attempt to reverse-engineer, decompile, or modify the Beta Feature</li>
+      <li>Not share beta access credentials or early access with unauthorized parties</li>
+      <li>Comply with all applicable laws and regulations</li>
+    </ul>
+
+    <h2><span class="section-number">6.</span> Company Responsibilities</h2>
+    <p>
+      The Company agrees to:
+    </p>
+    <ul>
+      <li>Maintain reasonable efforts to secure your data against unauthorized access</li>
+      <li>Respond to critical security issues within 24 hours</li>
+      <li>Provide technical support for beta-related issues via email or in-app messaging</li>
+      <li>Implement your feedback where feasible and provide updates on enhancements</li>
+      <li>Transparently communicate known issues and limitations</li>
+    </ul>
+
+    <h2><span class="section-number">7.</span> Limitations and Disclaimers</h2>
+    <p>
+      <strong>The Beta Feature is provided "as-is" and "as available" without warranty.</strong>
+      You acknowledge that:
+    </p>
+    <ul>
+      <li>The Beta Feature may contain bugs, errors, and unfinished functionality</li>
+      <li>Data loss, incorrect calculations, or service interruptions may occur</li>
+      <li>The Beta Feature may be modified, suspended, or discontinued at any time without notice</li>
+      <li>The Company is not liable for any direct, indirect, incidental, or consequential damages arising from use of the Beta Feature</li>
+      <li>Wearable metrics provided are for informational purposes only and not medical advice</li>
+      <li>The Company does not guarantee accuracy, completeness, or real-time synchronization of wearable data</li>
+    </ul>
+
+    <h2><span class="section-number">8.</span> Feedback and Intellectual Property</h2>
+    <p>
+      Any feedback, suggestions, bug reports, or ideas you provide regarding the Beta Feature
+      may be used by the Company to improve the feature or other products. You grant the Company
+      a non-exclusive, royalty-free, perpetual license to use such feedback without obligation to you.
+    </p>
+
+    <h2><span class="section-number">9.</span> Confidentiality</h2>
+    <p>
+      You agree to keep the Beta Feature and any pre-release information confidential and not disclose it
+      to unauthorized third parties. This obligation survives termination of this Agreement for a period of
+      one (1) year. Exceptions include disclosures required by law or court order, with prior written notice to the Company.
+    </p>
+
+    <h2><span class="section-number">10.</span> Term and Termination</h2>
+    <p>
+      This Agreement begins on the date of acceptance and continues until the Beta Feature is officially
+      released or the beta testing program is terminated, whichever is earlier. The Company reserves the right
+      to terminate your beta access at any time for violations of this Agreement. Upon termination, your beta
+      access will be revoked and your wearable data will be retained or deleted per Section 4.
+    </p>
+
+    <h2><span class="section-number">11.</span> Dispute Resolution</h2>
+    <p>
+      Any disputes arising from this Agreement shall be governed by the laws of the jurisdiction
+      in which the Company operates. You agree to attempt resolution through good-faith negotiation
+      before pursuing legal action.
+    </p>
+
+    <h2><span class="section-number">12.</span> Entire Agreement</h2>
+    <p>
+      This Agreement constitutes the entire agreement between you and the Company regarding beta testing
+      of the Garmin integration feature. It supersedes all prior negotiations and understandings.
+      Modifications must be in writing and signed by an authorized representative of the Company.
+    </p>
+
+    <h2><span class="section-number">13.</span> Contact Information</h2>
+    <p>
+      For questions, concerns, or to report issues related to this beta testing agreement,
+      please contact: <strong>support@earthrhythms.io</strong>
+    </p>
+
+    <p style="margin-top: 40px; font-size: 13px; color: #5a6b7a;">
+      By clicking "Accept" in the EarthRhythms Mobile application, you acknowledge that you have read,
+      understood, and agree to be bound by this Beta Testing Agreement.
+    </p>
+
+    <div class="signature-section">
+      <div class="signature-block">
+        <div class="signature-line"></div>
+        <div class="signature-label">EarthRhythms (Company)</div>
+        <div style="margin-top: 20px; font-size: 12px; color: #5a6b7a;">Date: ______________</div>
+      </div>
+      <div class="signature-block">
+        <div class="signature-line"></div>
+        <div class="signature-label">Beta Tester (User)</div>
+        <div style="margin-top: 20px; font-size: 12px; color: #5a6b7a;">Date: ______________</div>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>
