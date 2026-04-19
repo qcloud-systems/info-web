@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <title>QCS - Contributing Guidelines</title>
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #f0f2f5;
+      color: #2d3748;
+      line-height: 1.6;
+    }
+
+    .document-container {
+      max-width: 900px;
+      margin: 0 auto;
+      background: white;
+      padding: 60px 50px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+      min-height: 100vh;
+    }
+
+    .doc-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 30px;
+      border-bottom: 3px solid #0066cc;
+    }
+
+    .doc-header h1 {
+      font-size: 32px;
+      color: #1a2332;
+      margin-bottom: 10px;
+    }
+
+    .doc-header p {
+      color: #5a6b7a;
+      font-size: 14px;
+    }
+
+    h2 {
+      color: #0066cc;
+      font-size: 20px;
+      margin-top: 35px;
+      margin-bottom: 15px;
+      padding-top: 10px;
+      border-left: 4px solid #0066cc;
+      padding-left: 15px;
+    }
+
+    h3 {
+      color: #2d3e50;
+      font-size: 16px;
+      margin-top: 20px;
+      margin-bottom: 12px;
+    }
+
+    p {
+      margin-bottom: 15px;
+      color: #2d3748;
+    }
+
+    ul, ol {
+      margin: 15px 0 15px 30px;
+      color: #2d3748;
+    }
+
+    li {
+      margin-bottom: 10px;
+      line-height: 1.7;
+    }
+
+    code {
+      background: #f0f2f5;
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+      font-size: 14px;
+      color: #c7254e;
+    }
+
+    a {
+      color: #0066cc;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    hr {
+      border: none;
+      border-top: 1px solid #e0e0e0;
+      margin: 30px 0;
+    }
+
+    .back-link {
+      display: inline-block;
+      margin-top: 40px;
+      padding-top: 30px;
+      border-top: 1px solid #e0e0e0;
+    }
+
+    .back-link a {
+      color: #0066cc;
+      font-weight: 500;
+    }
+
+    @media (max-width: 800px) {
+      .document-container {
+        padding: 40px 25px;
+      }
+
+      .doc-header h1 {
+        font-size: 24px;
+      }
+
+      h2 {
+        font-size: 18px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="document-container">
+    <div class="doc-header">
+      <h1>Contributing Guidelines</h1>
+      <p>QCS Documentation Hub</p>
+    </div>
+
+    <p>
+      Thank you for your interest in contributing to the QCloud Systems documentation site.
+      To maintain consistency and quality, please follow the guidelines below.
+    </p>
+
+    <hr>
+
+    <h2>Branching Strategy</h2>
+    <ul>
+      <li><code>main</code> — Production-ready documentation.</li>
+      <li><code>feature/&lt;name&gt;</code> — New documentation sections or layout enhancements.</li>
+      <li><code>fix/&lt;name&gt;</code> — Bug fixes, typos, or minor improvements.</li>
+    </ul>
+
+    <hr>
+
+    <h2>Commit Message Format</h2>
+    <p>Use clear, descriptive commit messages:</p>
+    <ul>
+      <li><code>docs: add new architecture diagram</code></li>
+      <li><code>style: improve sidebar spacing</code></li>
+      <li><code>fix: correct DNS instructions</code></li>
+      <li><code>feat: add dark mode toggle</code></li>
+    </ul>
+
+    <hr>
+
+    <h2>Documentation Standards</h2>
+    <ul>
+      <li>Keep content concise, technical, and accurate.</li>
+      <li>Use consistent heading levels (<code>h1</code>, <code>h2</code>, <code>h3</code>).</li>
+      <li>Prefer lists and code blocks for clarity.</li>
+      <li>Avoid unnecessary dependencies — keep the site static and lightweight.</li>
+    </ul>
+
+    <hr>
+
+    <h2>Pull Request Process</h2>
+    <ol>
+      <li>Fork the repository.</li>
+      <li>Create a feature or fix branch.</li>
+      <li>Commit changes with clear messages.</li>
+      <li>Submit a pull request describing:
+        <ul style="margin-top: 10px;">
+          <li>What changed</li>
+          <li>Why it changed</li>
+          <li>Any relevant context or screenshots</li>
+        </ul>
+      </li>
+    </ol>
+
+    <hr>
+
+    <h2>Code Style</h2>
+    <ul>
+      <li>Use semantic HTML.</li>
+      <li>Keep CSS modular and readable.</li>
+      <li>Avoid inline styles unless necessary.</li>
+      <li>Maintain accessibility (contrast, readable font sizes, ARIA labels when needed).</li>
+    </ul>
+
+    <hr>
+
+    <h2>Licensing</h2>
+    <p>
+      By contributing, you agree that your contributions will be licensed under the
+      MIT License of this repository.
+    </p>
+
+    <div class="back-link">
+      <a href="index.html">← Back to Hub</a>
+    </div>
+  </div>
+</body>
+
+</html>
