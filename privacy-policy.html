@@ -184,12 +184,17 @@
       <ul>
         <li><a href="#section1">1. Introduction</a></li>
         <li><a href="#section2">2. Information We Collect</a></li>
+        <li><a href="#section2a">2a. Data Minimization</a></li>
         <li><a href="#section3">3. Use of Information</a></li>
         <li><a href="#section4">4. Data Security</a></li>
         <li><a href="#section5">5. Garmin Health API Compliance</a></li>
         <li><a href="#section6">6. Data Sharing and Disclosure</a></li>
         <li><a href="#section7">7. Data Retention</a></li>
         <li><a href="#section8">8. Your Rights</a></li>
+        <li><a href="#section8a">8a. Breach Notification</a></li>
+        <li><a href="#section8b">8b. Audit & Compliance</a></li>
+        <li><a href="#section8c">8c. Subprocessors</a></li>
+        <li><a href="#section8d">8d. Corporate Structure & Related Entities</a></li>
         <li><a href="#section9">9. Third-Party Links</a></li>
         <li><a href="#section10">10. Children's Privacy</a></li>
         <li><a href="#section11">11. Changes to This Privacy Policy</a></li>
@@ -207,10 +212,17 @@
     <h2 id="section2">2. Information We Collect</h2>
     <p>We may collect information about you in the following ways:</p>
     <ul>
-      <li><strong>Wearable Device Data:</strong> When you authorize integration with Garmin-connected devices, we access health and fitness data including but not limited to: heart rate, sleep patterns, activity data, location, and other metrics provided through the Garmin Health API.</li>
+      <li><strong>Wearable Device Data:</strong> When you authorize integration with Garmin-connected devices via the Garmin Open Health API, we access specific health and fitness data including: heart rate, sleep duration and quality, daily steps, activity type and duration, calories burned, distance traveled, and optional location data. No additional data beyond what you explicitly authorize is collected.</li>
       <li><strong>User-Provided Information:</strong> Information you voluntarily provide, such as account credentials, profile information, and preferences.</li>
       <li><strong>Automatically Collected Information:</strong> Device information, IP address, browser type, and usage analytics.</li>
     </ul>
+
+    <h2 id="section2a">2a. Data Minimization</h2>
+    <p>
+      We collect only the minimum health data necessary to provide our Service. Our principle is data minimization—
+      we do not request or collect any health metrics beyond what is essential for the specific features you are using. 
+      Users maintain full control over which data categories are shared and can revoke access to specific data types at any time.
+    </p>
 
     <h2 id="section3">3. Use of Information</h2>
     <p>We use the information we collect for the following purposes:</p>
@@ -218,32 +230,36 @@
       <li>To provide, maintain, and improve our Service</li>
       <li>To process and authenticate Garmin Health API integrations</li>
       <li>To analyze health and fitness trends you authorize</li>
-      <li>To communicate with you about your account and service updates</li>
-      <li>To comply with legal obligations</li>
+      <li>To communicate with you about your account and service updates</li>AES-256 encryption for data in transit and at rest, 
+      secure API connections with OAuth 2.0 authentication, and restricted access controls with role-based permissions. 
+      All health data is treated as protected health information (PHI) under HIPAA guideline
       <li>To protect against fraudulent or malicious activity</li>
     </ul>
 
     <h2 id="section4">4. Data Security</h2>
     <p>
       We implement industry-standard security measures to protect your personal information, including encryption, 
-      secure API connections, and restricted access controls. However, no method of transmission over the Internet is 100% secure. 
-      We cannot guarantee absolute security of your data.
+      secure API connections, and restricted access controls.
     </p>
 
     <h2 id="section5">5. Garmin Health API Compliance</h2>
     <p>When using Garmin Health API integration, your data is handled in accordance with:</p>
-    <ul>
-      <li>Garmin's Terms of Service and API policies</li>
-      <li>HIPAA and HITECH Act requirements where applicable</li>
-      <li>GDPR and other applicable privacy regulations</li>
+    <ul>Open Health API policies and guidelines</li>
+      <li>HIPAA and HITECH Act requirements for all protected health information</li>
+      <li>GDPR, CCPA, and other applicable privacy regulations</li>
+      <li>Our commitment to use your health data only for purposes you explicitly authorize</li>
+      <li>A HIPAA Business Associate Agreement (BAA) is available upon request
       <li>Our commitment to use your health data only for purposes you authorize</li>
     </ul>
 
-    <h2 id="section6">6. Data Sharing and Disclosure</h2>
-    <p>We do not sell your personal health information. We may disclose information only:</p>
+      We do NOT sell, trade, rent, or share your personal health information with third parties for any reason, 
+      including marketing, analytics, or commercial purposes. Period. We may disclose information only:
+    </p>
     <ul>
-      <li>With third-party service providers who assist us in operating our Service</li>
-      <li>When required by law or court order</li>
+      <li>With our service infrastructure provider (earthrhythms-mobile-api) for the sole purpose of storing and processing your data as necessary to provide our Service</li>
+      <li>When required by law or valid court order, with advance notice to you when legally permitted</li>
+      <li>To protect our rights, privacy, safety, or property</li>
+      <li>With your explicit prior written consent for a specific purposeurt order</li>
       <li>To protect our rights, privacy, safety, or property</li>
       <li>With your explicit consent</li>
     </ul>
@@ -253,16 +269,63 @@
       We retain your data only as long as necessary to provide our Service. You may request deletion of your data at any time, 
       subject to legal retention requirements. Deletion requests will be processed within 30 days.
     </p>
-
-    <h2 id="section8">8. Your Rights</h2>
-    <p>Depending on your location, you may have the following rights:</p>
-    <ul>
-      <li><strong>Access:</strong> Request access to your personal data</li>
-      <li><strong>Correction:</strong> Request correction of inaccurate data</li>
-      <li><strong>Deletion:</strong> Request deletion of your data (Right to be Forgotten)</li>
-      <li><strong>Portability:</strong> Request a copy of your data in a portable format</li>
-      <li><strong>Opt-Out:</strong> Revoke authorization and disconnect integrations</li>
+ and receive a copy within 10 business days</li>
+      <li><strong>Correction:</strong> Request correction of inaccurate data with documentation of changes</li>
+      <li><strong>Deletion:</strong> Request deletion of your data (Right to be Forgotten); we will comply within 30 days</li>
+      <li><strong>Portability:</strong> Request a copy of your data in a portable, machine-readable format (JSON or CSV)</li>
+      <li><strong>Opt-Out:</strong> Disconnect your Garmin integration instantly and permanently; all associated data is deleted within 48 hours</li>
+      <li><strong>Data Export:</strong> Request a complete export of all your data within 24 hours</li>
     </ul>
+
+    <h2 id="section8a">8a. Breach Notification</h2>
+    <p>
+      In the event of a confirmed security breach involving your personal or health information, we will:
+    </p>
+    <ul>
+      <li>Notify all affected individuals within 48 hours of discovery</li>
+      <li>Provide clear notification of: what information was compromised, when the breach occurred, and what steps we are taking</li>
+      <li>Offer complimentary credit monitoring for 12 months if financial data is affected</li>
+      <li>Notify relevant regulatory bodies (HIPAA, state attorneys general) as required by law</li>
+      <li>Conduct and publish results of a third-party security audit within 90 days</li>
+    </ul>
+
+    <h2 id="section8b">8b. Audit & Compliance</h2>
+    <p>
+      To ensure ongoing compliance and security:
+    </p>
+    <ul>
+      <li><strong>System Access Logging:</strong> All system access to health data is logged and reviewed monthly</li>
+      <li><strong>Security Reviews:</strong> Independent security audits conducted quarterly</li>
+      <li><strong>Compliance Audits:</strong> HIPAA compliance audits conducted annually</li>
+      <li><strong>API Activity Monitoring:</strong> All Garmin API calls are logged with user consent and reviewed for anomalies</li>
+      <li><strong>Data Processing Audits:</strong> User data processing audited monthly to ensure only authorized use</li>
+      <li><strong>Certified Security Leadership:</strong> QCS security team includes ISACA Certified Information Security Managers (CISM), ensuring professional-level governance and compliance management</li>
+    </ul>
+
+    <h2 id="section8c">8c. Subprocessors</h2>
+    <p>
+      We use the following third-party service providers to process your data:
+    </p>
+    <ul>
+      <li><strong>earthrhythms-mobile-api:</strong> Backend infrastructure for storing and processing your health data. Data is encrypted end-to-end and earthrhythms-mobile-api has no access to unencrypted health information.</li>
+    </ul>
+    <p>
+      All subprocessors are bound by data processing agreements that meet or exceed HIPAA and GDPR requirements. 
+      We maintain a current list of all subprocessors and notify users of any changes 30 days in advance.
+    </p>
+
+    <h2 id="section8d">8d. Corporate Structure & Related Entities</h2>
+    <p>
+      <strong>QCS</strong> is the parent organization responsible for all data governance, security, and privacy compliance. 
+      <strong>earthrhythms</strong> is a health and wellness innovation division of QCS that develops mobile and wearable integration platforms. 
+      The earthrhythms-mobile-api is QCS infrastructure operated under unified data governance and security policies.
+    </p>
+    <p>
+      All health data processed through earthrhythms-mobile-api remains under QCS's direct control and is subject to this privacy policy. 
+      Both entities operate under the same HIPAA Business Associate Agreement, security certifications, and privacy commitments. 
+      Users should understand that "earthrhythms," "earthrhythms-mobile-api," and "QCS" refer to integrated components of the same organization 
+      with unified compliance and data protection standards.
+    </p>
 
     <h2 id="section9">9. Third-Party Links</h2>
     <p>
