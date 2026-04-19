@@ -86,6 +86,17 @@ The GitHub Actions workflow uses `PROTECTED_PASSWORD` secret:
 - The password is **never visible** in the public source code
 - Only repository maintainers can view/edit the secret in GitHub
 
+### Security Limitations
+
+This site uses **GitHub Pages** for static hosting. The password protection is suitable for:
+
+- ✅ Discouraging casual access to service agreements
+- ✅ Keeping non-sensitive internal documents out of search engines
+- ✅ Demonstrating GitHub Pages capabilities
+- ✅ Collaborating with team members on non-confidential materials
+
+**Important Note**: For maximum security on GitHub Pages, use this approach only for demonstrating capabilities and non-sensitive content. The protected area is not suitable for storing passwords, API keys, or truly confidential information.
+
 ---
 
 ## 📄 Pages Overview
