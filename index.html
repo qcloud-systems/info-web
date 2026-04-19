@@ -3,239 +3,97 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
-
-  <title>QCloud Systems Docs</title>
-
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Inter', sans-serif;
-      background: #f5f7fa;
-      color: #333;
-    }
-
-    /* Sidebar with multi-color gradient */
-    .sidebar {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 260px;
-      height: 100%;
-      background: linear-gradient(180deg, #4f46e5, #6366f1, #3b82f6, #06b6d4);
-      color: white;
-      padding: 0;
-      overflow-y: auto;
-      box-shadow: 2px 0 10px rgba(0,0,0,0.25);
-    }
-
-    /* Profile Header */
-    .profile-header {
-      text-align: center;
-      padding: 30px 20px;
-      background: rgba(255,255,255,0.12);
-      border-bottom: 1px solid rgba(255,255,255,0.15);
-    }
-
-    .profile-header img {
-      width: 80px;
-      height: 80px;
-      border-radius: 50%;
-      border: 3px solid rgba(255,255,255,0.4);
-      margin-bottom: 10px;
-    }
-
-    .profile-header p {
-      margin: 4px 0;
-      font-size: 14px;
-      color: #e0e7ff;
-    }
-
-    .sidebar nav {
-      padding: 20px;
-    }
-
-    .sidebar nav a {
-      display: block;
-      color: #eef2ff;
-      text-decoration: none;
-      padding: 10px 0;
-      font-size: 15px;
-      transition: 0.2s;
-    }
-
-    .sidebar nav a:hover {
-      color: #ffffff;
-      padding-left: 6px;
-    }
-
-    /* Main content */
-    .content {
-      margin-left: 280px;
-      padding: 40px;
-    }
-
-    section {
-      background: white;
-      padding: 25px;
-      margin-bottom: 25px;
-      border-radius: 12px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
-    }
-
-    section h1 {
-      margin-top: 0;
-      color: #4f46e5;
-    }
-
-    /* Map styling */
-    #map {
-      height: 400px;
-      width: 100%;
-      border-radius: 10px;
-      margin-top: 10px;
-    }
-
-    #map-search {
-      width: 100%;
-      padding: 12px;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-      margin-bottom: 10px;
-      font-size: 15px;
-    }
-  </style>
+  <title>QCS</title>
 </head>
 
 <body>
-
-  <!-- Sidebar with profile header -->
+  <!-- Sidebar Navigation -->
   <aside class="sidebar">
-
-    <div class="profile-header">
-      <img src="https://via.placeholder.com/80" alt="Profile">
-      <p><strong>Your IP:</strong> <span id="side-ip">Loading...</span></p>
-      <p><strong>Time:</strong> <span id="side-time">Loading...</span></p>
+    <div class="sidebar-header">
+      <h1 class="logo">QCS</h1>
+      <p class="tagline">Hub</p>
     </div>
 
-    <nav>
-      <a href="#intro">Introduction</a>
-      <a href="#setup">Setup</a>
-      <a href="#architecture">Architecture</a>
-      <a href="#api">API</a>
+    <nav class="sidebar-nav">
+      <a href="#overview">Overview</a>
+      <a href="#prototypes">Prototypes</a>
+      <a href="#projects">Projects</a>
+      <a href="#documentation">Documentation</a>
       <a href="#contact">Contact</a>
-
-      <hr style="border-color: rgba(255,255,255,0.3);">
-
-      <h3 style="color:white;">Other Sites</h3>
-      <a href="SITE_1_URL" target="_blank">Project Site 1</a>
-      <a href="SITE_2_URL" target="_blank">Project Site 2</a>
-      <a href="SITE_3_URL" target="_blank">Project Site 3</a>
-      <a href="SITE_4_URL" target="_blank">Project Site 4</a>
-      <a href="SITE_5_URL" target="_blank">Project Site 5</a>
-
-      <hr style="border-color: rgba(255,255,255,0.3);">
-
-      <a href="#location">Location Finder</a>
+      <a href="protected.html" style="color: #ff9a56; margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(255,255,255,0.1);">🔒 Protected Area</a>
     </nav>
   </aside>
 
+  <!-- Main Content -->
   <main class="content">
-
-    <section id="intro">
-      <h1>Introduction</h1>
+    
+    <section id="overview">
+      <h1>QCS</h1>
       <p>
-        Welcome to the QCloud Systems documentation hub.  
-        This site provides technical notes, architecture references,  
-        and project documentation in a clean, readable format.
+        A hub for information, documentation, and active projects related to QCS infrastructure and development.
+      </p>
+      <p>
+        This site serves as a central reference for technical documentation, prototypes, and project updates.
       </p>
     </section>
 
-    <section id="setup">
-      <h1>Setup</h1>
-      <p>
-        Use this section to describe installation steps, environment setup,  
-        or onboarding instructions for your project.
+    <section id="prototypes">
+      <h1>Prototypes & Active Projects</h1>
+      <div class="projects-grid">
+        <div class="project-card">
+          <h3>Rizal Center</h3>
+          <p>An interactive platform showcasing community and organizational information.</p>
+          <a href="https://rizalcenter.app" target="_blank" class="btn-primary">Visit Prototype →</a>
+        </div>
+      </div>
+      <p style="margin-top: 30px; font-size: 14px; color: #666;">
+        More prototypes coming soon. Add your project here by updating this section.
       </p>
     </section>
 
-    <section id="architecture">
-      <h1>Architecture</h1>
+    <section id="projects">
+      <h1>Projects</h1>
       <p>
-        Document your system design, diagrams, workflows, and technical decisions here.
+        Documentation and information about QCS projects will be organized here.
       </p>
+      <ul>
+        <li>Infrastructure documentation</li>
+        <li>API references</li>
+        <li>Architecture guides</li>
+        <li>Deployment procedures</li>
+      </ul>
     </section>
 
-    <section id="api">
-      <h1>API</h1>
+    <section id="documentation">
+      <h1>Documentation</h1>
       <p>
-        Add API endpoints, parameters, examples, and usage notes.
+        Technical documentation, guides, and reference materials for QCS development and infrastructure.
       </p>
+      <p>
+        Sections can be added as needed for specific topics, architecture diagrams, setup instructions, and best practices.
+      </p>
+      <div style="margin-top: 30px;">
+        <h3 style="color: #2d3e50; font-size: 16px; margin-bottom: 15px;">Available Documents</h3>
+        <div class="projects-grid" style="grid-template-columns: 1fr;">
+          <div class="project-card">
+            <h3>Privacy Policy</h3>
+            <p>Complete privacy policy and data handling practices for QCS services, including Garmin Health API compliance and user rights.</p>
+            <a href="privacy-policy.html" target="_blank" class="btn-primary">Read Policy →</a>
+          </div>
+        </div>
+      </div>
     </section>
 
     <section id="contact">
-      <h1>Contact</h1>
+      <h1>Contact & Links</h1>
       <p>
-        Add your preferred contact information or links to GitHub/LinkedIn.
+        For questions or more information about QCS projects, please reach out.
       </p>
     </section>
 
-    <!-- Google Maps -->
-    <section id="location">
-      <h1>Location Finder</h1>
-      <input id="map-search" type="text" placeholder="Search for a place...">
-      <div id="map"></div>
-
-      <script>
-        function initMap() {
-          const map = new google.maps.Map(document.getElementById("map"), {
-            center: { lat: 41.8781, lng: -87.6298 },
-            zoom: 10,
-          });
-
-          const input = document.getElementById("map-search");
-          const searchBox = new google.maps.places.SearchBox(input);
-
-          map.addListener("bounds_changed", () => {
-            searchBox.setBounds(map.getBounds());
-          });
-
-          searchBox.addListener("places_changed", () => {
-            const places = searchBox.getPlaces();
-            if (!places.length) return;
-
-            const place = places[0];
-            if (!place.geometry) return;
-
-            map.setCenter(place.geometry.location);
-            map.setZoom(14);
-          });
-        }
-      </script>
-
-      <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places&callback=initMap" async defer></script>
-    </section>
-
   </main>
-
-  <!-- Sidebar IP + Time Script -->
-  <script>
-    fetch("https://api.ipify.org?format=json")
-      .then(response => response.json())
-      .then(data => {
-        document.getElementById("side-ip").textContent = data.ip;
-      });
-
-    function updateSidebarTime() {
-      const now = new Date();
-      document.getElementById("side-time").textContent = now.toLocaleString();
-    }
-
-    updateSidebarTime();
-    setInterval(updateSidebarTime, 1000);
-  </script>
-
 </body>
+
 </html>
