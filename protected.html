@@ -137,6 +137,12 @@
         <p style="font-size: 13px; color: #5a6b7a; margin: 0;">Non-Disclosure Agreement</p>
         <p style="font-size: 12px; color: #aaa; margin: 10px 0 0 0;">🔐 Password Protected</p>
       </div>
+
+      <div style="border: 1px solid #e2e8f0; border-radius: 8px; padding: 20px; cursor: pointer;" onclick="showPasswordForm('beta-testing')">
+        <h3 style="color: #0066cc; margin-top: 0;">Beta Testing Agreement</h3>
+        <p style="font-size: 13px; color: #5a6b7a; margin: 0;">Garmin Integration Beta Testing</p>
+        <p style="font-size: 12px; color: #aaa; margin: 10px 0 0 0;">🔐 Password Protected</p>
+      </div>
     </div>
 
     <div id="passwordFormArea" style="display: none;">
@@ -166,7 +172,8 @@
     // Passwords injected by GitHub Actions from secrets
     const PASSWORDS = {
       'service-agreement': "",
-      'nda': ""
+      'nda': "",
+      'beta-testing': "{{ PROTECTED_PASSWORD_BTA }}"
     };
 
     let currentDocument = null;
@@ -189,7 +196,7 @@
 
     document.getElementById("passwordForm").addEventListener("submit", function(e) {
       e.preventDefault();
-      
+
       const enteredPassword = document.getElementById("passwordInput").value;
       const errorMsg = document.getElementById("errorMsg");
       const correctPassword = PASSWORDS[currentDocument];
@@ -201,8 +208,10 @@
           documentFile = 'service-agreement.html';
         } else if (currentDocument === 'nda') {
           documentFile = 'nda-agreement.html';
+        } else if (currentDocument === 'beta-testing') {
+          documentFile = 'beta-testing-agreement.html';
         }
-        
+
         document.getElementById('passwordFormArea').style.display = 'none';
         document.getElementById('documentsArea').style.display = 'block';
         document.getElementById('documentFrame').src = documentFile;
