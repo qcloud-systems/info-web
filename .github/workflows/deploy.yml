@@ -17,8 +17,12 @@ jobs:
       uses: actions/checkout@v4
     
     - name: Inject password into protected.html
+      env:
+        PASSWORD: ${{ secrets.PROTECTED_PASSWORD }}
       run: |
-        sed -i 's/{{ PROTECTED_PASSWORD }}/${{ secrets.PROTECTED_PASSWORD }}/g' protected.html
+        sed -i "s|{{ PROTECTED_PASSWORD }}|${PASSWORD}|g" protected.html
+        # Verify injection worked
+        grep -n "CORRECT_PASSWORD" protected.html
     
     - name: Create publish directory with only site files
       run: |
