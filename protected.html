@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <title>QCS - Protected Content</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #f0f2f5 0%, #e8ecf1 100%);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+      padding: 50px 40px;
+      max-width: 400px;
+      width: 100%;
+      text-align: center;
+    }
+
+    .container h1 {
+      color: #1a2332;
+      font-size: 28px;
+      margin-bottom: 12px;
+    }
+
+    .container p {
+      color: #5a6b7a;
+      margin-bottom: 30px;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .lock-icon {
+      font-size: 48px;
+      margin-bottom: 20px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    input[type="password"] {
+      width: 100%;
+      padding: 12px 14px;
+      border: 2px solid #e2e8f0;
+      border-radius: 6px;
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      transition: border-color 0.3s ease;
+    }
+
+    input[type="password"]:focus {
+      outline: none;
+      border-color: #0066cc;
+      box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.1);
+    }
+
+    button {
+      width: 100%;
+      padding: 12px 20px;
+      background: #0066cc;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    button:hover {
+      background: #0052a3;
+      box-shadow: 0 4px 12px rgba(0, 102, 204, 0.3);
+    }
+
+    button:active {
+      transform: scale(0.98);
+    }
+
+    .error {
+      color: #e63946;
+      font-size: 13px;
+      margin-top: 10px;
+      display: none;
+    }
+
+    .back-link {
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid #e2e8f0;
+    }
+
+    .back-link a {
+      color: #0066cc;
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    .back-link a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="lock-icon">🔒</div>
+    <h1>Protected Content</h1>
+    <p>This page is password protected. Please enter the password to continue.</p>
+
+    <form id="passwordForm">
+      <div class="form-group">
+        <input 
+          type="password" 
+          id="passwordInput" 
+          placeholder="Enter password" 
+          required
+          autocomplete="off"
+        >
+      </div>
+      <button type="submit">Unlock</button>
+      <div class="error" id="errorMsg">Incorrect password. Please try again.</div>
+    </form>
+
+    <div class="back-link">
+      <a href="index.html">← Back to Home</a>
+    </div>
+  </div>
+
+  <script>
+    // Configuration: Change this password
+    const CORRECT_PASSWORD = "M0n3yC@ntB3E@t3n";
+
+    document.getElementById("passwordForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      
+      const enteredPassword = document.getElementById("passwordInput").value;
+      const errorMsg = document.getElementById("errorMsg");
+
+      if (enteredPassword === CORRECT_PASSWORD) {
+        // Password correct - redirect to service agreement
+        window.location.href = "service-agreement.html";
+      } else {
+        errorMsg.style.display = "block";
+        document.getElementById("passwordInput").value = "";
+      }
+    });
+
+    // Focus password input on load
+    document.getElementById("passwordInput").focus();
+  </script>
+</body>
+
+</html>

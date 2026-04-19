@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <title>QCS - Service Agreement</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #f0f2f5;
+      color: #2d3748;
+      line-height: 1.6;
+    }
+
+    .document-container {
+      max-width: 900px;
+      margin: 0 auto;
+      background: white;
+      padding: 60px 50px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+      min-height: 100vh;
+    }
+
+    .doc-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 30px;
+      border-bottom: 3px solid #0066cc;
+    }
+
+    .doc-header h1 {
+      font-size: 32px;
+      color: #1a2332;
+      margin-bottom: 10px;
+    }
+
+    .doc-header p {
+      color: #5a6b7a;
+      font-size: 14px;
+    }
+
+    h2 {
+      font-size: 18px;
+      color: #0066cc;
+      margin-top: 30px;
+      margin-bottom: 15px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    p {
+      margin-bottom: 15px;
+      text-align: justify;
+      color: #4a5568;
+    }
+
+    .section-number {
+      font-weight: 600;
+      color: #2d3e50;
+    }
+
+    ul {
+      margin-left: 24px;
+      margin-bottom: 15px;
+    }
+
+    li {
+      margin-bottom: 10px;
+      color: #4a5568;
+    }
+
+    .signature-section {
+      margin-top: 60px;
+      padding-top: 40px;
+      border-top: 1px solid #e2e8f0;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+    }
+
+    .signature-block {
+      text-align: center;
+    }
+
+    .signature-line {
+      border-top: 1px solid #2d3748;
+      margin-top: 60px;
+      margin-bottom: 5px;
+      width: 200px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .signature-label {
+      font-size: 12px;
+      color: #5a6b7a;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .back-link {
+      display: inline-block;
+      margin-top: 30px;
+      color: #0066cc;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 14px;
+    }
+
+    .back-link:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 768px) {
+      .document-container {
+        padding: 30px 20px;
+      }
+
+      .signature-section {
+        grid-template-columns: 1fr;
+      }
+
+      h1 {
+        font-size: 24px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="document-container">
+    <div class="doc-header">
+      <h1>SERVICE AGREEMENT</h1>
+      <p>QCS - Effective as of April 18, 2026</p>
+    </div>
+
+    <h2><span class="section-number">1.</span> Agreement Terms</h2>
+    <p>
+      This Service Agreement ("Agreement") is entered into by and between QCS ("Provider") and the accessing party ("Client"). 
+      This Agreement outlines the terms and conditions under which services are provided.
+    </p>
+
+    <h2><span class="section-number">2.</span> Services Provided</h2>
+    <p>Provider agrees to provide services as outlined in the project scope and specifications. Services include:</p>
+    <ul>
+      <li>Technical consultation and support</li>
+      <li>Infrastructure documentation and maintenance</li>
+      <li>Project development and prototype creation</li>
+      <li>Ongoing system monitoring and updates</li>
+    </ul>
+
+    <h2><span class="section-number">3.</span> Confidentiality</h2>
+    <p>
+      Both parties agree to maintain the confidentiality of proprietary information shared during the course of this Agreement. 
+      This includes but is not limited to technical specifications, architectural designs, and business strategies.
+    </p>
+
+    <h2><span class="section-number">4.</span> Intellectual Property</h2>
+    <p>
+      All deliverables, documentation, code, and intellectual property created as part of this Agreement 
+      shall remain the property of QCS unless otherwise specified in a separate written agreement.
+    </p>
+
+    <h2><span class="section-number">5.</span> Limitation of Liability</h2>
+    <p>
+      In no event shall QCS be liable for any indirect, incidental, special, consequential, or punitive damages 
+      arising out of or related to this Agreement, even if advised of the possibility of such damages.
+    </p>
+
+    <h2><span class="section-number">6.</span> Term and Termination</h2>
+    <p>
+      This Agreement shall commence on the date of execution and continue until terminated by either party 
+      with written notice of thirty (30) days. Termination does not relieve either party of obligations 
+      incurred prior to the effective date of termination.
+    </p>
+
+    <h2><span class="section-number">7.</span> Governing Law</h2>
+    <p>
+      This Agreement shall be governed by and construed in accordance with applicable law, 
+      without regard to its conflict of law principles.
+    </p>
+
+    <h2><span class="section-number">8.</span> Amendments</h2>
+    <p>
+      This Agreement may only be amended by written consent of both parties. 
+      No verbal agreements or understandings shall modify this Agreement.
+    </p>
+
+    <div class="signature-section">
+      <div class="signature-block">
+        <div class="signature-line"></div>
+        <div class="signature-label">QCS Representative</div>
+        <div style="margin-top: 20px; font-size: 12px; color: #5a6b7a;">Date: ______________</div>
+      </div>
+      <div class="signature-block">
+        <div class="signature-line"></div>
+        <div class="signature-label">Client Representative</div>
+        <div style="margin-top: 20px; font-size: 12px; color: #5a6b7a;">Date: ______________</div>
+      </div>
+    </div>
+
+    <a href="protected.html" class="back-link">← Back</a>
+  </div>
+</body>
+
+</html>
