@@ -52,18 +52,19 @@
 <section id="status" class="status-section">
   <h1>Upstream Services</h1>
   <p class="status-intro">
-    Live status of third-party platforms QCS projects depend on, read from each
-    provider's own status page. <strong>This is not a status page for QCS
-    services</strong> &mdash; it reports only on these upstream providers.
-    Each bar is one day, built from incidents the provider reported, so it
-    reflects disclosure rather than measured uptime.
+    Live status of the third-party platforms QCS projects depend on, grouped by
+    what each one does and read from the provider's own status feed.
+    <strong>This is not a status page for QCS services</strong> &mdash; it
+    reports only on these upstream dependencies. Each bar is one day, built
+    from incidents the provider reported, so it reflects disclosure rather
+    than measured uptime.
   </p>
 
   <ul class="status-list" role="status" aria-live="polite">
     <li class="status-item" data-kind="statuspage" data-api="https://status.supabase.com/api/v2/status.json" data-incidents="https://status.supabase.com/api/v2/incidents.json">
       <div class="status-head">
         <span class="status-dot" data-state="loading" aria-hidden="true"></span>
-        <a class="status-name" href="https://status.supabase.com" target="_blank" rel="noopener">Supabase</a>
+        <span class="status-name">Database</span>
         <span class="status-text">Checking&hellip;</span>
       </div>
       <div class="status-bars" aria-hidden="true"></div>
@@ -75,7 +76,7 @@
     <li class="status-item" data-kind="statuspage" data-api="https://www.githubstatus.com/api/v2/status.json" data-incidents="https://www.githubstatus.com/api/v2/incidents.json">
       <div class="status-head">
         <span class="status-dot" data-state="loading" aria-hidden="true"></span>
-        <a class="status-name" href="https://www.githubstatus.com" target="_blank" rel="noopener">GitHub</a>
+        <span class="status-name">Source control &amp; CI</span>
         <span class="status-text">Checking&hellip;</span>
       </div>
       <div class="status-bars" aria-hidden="true"></div>
@@ -87,7 +88,7 @@
     <li class="status-item" data-kind="statuspage" data-api="https://www.cloudflarestatus.com/api/v2/status.json" data-incidents="https://www.cloudflarestatus.com/api/v2/incidents.json">
       <div class="status-head">
         <span class="status-dot" data-state="loading" aria-hidden="true"></span>
-        <a class="status-name" href="https://www.cloudflarestatus.com" target="_blank" rel="noopener">Cloudflare</a>
+        <span class="status-name">CDN &amp; DNS</span>
         <span class="status-text">Checking&hellip;</span>
       </div>
       <div class="status-bars" aria-hidden="true"></div>
@@ -99,7 +100,7 @@
     <li class="status-item" data-kind="statuspage" data-api="https://status.flyio.net/api/v2/status.json" data-incidents="https://status.flyio.net/api/v2/incidents.json">
       <div class="status-head">
         <span class="status-dot" data-state="loading" aria-hidden="true"></span>
-        <a class="status-name" href="https://status.flyio.net" target="_blank" rel="noopener">Fly.io</a>
+        <span class="status-name">Edge hosting</span>
         <span class="status-text">Checking&hellip;</span>
       </div>
       <div class="status-bars" aria-hidden="true"></div>
@@ -111,7 +112,7 @@
     <li class="status-item" data-kind="instatus" data-api="https://railway.instatus.com/summary.json">
       <div class="status-head">
         <span class="status-dot" data-state="loading" aria-hidden="true"></span>
-        <a class="status-name" href="https://status.railway.com" target="_blank" rel="noopener">Railway</a>
+        <span class="status-name">Application backend</span>
         <span class="status-text">Checking&hellip;</span>
       </div>
       <div class="status-bars" aria-hidden="true"></div>
