@@ -33,8 +33,21 @@ go run . serve -addr :8081
 ```
 
 After the first deploy of the Go rewrite, work through the post-deploy
-checklist in the `qcs-web` repo (`POST-DEPLOY.md`); two of its items apply
-to this repo.
+checklist in the `qcs-web` repo (`POST-DEPLOY.md`); three of its items apply
+to this repo. `ARCHITECTURE.md` in that repo explains the build strategy
+shared by both sites and how to extend it.
+
+### Adding a status provider
+
+Add an entry to `statusServices()` in `content.go`. Set `Kind` to
+`kindStatuspage` or `kindInstatus` — Statuspage entries need both `/api/v2/`
+URLs, Instatus entries must leave `Incidents` empty, and `go run . check`
+enforces both. A provider that serves no CORS-enabled JSON cannot be added
+without a server-side proxy.
+
+The daily bars are built from each provider's reported incidents, which is
+the only history Statuspage exposes. They track disclosure, not measured
+uptime.
 
 The only dependency is Go. There is no Node toolchain.
 
