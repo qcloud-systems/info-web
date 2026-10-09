@@ -97,8 +97,6 @@ func statusServices() []StatusService {
 			Page:      "https://www.cloudflarestatus.com",
 		},
 		{
-			// Fly.io runs Statuspage at status.flyio.net. Verify in the
-			// browser console on first deploy -- see POST-DEPLOY.md.
 			Name:      "Fly.io",
 			Kind:      kindStatuspage,
 			API:       "https://status.flyio.net/api/v2/status.json",
@@ -108,10 +106,14 @@ func statusServices() []StatusService {
 		{
 			// Railway runs Instatus, which exposes current state only --
 			// no incident history, so its bars stay in the "no data" state.
-			// Verify the host in the browser on first deploy.
+			//
+			// The JSON lives on the instatus.com host, not on
+			// status.railway.com: that domain serves the rendered status
+			// page for every path, so /summary.json there returns HTML and
+			// the client-side JSON parse fails.
 			Name: "Railway",
 			Kind: kindInstatus,
-			API:  "https://status.railway.com/summary.json",
+			API:  "https://railway.instatus.com/summary.json",
 			Page: "https://status.railway.com",
 		},
 	}
