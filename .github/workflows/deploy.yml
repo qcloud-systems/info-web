@@ -11,36 +11,26 @@ jobs:
       contents: write
       pages: write
       id-token: write
-    
+
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-    
-    - name: Inject passwords into protected documents
-      env:
-        INFOWEB_PASS_SA: ${{ secrets.PROTECTED_PASSWORD_SA }}
-        INFOWEB_PASS_NDA: ${{ secrets.PROTECTED_PASSWORD_NDA }}
-      run: |
-        sed -i "s|{{ PROTECTED_PASSWORD_SA }}|${INFOWEB_PASS_SA}|g" protected.html
-        sed -i "s|{{ PROTECTED_PASSWORD_NDA }}|${INFOWEB_PASS_NDA}|g" protected.html
-        # Verify injections worked
-        grep -n "PASSWORDS" protected.html
-    
-    - name: Create publish directory with only site files
-      run: |
-        mkdir -p publish
-        cp index.html publish/
-        cp style.css publish/
-        cp protected.html publish/
-        cp service-agreement.html publish/
-        cp nda-agreement.html publish/
-        cp privacy-policy.html publish/
-        cp favicon.ico publish/
-        cp CNAME publish/
-        touch publish/.nojekyll
-    
-    - name: Deploy to GitHub Pages
-      uses: peaceiris/actions-gh-pages@v3
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./publish
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.23'
+
+      - name: Vet
+        run: go vet ./...
+
+      # `build` refuses to emit anything named like an agreement or the old
+      # password page, so a reintroduced copy fails here instead of shipping.
+      - name: Build site
+        run: go run . build
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./public

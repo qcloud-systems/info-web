@@ -1,0 +1,50 @@
+{{define "base.html" -}}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{.Page.Title}}</title>
+  <meta name="description" content="{{.Page.Desc}}">
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/site.css">
+</head>
+
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <span class="brand-mark">Q</span>
+      <p class="logo">{{.Site.Name}}</p>
+      <p class="tagline">{{.Site.Tagline}}</p>
+    </div>
+
+    <nav class="sidebar-nav" aria-label="Primary">
+      {{range .Site.Nav -}}
+      <a href="{{.Href}}"{{if .External}} class="external" target="_blank" rel="noopener"{{end}}>{{.Label}}</a>
+      {{end -}}
+    </nav>
+  </aside>
+
+  <main id="main" class="content">
+    {{block "content" .}}{{end}}
+
+    <footer class="footer">
+      <div class="footer-links">
+        <a href="{{.Site.MainURL}}" target="_blank" rel="noopener">qcloud.systems</a>
+        <a href="/privacy-policy.html">Privacy Policy</a>
+        <a href="/CONTRIBUTING.html">Contributing</a>
+        <a href="{{.Site.GitHub}}" target="_blank" rel="noopener">GitHub</a>
+      </div>
+      <p class="footer-note">&copy; {{year}} {{.Site.Name}}. Public information hub.</p>
+    </footer>
+  </main>
+
+  <script src="/js/status.js" defer></script>
+</body>
+
+</html>
+{{end}}

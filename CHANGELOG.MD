@@ -6,6 +6,48 @@ The format is based on [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [3.0.0] — 2026-10-08
+### Removed
+- **The password-protected area, which never actually protected anything.**
+  Passwords were injected into client-side JavaScript at deploy time and were
+  readable with View Source; separately, the agreement files were published at
+  predictable public URLs and loaded without any password at all. The form
+  only pointed an iframe at an already-public file.
+- `protected.html`, `service-agreement.html`, `nda-agreement.html` and
+  `beta-testing-agreement.html`. Blank templates now live on qcloud.systems;
+  executed client documents are not published anywhere.
+- The password-injection step and the `PROTECTED_PASSWORD_*` secrets, along
+  with the workflow step that echoed the injected line into the build log.
+
+### Added
+- Go static site generator (`main.go`, `content.go`, `templates/`), replacing
+  hand-maintained HTML. `go run . serve` for development, `go run . build` to
+  render into `./public`.
+- Build-time validation: missing templates, missing documents, projects with
+  no URL, and a missing `CNAME` all fail the build.
+- A guard that **fails the build** if a file named like one of the removed
+  agreements reappears in `static/`.
+- Shared `css/doc.css` for the long documents, replacing ~280 lines of
+  inline CSS duplicated across them.
+- `Makefile` with `dev`, `build`, `check`, `fmt`, `vet`, `clean`.
+- `.nojekyll` written on every build.
+
+### Changed
+- Repalette to match qcloud.systems: charcoal ink `#1a2332`, action blue
+  `#0066cc`, sky-blue accent `#6cc5e6` taken from the wordmark.
+- Deploy workflow builds with Go and publishes `./public`.
+- README rewritten; the previous version documented the password scheme as
+  secure, including the claim that passwords were "never visible in the
+  public source code," which was not true.
+
+### Fixed
+- `CONTRIBUTING.html` was linked from the hub but never copied into the
+  published output, so the link 404'd.
+- The beta testing agreement's password placeholder was never substituted and
+  its file was never published, leaving a card that could not work.
+
+---
+
 ## [2.0.0] — 2026-04-19
 ### Added
 - Complete UI redesign with sleek grey and blue color scheme
