@@ -1,0 +1,136 @@
+{{define "content"}}
+<section id="overview">
+  <h1>QCS Information Hub</h1>
+  <p>
+    A public reference for information, documentation, and active projects related to
+    QCS infrastructure and development.
+  </p>
+  <p>
+    This site is a central reference for technical documentation, prototypes, and project
+    updates. Everything published here is intended to be public.
+  </p>
+  <p class="actions">
+    <a href="{{.Site.MainURL}}" class="btn btn-primary" target="_blank" rel="noopener">Visit qcloud.systems</a>
+  </p>
+</section>
+
+<section id="status" class="status-section">
+  <h1>Upstream Services</h1>
+  <p class="status-intro">
+    Live status of third-party platforms QCS projects depend on, read from each
+    provider's own status page. <strong>This is not a status page for QCS
+    services</strong> &mdash; it reports only on these upstream providers.
+    Each bar is one day, built from incidents the provider reported, so it
+    reflects disclosure rather than measured uptime.
+  </p>
+
+  <ul class="status-list" role="status" aria-live="polite">
+    {{range .Status -}}
+    <li class="status-item" data-kind="{{.Kind}}" data-api="{{.API}}"{{with .Incidents}} data-incidents="{{.}}"{{end}}>
+      <div class="status-head">
+        <span class="status-dot" data-state="loading" aria-hidden="true"></span>
+        <a class="status-name" href="{{.Page}}" target="_blank" rel="noopener">{{.Name}}</a>
+        <span class="status-text">Checking&hellip;</span>
+      </div>
+      <div class="status-bars" aria-hidden="true"></div>
+      <div class="status-scale">
+        <span class="status-scale-start">90 days ago</span>
+        <span class="status-scale-end">today</span>
+      </div>
+    </li>
+    {{end -}}
+  </ul>
+
+  <p class="status-legend" aria-hidden="true">
+    <span><i class="status-key" data-state="ok"></i> No reported incident</span>
+    <span><i class="status-key" data-state="warn"></i> Minor</span>
+    <span><i class="status-key" data-state="bad"></i> Major or critical</span>
+    <span><i class="status-key" data-state="unknown"></i> No data</span>
+  </p>
+
+</section>
+
+<section id="prototypes">
+  <h1>Prototypes &amp; Active Projects</h1>
+  <div class="projects-grid">
+    {{range .Projects -}}
+    <div class="project-card">
+      <h3>{{.Name}}</h3>
+      <p>{{.Desc}}</p>
+      <a href="{{.URL}}" target="_blank" rel="noopener" class="btn-primary">{{.CTA}} &rarr;</a>
+    </div>
+    {{end -}}
+  </div>
+</section>
+
+<section id="projects">
+  <h1>Projects</h1>
+  <p>Documentation and information about QCS projects.</p>
+  <ul>
+    <li>Infrastructure documentation</li>
+    <li>API references</li>
+    <li>Architecture guides</li>
+    <li>Deployment procedures</li>
+  </ul>
+</section>
+
+<section id="documentation">
+  <h1>Documentation</h1>
+  <p>
+    Technical documentation, guides, and reference materials for QCS development and
+    infrastructure &mdash; architecture diagrams, setup instructions, and best practices.
+  </p>
+
+  <h3 class="subhead">Available Documents</h3>
+  <div class="projects-grid">
+    <div class="project-card">
+      <h3>Privacy Policy</h3>
+      <p>
+        Privacy policy and data handling practices for QCS services, including Garmin
+        Health API compliance and user rights.
+      </p>
+      <a href="/privacy-policy.html" class="btn-primary">Read Policy &rarr;</a>
+    </div>
+    <div class="project-card">
+      <h3>Contributing Guidelines</h3>
+      <p>
+        How to report issues, suggest improvements, and submit updates to this hub.
+      </p>
+      <a href="/CONTRIBUTING.html" class="btn-primary">Read Guidelines &rarr;</a>
+    </div>
+  </div>
+
+  <div class="callout">
+    <h3>Looking for agreements?</h3>
+    <p>
+      Service agreements, NDAs, and beta testing terms are published on our main site.
+      Executed, client-specific documents are never posted publicly &mdash; they're
+      delivered to clients directly.
+    </p>
+    <a href="{{.Site.MainURL}}/legal/" class="btn-quiet" target="_blank" rel="noopener">View agreement templates &rarr;</a>
+  </div>
+</section>
+
+<section id="contact">
+  <h1>Contact &amp; Collaboration</h1>
+  <p>
+    For questions or feedback about QCS projects, reach us on
+    <a href="{{.Site.Medium}}" target="_blank" rel="noopener">Medium</a> or
+    <a href="{{.Site.GitHub}}" target="_blank" rel="noopener">GitHub</a>.
+  </p>
+
+  <h3 class="subhead">Contribute to This Hub</h3>
+  <p>
+    This information hub is maintained as an open project. We welcome contributions,
+    feedback, and improvements from the community.
+  </p>
+  <ul>
+    <li><strong>Report Issues:</strong> Found an error or outdated information? Open an issue on our repository.</li>
+    <li><strong>Submit Updates:</strong> Have improvements to suggest? See our contributing guidelines for the submission process.</li>
+    <li><strong>Documentation:</strong> Help us improve technical documentation and guides.</li>
+  </ul>
+  <p class="actions">
+    <a href="/CONTRIBUTING.html" class="btn btn-quiet">View Contributing Guidelines</a>
+  </p>
+</section>
+{{end}}

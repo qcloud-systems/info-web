@@ -1,0 +1,34 @@
+Remove the broken password gate; rebuild as a Go static site
+
+The protected area did not restrict anything, for two independent reasons:
+
+  1. Passwords were injected into client-side JavaScript at deploy time, so
+     anyone could read them with View Source.
+  2. The agreement files were published as ordinary static files at
+     predictable URLs. /service-agreement.html loaded directly with no
+     password involved; the form only pointed an iframe at that public URL.
+
+A static host has no server-side compute and cannot enforce access control.
+
+Removed protected.html and the three agreement documents, the injection step,
+and the workflow step that echoed the injected line into the build log. Blank
+templates now live on qcloud.systems. `go run . build` fails if a file named
+like one of the removed agreements reappears.
+
+Delete the PROTECTED_PASSWORD_SA / _NDA / _BTA repository secrets — they are
+unused, and they were public while the gate was live.
+
+Also replaces hand-maintained HTML with a Go generator (main.go, content.go,
+templates/), matching qcloud.systems. Build-time validation covers missing
+templates, missing documents, projects without URLs, and a missing CNAME,
+which would silently drop the custom domain.
+
+Fixes two latent bugs: CONTRIBUTING.html was linked from the hub but never
+copied into the published output, and the beta testing agreement's password
+placeholder was never substituted while its file was never published.
+
+Repaletted to match qcloud.systems. README rewritten — the previous version
+documented the password scheme as secure, including the claim that passwords
+were "never visible in the public source code".
+
+Co-Authored-By: Claude Opus 5 <noreply@anthropic.com>

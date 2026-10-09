@@ -1,3 +1,10 @@
+# Build output -- `go run . build` wipes and regenerates this directory.
+/public/
+
+# Go
+*.exe
+info-web
+
 # Environment variables
 .env
 .env.local
