@@ -1,110 +1,231 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>QCS — Information Hub</title>
+  <meta name="description" content="A public reference for QCS infrastructure, documentation, prototypes, and active projects.">
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
-  <title>QCS</title>
-  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="stylesheet" href="/css/site.css">
 </head>
 
 <body>
-  <!-- Sidebar Navigation -->
+  <a class="skip-link" href="#main">Skip to content</a>
+
   <aside class="sidebar">
     <div class="sidebar-header">
-      <h1 class="logo">QCS</h1>
-      <p class="tagline">Hub</p>
+      <span class="brand-mark">Q</span>
+      <p class="logo">QCS</p>
+      <p class="tagline">Information Hub</p>
     </div>
 
-    <nav class="sidebar-nav">
+    <nav class="sidebar-nav" aria-label="Primary">
       <a href="#overview">Overview</a>
+      <a href="#status">Status</a>
       <a href="#prototypes">Prototypes</a>
       <a href="#projects">Projects</a>
       <a href="#documentation">Documentation</a>
       <a href="#contact">Contact</a>
-      <a href="protected.html" style="color: #ff9a56; margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(255,255,255,0.1);">🔒 Protected Agreements</a>
-    </nav>
+      <a href="https://qcloud.systems" class="external" target="_blank" rel="noopener">qcloud.systems</a>
+      </nav>
   </aside>
 
-  <!-- Main Content -->
-  <main class="content">
+  <main id="main" class="content">
     
-    <section id="overview">
-      <h1>QCS</h1>
-      <p>
-        A hub for information, documentation, and active projects related to QCS infrastructure and development.
-      </p>
-      <p>
-        This site serves as a central reference for technical documentation, prototypes, and project updates.
-      </p>
-    </section>
+<section id="overview">
+  <h1>QCS Information Hub</h1>
+  <p>
+    A public reference for information, documentation, and active projects related to
+    QCS infrastructure and development.
+  </p>
+  <p>
+    This site is a central reference for technical documentation, prototypes, and project
+    updates. Everything published here is intended to be public.
+  </p>
+  <p class="actions">
+    <a href="https://qcloud.systems" class="btn btn-primary" target="_blank" rel="noopener">Visit qcloud.systems</a>
+  </p>
+</section>
 
-    <section id="prototypes">
-      <h1>Prototypes & Active Projects</h1>
-      <div class="projects-grid">
-        <div class="project-card">
-          <h3>Rizal Center</h3>
-          <p>An interactive platform showcasing community and organizational information.</p>
-          <a href="https://rizalcenter.app" target="_blank" class="btn-primary">Visit Prototype →</a>
-        </div>
+<section id="status" class="status-section">
+  <h1>Upstream Services</h1>
+  <p class="status-intro">
+    Live status of third-party platforms QCS projects depend on, read from each
+    provider's own status page. <strong>This is not a status page for QCS
+    services</strong> &mdash; it reports only on these upstream providers.
+    Each bar is one day, built from incidents the provider reported, so it
+    reflects disclosure rather than measured uptime.
+  </p>
+
+  <ul class="status-list" role="status" aria-live="polite">
+    <li class="status-item" data-kind="statuspage" data-api="https://status.supabase.com/api/v2/status.json" data-incidents="https://status.supabase.com/api/v2/incidents.json">
+      <div class="status-head">
+        <span class="status-dot" data-state="loading" aria-hidden="true"></span>
+        <a class="status-name" href="https://status.supabase.com" target="_blank" rel="noopener">Supabase</a>
+        <span class="status-text">Checking&hellip;</span>
       </div>
-    </section>
-
-    <section id="projects">
-      <h1>Projects</h1>
-      <p>
-        Documentation and information about QCS projects 
-      </p>
-      <ul>
-        <li>Infrastructure documentation</li>
-        <li>API references</li>
-        <li>Architecture guides</li>
-        <li>Deployment procedures</li>
-      </ul>
-    </section>
-
-    <section id="documentation">
-      <h1>Documentation</h1>
-      <p>
-        Technical documentation, guides, and reference materials for QCS development and infrastructure.
-      </p>
-      <p>
-        Sections for specific topics, architecture diagrams, setup instructions, and best practices.
-      </p>
-      <div style="margin-top: 30px;">
-        <h3 style="color: #2d3e50; font-size: 16px; margin-bottom: 15px;">Available Documents</h3>
-        <div class="projects-grid" style="grid-template-columns: 1fr;">
-          <div class="project-card">
-            <h3>Privacy Policy</h3>
-            <p>Complete privacy policy and data handling practices for QCS services, including Garmin Health API compliance and user rights.</p>
-            <a href="privacy-policy.html" target="_blank" class="btn-primary">Read Policy →</a>
-          </div>
-        </div>
+      <div class="status-bars" aria-hidden="true"></div>
+      <div class="status-scale">
+        <span class="status-scale-start">90 days ago</span>
+        <span class="status-scale-end">today</span>
       </div>
-    </section>
+    </li>
+    <li class="status-item" data-kind="statuspage" data-api="https://www.githubstatus.com/api/v2/status.json" data-incidents="https://www.githubstatus.com/api/v2/incidents.json">
+      <div class="status-head">
+        <span class="status-dot" data-state="loading" aria-hidden="true"></span>
+        <a class="status-name" href="https://www.githubstatus.com" target="_blank" rel="noopener">GitHub</a>
+        <span class="status-text">Checking&hellip;</span>
+      </div>
+      <div class="status-bars" aria-hidden="true"></div>
+      <div class="status-scale">
+        <span class="status-scale-start">90 days ago</span>
+        <span class="status-scale-end">today</span>
+      </div>
+    </li>
+    <li class="status-item" data-kind="statuspage" data-api="https://www.cloudflarestatus.com/api/v2/status.json" data-incidents="https://www.cloudflarestatus.com/api/v2/incidents.json">
+      <div class="status-head">
+        <span class="status-dot" data-state="loading" aria-hidden="true"></span>
+        <a class="status-name" href="https://www.cloudflarestatus.com" target="_blank" rel="noopener">Cloudflare</a>
+        <span class="status-text">Checking&hellip;</span>
+      </div>
+      <div class="status-bars" aria-hidden="true"></div>
+      <div class="status-scale">
+        <span class="status-scale-start">90 days ago</span>
+        <span class="status-scale-end">today</span>
+      </div>
+    </li>
+    <li class="status-item" data-kind="statuspage" data-api="https://status.flyio.net/api/v2/status.json" data-incidents="https://status.flyio.net/api/v2/incidents.json">
+      <div class="status-head">
+        <span class="status-dot" data-state="loading" aria-hidden="true"></span>
+        <a class="status-name" href="https://status.flyio.net" target="_blank" rel="noopener">Fly.io</a>
+        <span class="status-text">Checking&hellip;</span>
+      </div>
+      <div class="status-bars" aria-hidden="true"></div>
+      <div class="status-scale">
+        <span class="status-scale-start">90 days ago</span>
+        <span class="status-scale-end">today</span>
+      </div>
+    </li>
+    <li class="status-item" data-kind="instatus" data-api="https://status.railway.com/summary.json">
+      <div class="status-head">
+        <span class="status-dot" data-state="loading" aria-hidden="true"></span>
+        <a class="status-name" href="https://status.railway.com" target="_blank" rel="noopener">Railway</a>
+        <span class="status-text">Checking&hellip;</span>
+      </div>
+      <div class="status-bars" aria-hidden="true"></div>
+      <div class="status-scale">
+        <span class="status-scale-start">90 days ago</span>
+        <span class="status-scale-end">today</span>
+      </div>
+    </li>
+    </ul>
 
-    <section id="contact">
-      <h1>Contact & Collaboration</h1>
-      <p>
-        For questions or feedback about QCS projects, contact us on Medium.
-      </p>
-      
-      <h3 style="color: #2d3e50; font-size: 16px; margin-top: 30px; margin-bottom: 12px;">Contribute to This Hub</h3>
-      <p>
-        This information hub is maintained as an open project. We welcome contributions, feedback, and improvements from the community.
-      </p>
-      <ul style="margin: 15px 0 0 20px; line-height: 1.8;">
-        <li><strong>Report Issues:</strong> Found an error or outdated information? Open an issue on our repository.</li>
-        <li><strong>Submit Updates:</strong> Have improvements to suggest? See our Contributing guidelines for submission process.</li>
-        <li><strong>Documentation:</strong> Help us improve technical documentation and guides.</li>
-      </ul>
-      <p style="margin-top: 20px;">
-        <a href="CONTRIBUTING.html" style="color: #0066cc; text-decoration: none; font-weight: 500;">📋 View Contributing Guidelines →</a>
-      </p>
-    </section>
+  <p class="status-legend" aria-hidden="true">
+    <span><i class="status-key" data-state="ok"></i> No reported incident</span>
+    <span><i class="status-key" data-state="warn"></i> Minor</span>
+    <span><i class="status-key" data-state="bad"></i> Major or critical</span>
+    <span><i class="status-key" data-state="unknown"></i> No data</span>
+  </p>
 
+</section>
+
+<section id="prototypes">
+  <h1>Prototypes &amp; Active Projects</h1>
+  <div class="projects-grid">
+    <div class="project-card">
+      <h3>Rizal Center</h3>
+      <p>An interactive platform showcasing community and organizational information.</p>
+      <a href="https://rizalcenter.app" target="_blank" rel="noopener" class="btn-primary">Visit Prototype &rarr;</a>
+    </div>
+    </div>
+</section>
+
+<section id="projects">
+  <h1>Projects</h1>
+  <p>Documentation and information about QCS projects.</p>
+  <ul>
+    <li>Infrastructure documentation</li>
+    <li>API references</li>
+    <li>Architecture guides</li>
+    <li>Deployment procedures</li>
+  </ul>
+</section>
+
+<section id="documentation">
+  <h1>Documentation</h1>
+  <p>
+    Technical documentation, guides, and reference materials for QCS development and
+    infrastructure &mdash; architecture diagrams, setup instructions, and best practices.
+  </p>
+
+  <h3 class="subhead">Available Documents</h3>
+  <div class="projects-grid">
+    <div class="project-card">
+      <h3>Privacy Policy</h3>
+      <p>
+        Privacy policy and data handling practices for QCS services, including Garmin
+        Health API compliance and user rights.
+      </p>
+      <a href="/privacy-policy.html" class="btn-primary">Read Policy &rarr;</a>
+    </div>
+    <div class="project-card">
+      <h3>Contributing Guidelines</h3>
+      <p>
+        How to report issues, suggest improvements, and submit updates to this hub.
+      </p>
+      <a href="/CONTRIBUTING.html" class="btn-primary">Read Guidelines &rarr;</a>
+    </div>
+  </div>
+
+  <div class="callout">
+    <h3>Looking for agreements?</h3>
+    <p>
+      Service agreements, NDAs, and beta testing terms are published on our main site.
+      Executed, client-specific documents are never posted publicly &mdash; they're
+      delivered to clients directly.
+    </p>
+    <a href="https://qcloud.systems/legal/" class="btn-quiet" target="_blank" rel="noopener">View agreement templates &rarr;</a>
+  </div>
+</section>
+
+<section id="contact">
+  <h1>Contact &amp; Collaboration</h1>
+  <p>
+    For questions or feedback about QCS projects, reach us on
+    <a href="https://qcloudsystems.medium.com/" target="_blank" rel="noopener">Medium</a> or
+    <a href="https://github.com/qcloud-systems" target="_blank" rel="noopener">GitHub</a>.
+  </p>
+
+  <h3 class="subhead">Contribute to This Hub</h3>
+  <p>
+    This information hub is maintained as an open project. We welcome contributions,
+    feedback, and improvements from the community.
+  </p>
+  <ul>
+    <li><strong>Report Issues:</strong> Found an error or outdated information? Open an issue on our repository.</li>
+    <li><strong>Submit Updates:</strong> Have improvements to suggest? See our contributing guidelines for the submission process.</li>
+    <li><strong>Documentation:</strong> Help us improve technical documentation and guides.</li>
+  </ul>
+  <p class="actions">
+    <a href="/CONTRIBUTING.html" class="btn btn-quiet">View Contributing Guidelines</a>
+  </p>
+</section>
+
+
+    <footer class="footer">
+      <div class="footer-links">
+        <a href="https://qcloud.systems" target="_blank" rel="noopener">qcloud.systems</a>
+        <a href="/privacy-policy.html">Privacy Policy</a>
+        <a href="/CONTRIBUTING.html">Contributing</a>
+        <a href="https://github.com/qcloud-systems" target="_blank" rel="noopener">GitHub</a>
+      </div>
+      <p class="footer-note">&copy; 2026 QCS. Public information hub.</p>
+    </footer>
   </main>
+
+  <script src="/js/status.js" defer></script>
 </body>
 
 </html>
