@@ -113,7 +113,18 @@ func validate() error {
 	// The status strip is fetched from the browser, so every endpoint must be
 	// https -- a mixed-content request would be blocked -- and must match an
 	// adapter the client script knows how to parse.
+	seenRole := map[string]bool{}
 	for _, s := range statusServices() {
+		if s.Role == "" {
+			return fmt.Errorf("status service %q has no Role; the page renders "+
+				"Role, not Name, so an empty one shows a blank row", s.Name)
+		}
+		if seenRole[s.Role] {
+			return fmt.Errorf("status service %q reuses Role %q; roles are the "+
+				"only label shown, so duplicates are indistinguishable", s.Name, s.Role)
+		}
+		seenRole[s.Role] = true
+
 		switch s.Kind {
 		case kindStatuspage:
 			if !strings.HasSuffix(s.API, "/api/v2/status.json") {

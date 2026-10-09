@@ -45,6 +45,14 @@ type Project struct {
 // endpoint, so including it would require a server-side proxy -- compute that
 // this static site does not have.
 type StatusService struct {
+	// Role is what the page displays: the function this provider serves,
+	// not who it is. A status strip only needs to tell a visitor which part
+	// of the system is degraded; naming vendors publishes an inventory of
+	// the stack and buys nothing for the reader.
+	//
+	// Note this is not concealment -- see the comment on statusServices.
+	Role string
+	// Name is the vendor, for maintainers. Never rendered.
 	Name string
 	// Kind selects the client-side adapter: "statuspage" or "instatus".
 	Kind string
@@ -53,7 +61,9 @@ type StatusService struct {
 	// Incidents returns recent incident history, used to colour the daily
 	// bars. Statuspage only; empty for providers that publish no history.
 	Incidents string
-	// Page is the human-readable status page to link to.
+	// Page is the vendor's own status page, for maintainers. Not linked
+	// from the site -- linking it would re-reveal the vendor the Role
+	// label is there to keep out of the copy.
 	Page string
 }
 
@@ -68,6 +78,16 @@ const (
 // Only providers that serve CORS-enabled JSON can be listed; one that does
 // not would need a server-side proxy this static site does not have.
 //
+// On the Role labels: the page shows what each provider does, not who it
+// is. That keeps a vendor inventory out of the visible copy, which is worth
+// doing -- but it is NOT concealment, and must not be treated as a control.
+// The browser does the fetching, so each endpoint is necessarily present in
+// the page source as a data-api attribute and visible in the network tab,
+// and this repository is public. Hiding the vendors properly would require
+// proxying every request server-side. The real defence for the services
+// behind these names is their own configuration -- Supabase row-level
+// security, keeping service keys off the client -- not label wording.
+//
 // The daily bars are reconstructed from each provider's reported incidents,
 // which is the only history Statuspage exposes publicly. A day is marked
 // degraded when a reported incident overlapped it. An outage the provider
@@ -76,6 +96,7 @@ const (
 func statusServices() []StatusService {
 	return []StatusService{
 		{
+			Role:      "Database",
 			Name:      "Supabase",
 			Kind:      kindStatuspage,
 			API:       "https://status.supabase.com/api/v2/status.json",
@@ -83,6 +104,7 @@ func statusServices() []StatusService {
 			Page:      "https://status.supabase.com",
 		},
 		{
+			Role:      "Source control & CI",
 			Name:      "GitHub",
 			Kind:      kindStatuspage,
 			API:       "https://www.githubstatus.com/api/v2/status.json",
@@ -90,6 +112,7 @@ func statusServices() []StatusService {
 			Page:      "https://www.githubstatus.com",
 		},
 		{
+			Role:      "CDN & DNS",
 			Name:      "Cloudflare",
 			Kind:      kindStatuspage,
 			API:       "https://www.cloudflarestatus.com/api/v2/status.json",
@@ -97,6 +120,7 @@ func statusServices() []StatusService {
 			Page:      "https://www.cloudflarestatus.com",
 		},
 		{
+			Role:      "Edge hosting",
 			Name:      "Fly.io",
 			Kind:      kindStatuspage,
 			API:       "https://status.flyio.net/api/v2/status.json",
@@ -111,6 +135,7 @@ func statusServices() []StatusService {
 			// status.railway.com: that domain serves the rendered status
 			// page for every path, so /summary.json there returns HTML and
 			// the client-side JSON parse fails.
+			Role: "Application backend",
 			Name: "Railway",
 			Kind: kindInstatus,
 			API:  "https://railway.instatus.com/summary.json",
