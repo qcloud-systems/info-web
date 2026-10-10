@@ -156,7 +156,6 @@ func site() Site {
 			{Label: "Overview", Href: "#overview"},
 			{Label: "Status", Href: "#status"},
 			{Label: "Prototypes", Href: "#prototypes"},
-			{Label: "Projects", Href: "#projects"},
 			{Label: "Documentation", Href: "#documentation"},
 			{Label: "Contact", Href: "#contact"},
 			{Label: "qcloud.systems", Href: "https://qcloud.systems", External: true},
