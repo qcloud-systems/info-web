@@ -1,0 +1,5 @@
+Contact: https://github.com/qcloud-systems/info-web/security/advisories/new
+Expires: 2027-10-09T22:40:46Z
+Preferred-Languages: en
+Canonical: https://info.qcloud.systems/.well-known/security.txt
+Policy: https://info.qcloud.systems/security.html

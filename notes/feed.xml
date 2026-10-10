@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>QCS Engineering Notes</title>
+    <link>https://info.qcloud.systems/notes/</link>
+    <description>Engineering insights on infrastructure, tooling, and software development.</description>
+    <language>en</language>
+    <lastBuildDate>Sat, 10 Oct 2026 22:40:46 +0000</lastBuildDate>
+    <atom:link href="https://info.qcloud.systems/notes/feed.xml" rel="self" type="application/rss+xml"></atom:link>
+    <item>
+      <title>Building a Static Site with Hugo</title>
+      <link>https://info.qcloud.systems/notes/hugo-static-site.html</link>
+      <guid>https://info.qcloud.systems/notes/hugo-static-site.html</guid>
+      <pubDate>Sat, 10 Oct 2026 22:39:16 +0000</pubDate>
+      <description>Create, preview, and build a static website with Hugo, then host it privately on Amazon S3 behind CloudFront.</description>
+      <category>Hugo</category>
+      <category>AWS</category>
+      <category>Static Sites</category>
+    </item>
+  </channel>
+</rss>

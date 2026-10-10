@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Engineering Notes — QCS Information Hub</title>
+  <meta name="description" content="Engineering insights on infrastructure, tooling, and software development, drawn from real-world implementation.">
+  <link rel="canonical" href="https://info.qcloud.systems/notes/">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="QCS Information Hub">
+  <meta property="og:title" content="Engineering Notes — QCS Information Hub">
+  <meta property="og:description" content="Engineering insights on infrastructure, tooling, and software development, drawn from real-world implementation.">
+  <meta property="og:url" content="https://info.qcloud.systems/notes/">
+  <meta property="og:image" content="https://info.qcloud.systems/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="QCS Information Hub">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://info.qcloud.systems/og-image.png">
+  <meta name="twitter:title" content="Engineering Notes — QCS Information Hub">
+  <meta name="twitter:description" content="Engineering insights on infrastructure, tooling, and software development, drawn from real-world implementation.">
+  <link rel="alternate" type="application/rss+xml" title="QCS Engineering Notes" href="/notes/feed.xml">
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/site.css">
+</head>
+
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <span class="brand-mark">Q</span>
+      <p class="logo">QCS</p>
+      <p class="tagline">Information Hub</p>
+    </div>
+
+    <nav class="sidebar-nav" aria-label="Primary">
+      <a href="/#overview">Overview</a>
+      <a href="/#whats-new">What&#39;s New</a>
+      <a href="/#status">Status</a>
+      <a href="/#prototypes">Prototypes</a>
+      <a href="/#roadmap">Roadmap</a>
+      <a href="/#articles">Articles</a>
+      <a href="/#documentation">Documentation</a>
+      <a href="/notes/">Engineering Notes</a>
+      <a href="/#faq">FAQ</a>
+      <a href="/#contact">Contact</a>
+      <a href="https://qcloud.systems" class="external" target="_blank" rel="noopener">qcloud.systems</a>
+      </nav>
+  </aside>
+
+  <main id="main" class="content">
+    
+<section id="notes">
+  <h1>Engineering Notes</h1>
+  <p>
+    Engineering insights on infrastructure, tooling, and software development, drawn from
+    real-world implementation.
+  </p>
+  <p class="fineprint">
+    Independent of official QCS documentation. Notes reflect tool versions current at publication.
+  </p>
+
+  <div class="notes-tools">
+    <label class="notes-search">
+      <span class="visually-hidden">Search engineering notes</span>
+      <input type="search" id="notes-search" placeholder="Search notes, commands, tools&hellip;" autocomplete="off">
+    </label>
+    <nav class="tag-list" aria-label="Filter by topic">
+      <a href="/notes/" class="tag-chip" data-tag="" aria-current="true">All</a>
+      <a href="/notes/tags/aws.html" class="tag-chip" data-tag="AWS">AWS <span class="tag-count">1</span></a>
+      <a href="/notes/tags/hugo.html" class="tag-chip" data-tag="Hugo">Hugo <span class="tag-count">1</span></a>
+      <a href="/notes/tags/static-sites.html" class="tag-chip" data-tag="Static Sites">Static Sites <span class="tag-count">1</span></a>
+      </nav>
+    </div>
+  <p class="notes-status" id="notes-status" role="status" aria-live="polite"></p>
+
+  <div class="projects-grid" id="notes-grid">
+    
+<div class="project-card note-card" data-slug="hugo-static-site">
+  <h3><a href="/notes/hugo-static-site.html">Building a Static Site with Hugo</a></h3>
+  <p>Create, preview, and build a static website with Hugo, then host it privately on Amazon S3 behind CloudFront.</p>
+  <p class="note-meta"><time datetime="2026-10-10">Updated Oct 10, 2026</time> <a href="/notes/tags/hugo.html" class="tag-chip tag-chip-sm">Hugo</a> <a href="/notes/tags/aws.html" class="tag-chip tag-chip-sm">AWS</a> <a href="/notes/tags/static-sites.html" class="tag-chip tag-chip-sm">Static Sites</a>
+  </p>
+  <a href="/notes/hugo-static-site.html" class="btn-primary">Read Note &rarr;</a>
+</div>
+</div>
+  <script type="application/json" id="notes-index">[{"slug":"hugo-static-site","title":"Building a Static Site with Hugo","summary":"Create, preview, and build a static website with Hugo, then host it privately on Amazon S3 behind CloudFront.","tags":["Hugo","AWS","Static Sites"],"text":"Building a Static Site with Hugo How to create, preview, and build a static website with Hugo, a fast static site generator written in Go, and how to host the result on Amazon S3. Prerequisites Hugo installed. Check with hugo version. Many themes need the extended edition. Git, for version control and for installing a theme. 1. Create the site hugo new site my-site cd my-site git init This creates the standard layout: archetypes/, content/, data/, layouts/, static/, themes/, and a config file — hugo.toml in current versions, config.toml in older ones. 2. Add a theme Install the theme as a Git submodule so it stays pinned to a specific commit: git submodule add https://github.com/\u003cowner\u003e/\u003ctheme\u003e.git themes/\u003ctheme\u003e echo \"theme = '\u003ctheme\u003e'\" \u003e\u003e hugo.toml Browse themes at themes.gohugo.io. Prefer one that is actively maintained and supports your Hugo version — an abandoned theme is the most common reason an old site stops building. A theme is third-party code that runs in your build. Read what it pulls in, and review its changes before updating the submodule. 3. Preview locally hugo server -D Flag What it does -D Include draft pages --disableFastRender Rebuild everything on each change, not just the changed page The site is served from memory at and reloads as you edit content, layouts, static files, or config. It binds to 127.0.0.1, so it is only reachable from your own machine. Press Ctrl+C to stop. There is no need to run Hugo with sudo — it only reads and writes inside the project folder. 4. Build hugo --minify The finished site is written to public/. Every file there is plain HTML, CSS, and JavaScript that any static host can serve. Add public/ to .gitignore if you build in CI. 5. Host on Amazon S3 The recommended setup keeps the bucket private and serves it through CloudFront: Create an S3 bucket and leave Block Public Access turned on. Create a CloudFront distribution with the bucket as its origin, using Origin Access Control so only CloudFront can read the bucket. Attach a free TLS certificate from AWS Certificate Manager (it must be issued in us-east-1 for CloudFront) and point your domain at the distribution. Upload the site: Hugo can also do the upload itself with hugo deploy, configured in a [deployment] section of hugo.toml. Retiring a site safely When a site is shut down, delete its DNS record before deleting the bucket or distribution. A DNS name left pointing at a deleted bucket can be claimed by anyone who creates a bucket with the same name, letting them serve content on your domain (a \"subdomain takeover\"). Lessons learned Themes age faster than Hugo does. The Page.URL deprecation warning showed up years before it became a hard failure. Treat warnings from a theme as early notice: pin the theme, read Hugo's release notes before upgrading, and prefer a maintained theme — or a small set of your own layouts — over a large abandoned one. Elevated privileges create their own problems. Running the build with sudo leaves root-owned files in public/ and resources/, and the next normal build then fails with permission errors. Build as your own user from the start. Copying files by hand does not scale. Moving the built site between WSL and Windows by hand worked for a first look, but it is neither repeatable nor reviewable. A scripted deploy (aws s3 sync, hugo deploy, or a CI pipeline) produces the same result every time. Retire DNS with the site. When an experimental subdomain is shut down, its DNS record goes first. Nothing left pointing at deleted infrastructure means nothing left to take over. Troubleshooting WARN … Page.URL is deprecated — the theme uses a template variable that newer Hugo versions have removed, which turns the warning into a build failure. Replace .URL with .Permalink (full URL) or .RelPermalink (path only) in the theme's layouts, or switch to a maintained theme. Further reading Hugo documentation Using S3 and Hugo to Create a Hosting Static Website — Capgemini Engineering"}]</script>
+  <p class="fineprint">
+    Subscribe with <a href="/notes/feed.xml">RSS</a> to get new notes as they are published.
+  </p>
+</section>
+<script src="/js/notes.js" defer></script>
+
+
+    <footer class="footer">
+      <div class="footer-links">
+        <a href="https://qcloud.systems" target="_blank" rel="noopener">qcloud.systems</a>
+        <a href="/privacy-policy.html">Privacy Policy</a>
+        <a href="/terms-of-use.html">Terms of Use</a>
+        <a href="/security.html">Security</a>
+        <a href="/accessibility.html">Accessibility</a>
+        <a href="https://github.com/qcloud-systems/info-web/blob/main/CHANGELOG.MD" target="_blank" rel="noopener">Changelog</a>
+        <a href="/CONTRIBUTING.html">Contributing</a>
+        <a href="https://github.com/qcloud-systems" target="_blank" rel="noopener">GitHub</a>
+      </div>
+      <p class="footer-note">
+        &copy; 2026 QCS. Public information hub. Version 3.1.0. Last updated <time datetime="2026-10-10">October 10, 2026</time>.
+      </p>
+    </footer>
+  </main>
+
+  <script src="/js/status.js" defer></script>
+</body>
+
+</html>
