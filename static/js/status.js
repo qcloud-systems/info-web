@@ -230,6 +230,18 @@
         handleStatuspage(item, bars);
       }
     }
+    stampChecked();
+  }
+
+  // Shows when the feeds were read, in the visitor's local time. The element
+  // ships hidden so nothing stale shows if this script never runs.
+  function stampChecked() {
+    var el = document.querySelector('.status-checked');
+    if (!el) { return; }
+    var now = new Date();
+    var when = now.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+    el.textContent = 'Checked at ' + when + ' (your local time). Reload the page to refresh.';
+    el.hidden = false;
   }
 
   if (typeof fetch !== 'function' || typeof Promise !== 'function') {

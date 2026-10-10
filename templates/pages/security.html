@@ -1,0 +1,58 @@
+{{define "content"}}
+<section id="security" class="prose">
+  <h1>Security Policy</h1>
+  <p>
+    QCS takes the security of its services and of the people who use them seriously. If you
+    believe you have found a security vulnerability in a QCS website, service, or repository,
+    we would like to hear about it.
+  </p>
+
+  <h2>How to report</h2>
+  <p>
+    Please report vulnerabilities <strong>privately</strong>. Do not open a public GitHub issue,
+    pull request, or discussion for a security problem.
+  </p>
+  <ul>
+    <li>
+      Use GitHub's private vulnerability reporting:
+      <a href="{{.Site.Repo}}/security/advisories/new" target="_blank" rel="noopener">report a vulnerability</a>.
+    </li>
+  </ul>
+  <p>Where you can, please include:</p>
+  <ul>
+    <li>The affected URL, service, or repository</li>
+    <li>A description of the issue and its potential impact</li>
+    <li>Steps to reproduce, or a proof of concept</li>
+    <li>How you would like to be credited, if at all</li>
+  </ul>
+
+  <h2>What to expect</h2>
+  <ul>
+    <li>We will acknowledge your report and keep you informed as we investigate.</li>
+    <li>We will let you know when the issue is fixed.</li>
+    <li>With your permission, we are happy to credit you once a fix is released.</li>
+  </ul>
+
+  <h2>Scope</h2>
+  <p>
+    This policy covers websites and repositories operated by QCS, including
+    <a href="{{.Site.BaseURL}}">{{.Site.Domain}}</a> and
+    <a href="{{.Site.MainURL}}" target="_blank" rel="noopener">qcloud.systems</a>.
+    Vulnerabilities in third-party platforms QCS depends on should be reported to those
+    providers directly.
+  </p>
+
+  <h2>Good-faith research</h2>
+  <p>
+    We will not pursue action against anyone who researches and reports a vulnerability in good
+    faith and in line with this policy. Please avoid privacy violations, data destruction, and
+    service disruption, only interact with accounts you own or have permission to access, and
+    give us a reasonable chance to fix the issue before disclosing it publicly.
+  </p>
+
+  <p class="fineprint">
+    A machine-readable version of this contact information is published at
+    <a href="/.well-known/security.txt">/.well-known/security.txt</a>.
+  </p>
+</section>
+{{end}}
