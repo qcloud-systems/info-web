@@ -1,0 +1,13 @@
+{{define "note-card"}}
+<div class="project-card note-card" data-slug="{{.Slug}}">
+  <h3><a href="/notes/{{.Slug}}.html">{{.Title}}</a></h3>
+  <p>{{.Description}}</p>
+  {{if or .Tags (not .Updated.IsZero) -}}
+  <p class="note-meta">
+    {{- if not .Updated.IsZero}}<time datetime="{{.Updated.Format "2006-01-02"}}">Updated {{.Updated.Format "Jan 2, 2006"}}</time>{{end}}
+    {{- range .Tags}} <a href="/notes/tags/{{.Slug}}.html" class="tag-chip tag-chip-sm">{{.Name}}</a>{{end}}
+  </p>
+  {{end -}}
+  <a href="/notes/{{.Slug}}.html" class="btn-primary">Read Note &rarr;</a>
+</div>
+{{end}}

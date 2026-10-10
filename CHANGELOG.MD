@@ -6,45 +6,53 @@ The format is based on [Semantic Versioning](https://semver.org/).
 
 ---
 
-## [3.0.0] — 2026-10-08
-### Removed
-- **The password-protected area, which never actually protected anything.**
-  Passwords were injected into client-side JavaScript at deploy time and were
-  readable with View Source; separately, the agreement files were published at
-  predictable public URLs and loaded without any password at all. The form
-  only pointed an iframe at an already-public file.
-- `protected.html`, `service-agreement.html`, `nda-agreement.html` and
-  `beta-testing-agreement.html`. Blank templates now live on qcloud.systems;
-  executed client documents are not published anywhere.
-- The password-injection step and the `PROTECTED_PASSWORD_*` secrets, along
-  with the workflow step that echoed the injected line into the build log.
+## [3.1.0] — 2026-10-10
+### Added
+- **What's New** — the latest release highlights, right on the home page.
+- **Roadmap** — what's in progress, what's planned, and what has shipped.
+- **Articles** — the latest QCS posts from Medium.
+- **FAQ** — answers to common questions about this hub and QCS services.
+- **Engineering Notes** — practical how-tos, written in Markdown, starting
+  with building a static site with Hugo. Includes search, topic tags with
+  their own pages, a table of contents, copy buttons on code, linkable
+  headings, related notes, updated dates, and an RSS feed.
+- **Security Policy**, **Terms of Use**, and **Accessibility** pages.
+- A helpful **404 page** for broken or outdated links.
+- `/.well-known/security.txt`, `sitemap.xml`, and `robots.txt`, generated on
+  every build.
+- Link previews (Open Graph and Twitter cards) with a branded preview image,
+  canonical URLs, and structured data for search engines.
+- A "last checked" time under the upstream status list.
+- Optional Cloudflare Web Analytics, off until a token is set in `content.go`.
+- Unit tests, run on every deploy.
 
+### Changed
+- The footer links to every policy page and shows the version and
+  last-updated date.
+- Sidebar links now work from every page, not just the home page.
+- The Projects section was folded into Prototypes & Active Projects.
+
+---
+
+## [3.0.0] — 2026-10-08
 ### Added
 - Go static site generator (`main.go`, `content.go`, `templates/`), replacing
   hand-maintained HTML. `go run . serve` for development, `go run . build` to
   render into `./public`.
 - Build-time validation: missing templates, missing documents, projects with
   no URL, and a missing `CNAME` all fail the build.
-- A guard that **fails the build** if a file named like one of the removed
-  agreements reappears in `static/`.
-- Shared `css/doc.css` for the long documents, replacing ~280 lines of
-  inline CSS duplicated across them.
+- Shared `css/doc.css` for the long documents.
 - `Makefile` with `dev`, `build`, `check`, `fmt`, `vet`, `clean`.
-- `.nojekyll` written on every build.
 
 ### Changed
+- Agreement templates moved to qcloud.systems.
 - Repalette to match qcloud.systems: charcoal ink `#1a2332`, action blue
   `#0066cc`, sky-blue accent `#6cc5e6` taken from the wordmark.
 - Deploy workflow builds with Go and publishes `./public`.
-- README rewritten; the previous version documented the password scheme as
-  secure, including the claim that passwords were "never visible in the
-  public source code," which was not true.
+- README rewritten.
 
 ### Fixed
-- `CONTRIBUTING.html` was linked from the hub but never copied into the
-  published output, so the link 404'd.
-- The beta testing agreement's password placeholder was never substituted and
-  its file was never published, leaving a card that could not work.
+- The Contributing Guidelines link now works.
 
 ---
 
@@ -52,38 +60,24 @@ The format is based on [Semantic Versioning](https://semver.org/).
 ### Added
 - Complete UI redesign with sleek grey and blue color scheme
 - Professional sidebar navigation with improved styling
-- Password-protected area for more sensitive documents
-- Service Agreement document (`service-agreement.html`) with signature blocks
 - Privacy Policy document (`privacy-policy.html`) with table of contents
-- GitHub Actions workflow for automated deployment with password injection
-- GitHub Secrets integration for secure password storage
-- Local `.env` file for development (excluded from git)
-- `.gitignore` configuration to prevent committing sensitive files
-- Documentation section with public and sensitive documents
+- GitHub Actions workflow for automated deployment
+- Documentation section
 - Favicon support across all pages
 - Enhanced responsive design for mobile and tablet devices
-- Security documentation in README explaining protection limitations
 - DNS configuration guide for custom domain setup
 
 ### Changed
 - Overhauled HTML structure for better semantic organization
 - Completely rewrote CSS with modern grey (#2d3e50-#34495e) and blue (#0066cc) theme
 - Updated deployment process to use GitHub Actions instead of basic GitHub Pages
-- Improved README with comprehensive sections on security, DNS, and deployment
-- Updated version to 2.0.0 to reflect major redesign
+- Improved README with comprehensive sections on deployment and DNS
 
 ### Fixed
 - Removed incomplete Google Maps integration code
 - Cleaned up unused placeholder content and dummy links
-- Removed temporary `commands.out` file
 - Fixed CSS conflicts from multiple overlapping stylesheets
 - Improved workflow reliability with proper git repository handling
-
-### Security
-- Passwords now stored securely in GitHub Secrets instead of source code
-- Added `.gitignore` to prevent accidental commits of sensitive files
-- Passwords injected at build time via GitHub Actions
-- Added security limitations documentation to README
 
 ---
 

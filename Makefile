@@ -1,4 +1,4 @@
-.PHONY: dev build check clean fmt vet
+.PHONY: dev build check test clean fmt vet
 
 # Live dev server on :8080. Templates, CSS and docs are read from disk,
 # so a browser refresh picks up edits -- no rebuild needed.
@@ -12,6 +12,9 @@ build:
 # Validate content without writing anything.
 check:
 	go run . check
+
+test:
+	go test ./...
 
 fmt:
 	gofmt -w .

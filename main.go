@@ -21,6 +21,7 @@ import (
 	"os"
 	"path"
 	"path/filepath"
+	"regexp"
 	"strings"
 	"time"
 )
@@ -36,11 +37,59 @@ var funcs = template.FuncMap{
 }
 
 type data struct {
-	Site     Site
-	Page     Page
-	Projects []Project
-	Status   []StatusService
+	Site      Site
+	Page      Page
+	Canonical string
+	Projects  []Project
+	Status    []StatusService
+	Roadmap   []RoadmapGroup
+	FAQs      []FAQ
+	Notes     []Note
+	Note      Note
+	Tags      []TagGroup
+	Tag       TagGroup
+	Author    Author
+	// Search is the Notes index search data; ArticleLD is a note's
+	// structured data. Both are JSON, empty on pages that do not use them.
+	Search    template.JS
+	ArticleLD template.JS
+	Latest    Release
+	Posts     []Post
+	Built     time.Time
 }
+
+// RoadmapGroup is one stage column of the roadmap, in display order.
+type RoadmapGroup struct {
+	Label string
+	Stage string
+	Items []RoadmapItem
+}
+
+// buildInfo is gathered once per build (or once per dev-server start) rather
+// than per page, so the Medium feed is fetched a single time.
+type buildInfo struct {
+	Posts []Post
+	Built time.Time
+}
+
+func roadmapGroups() []RoadmapGroup {
+	groups := []RoadmapGroup{
+		{Label: "In progress", Stage: stageInProgress},
+		{Label: "Planned", Stage: stagePlanned},
+		{Label: "Shipped", Stage: stageShipped},
+	}
+	for _, it := range roadmap() {
+		for i := range groups {
+			if groups[i].Stage == it.Stage {
+				groups[i].Items = append(groups[i].Items, it)
+			}
+		}
+	}
+	return groups
+}
+
+// cfToken matches a Cloudflare Web Analytics beacon token.
+var cfToken = regexp.MustCompile(`^[0-9a-f]{32}$`)
 
 // forbidden names must never ship from this repo. They are the documents that
 // used to sit here behind a client-side password check that did not actually
@@ -74,7 +123,10 @@ func main() {
 	case "build":
 		err = build()
 	case "check":
-		fmt.Printf("ok: %d page(s), %d document(s)\n", len(pages()), len(documents()))
+		var all []Page
+		if all, err = allPages(false); err == nil {
+			fmt.Printf("ok: %d page(s), %d document(s)\n", len(all), len(documents()))
+		}
 	case "-h", "--help", "help":
 		fmt.Println("usage: info-web [serve|build|check]")
 		return
@@ -86,8 +138,21 @@ func main() {
 	}
 }
 
+// allPages is pages() plus the Notes index and one page per note.
+func allPages(fromDisk bool) ([]Page, error) {
+	notes, err := loadNotes(fromDisk)
+	if err != nil {
+		return nil, err
+	}
+	return append(pages(), notePages(notes)...), nil
+}
+
 func validate() error {
-	for _, p := range pages() {
+	all, err := allPages(false)
+	if err != nil {
+		return err
+	}
+	for _, p := range all {
 		if _, err := fs.Stat(templateFS, "templates/pages/"+p.Template); err != nil {
 			return fmt.Errorf("page %q references missing template %q", p.Path, p.Template)
 		}
@@ -102,6 +167,31 @@ func validate() error {
 	// GitHub Pages needs the custom domain file to survive every deploy.
 	if _, err := fs.Stat(staticFS, "static/CNAME"); err != nil {
 		return errors.New("static/CNAME is missing; the custom domain would be dropped on deploy")
+	}
+
+	s := site()
+	if !strings.HasPrefix(s.BaseURL, "https://") || strings.HasSuffix(s.BaseURL, "/") {
+		return fmt.Errorf("site BaseURL must be https with no trailing slash, got %q", s.BaseURL)
+	}
+	if s.CloudflareAnalytics != "" && !cfToken.MatchString(s.CloudflareAnalytics) {
+		return fmt.Errorf("CloudflareAnalytics must be a 32-character hex token, got %q", s.CloudflareAnalytics)
+	}
+
+	for _, it := range roadmap() {
+		switch it.Stage {
+		case stagePlanned, stageInProgress, stageShipped:
+		default:
+			return fmt.Errorf("roadmap item %q: unknown stage %q (want %q, %q or %q)",
+				it.Title, it.Stage, stagePlanned, stageInProgress, stageShipped)
+		}
+	}
+	for _, f := range faqs() {
+		if f.Q == "" || f.A == "" {
+			return fmt.Errorf("FAQ entry %q needs both a question and an answer", f.Q)
+		}
+	}
+	if _, err := latestRelease(changelogMD); err != nil {
+		return err
 	}
 
 	for _, p := range projects() {
@@ -156,7 +246,7 @@ func validate() error {
 	}
 
 	// Refuse to ship anything that belongs behind authentication.
-	err := fs.WalkDir(staticFS, "static", func(p string, d fs.DirEntry, err error) error {
+	err = fs.WalkDir(staticFS, "static", func(p string, d fs.DirEntry, err error) error {
 		if err != nil || d.IsDir() {
 			return err
 		}
@@ -171,24 +261,91 @@ func validate() error {
 	return err
 }
 
+// parse loads the base layout, every shared partial in templates/partials,
+// and the page's own template.
 func parse(p Page, fromDisk bool) (*template.Template, error) {
-	files := []string{"templates/base.html", "templates/pages/" + p.Template}
+	var src fs.FS = templateFS
 	if fromDisk {
-		return template.New("base.html").Funcs(funcs).ParseFiles(files...)
+		src = os.DirFS(".")
 	}
-	return template.New("base.html").Funcs(funcs).ParseFS(templateFS, files...)
+	partials, err := fs.Glob(src, "templates/partials/*.html")
+	if err != nil {
+		return nil, err
+	}
+	files := append([]string{"templates/base.html"}, partials...)
+	files = append(files, "templates/pages/"+p.Template)
+	return template.New("base.html").Funcs(funcs).ParseFS(src, files...)
 }
 
-func render(w io.Writer, p Page, fromDisk bool) error {
+func render(w io.Writer, p Page, fromDisk bool, info buildInfo) error {
 	tpl, err := parse(p, fromDisk)
 	if err != nil {
 		return fmt.Errorf("parse %s: %w", p.Template, err)
 	}
+	md, err := changelogSource(fromDisk)
+	if err != nil {
+		return err
+	}
+	latest, err := latestRelease(md)
+	if err != nil {
+		return err
+	}
+	notes, err := loadNotes(fromDisk)
+	if err != nil {
+		return err
+	}
+	s := site()
+	a := author()
+	tags := tagGroups(notes)
+
+	var note Note
+	for _, n := range notes {
+		if n.Slug == p.Note {
+			note = n
+		}
+	}
+	if p.Note != "" && note.Slug == "" {
+		return fmt.Errorf("note %q no longer exists; restart the dev server", p.Note)
+	}
+	var tag TagGroup
+	for _, g := range tags {
+		if g.Tag.Slug == p.Tag {
+			tag = g
+		}
+	}
+	if p.Tag != "" && tag.Tag.Slug == "" {
+		return fmt.Errorf("tag %q is no longer used; restart the dev server", p.Tag)
+	}
+
+	var search, articleLD template.JS
+	if p.Template == "notes.html" {
+		if search, err = searchIndex(notes); err != nil {
+			return err
+		}
+	}
+	if note.Slug != "" {
+		if articleLD, err = articleJSONLD(s, a, note); err != nil {
+			return err
+		}
+	}
 	return tpl.ExecuteTemplate(w, "base.html", data{
-		Site:     site(),
-		Page:     p,
-		Projects: projects(),
-		Status:   statusServices(),
+		Site:      s,
+		Page:      p,
+		Canonical: pageURL(s, p.Path),
+		Projects:  projects(),
+		Status:    statusServices(),
+		Roadmap:   roadmapGroups(),
+		FAQs:      faqs(),
+		Notes:     notes,
+		Note:      note,
+		Tags:      tags,
+		Tag:       tag,
+		Author:    a,
+		Search:    search,
+		ArticleLD: articleLD,
+		Latest:    latest,
+		Posts:     info.Posts,
+		Built:     info.Built,
 	})
 }
 
@@ -197,11 +354,17 @@ func serve() error {
 	live := flag.Bool("live", true, "read templates and static files from disk (dev)")
 	flag.Parse()
 
+	// The page list is read once at startup, so a newly added note needs a
+	// restart; edits to an existing note show on refresh.
+	all, err := allPages(*live)
+	if err != nil {
+		return err
+	}
 	byPath := map[string]Page{}
-	for _, p := range pages() {
+	for _, p := range all {
 		byPath["/"+p.Path] = p
-		if path.Base(p.Path) == "index.html" && path.Dir(p.Path) == "." {
-			byPath["/"] = p
+		if path.Base(p.Path) == "index.html" {
+			byPath["/"+strings.TrimSuffix(p.Path, "index.html")] = p
 		}
 	}
 
@@ -216,11 +379,27 @@ func serve() error {
 		assets = http.FileServer(http.FS(sub))
 	}
 
+	info := buildInfo{Posts: fetchPosts(site().MediumFeed), Built: time.Now().UTC()}
+	notes, err := loadNotes(*live)
+	if err != nil {
+		return err
+	}
+	extra := generated(site(), all, notes, info.Built)
+
 	mux := http.NewServeMux()
 	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		if b, ok := extra[strings.TrimPrefix(r.URL.Path, "/")]; ok {
+			ct := "text/plain; charset=utf-8"
+			if strings.HasSuffix(r.URL.Path, ".xml") {
+				ct = "application/xml; charset=utf-8"
+			}
+			w.Header().Set("Content-Type", ct)
+			w.Write(b)
+			return
+		}
 		if p, ok := byPath[r.URL.Path]; ok {
 			w.Header().Set("Content-Type", "text/html; charset=utf-8")
-			if err := render(w, p, *live); err != nil {
+			if err := render(w, p, *live, info); err != nil {
 				log.Printf("render %s: %v", p.Path, err)
 				http.Error(w, "internal error", http.StatusInternalServerError)
 			}
@@ -252,7 +431,13 @@ func build() error {
 		return err
 	}
 
-	for _, p := range pages() {
+	info := buildInfo{Posts: fetchPosts(site().MediumFeed), Built: time.Now().UTC()}
+
+	all, err := allPages(false)
+	if err != nil {
+		return err
+	}
+	for _, p := range all {
 		dst := filepath.Join(*out, filepath.FromSlash(p.Path))
 		if err := os.MkdirAll(filepath.Dir(dst), 0o755); err != nil {
 			return err
@@ -261,7 +446,7 @@ func build() error {
 		if err != nil {
 			return err
 		}
-		err = render(f, p, false)
+		err = render(f, p, false, info)
 		closeErr := f.Close()
 		if err != nil {
 			return fmt.Errorf("render %s: %w", p.Path, err)
@@ -276,12 +461,28 @@ func build() error {
 		return err
 	}
 
+	notes, err := loadNotes(false)
+	if err != nil {
+		return err
+	}
+	extra := generated(site(), all, notes, info.Built)
+	for name, b := range extra {
+		dst := filepath.Join(*out, filepath.FromSlash(name))
+		if err := os.MkdirAll(filepath.Dir(dst), 0o755); err != nil {
+			return err
+		}
+		if err := os.WriteFile(dst, b, 0o644); err != nil {
+			return err
+		}
+	}
+
 	// Tell GitHub Pages not to run the content through Jekyll.
 	if err := os.WriteFile(filepath.Join(*out, ".nojekyll"), nil, 0o644); err != nil {
 		return err
 	}
 
-	log.Printf("built %s: %d page(s) + %d static file(s) + .nojekyll", *out, len(pages()), n)
+	log.Printf("built %s: %d page(s) + %d static file(s) + %d generated file(s) + .nojekyll",
+		*out, len(all), n, len(extra))
 	return nil
 }
 

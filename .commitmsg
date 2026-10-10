@@ -1,34 +1,43 @@
-Remove the broken password gate; rebuild as a Go static site
+Add notes, roadmap, FAQ, articles, and policy pages (3.1.0)
 
-The protected area did not restrict anything, for two independent reasons:
+Home page:
+- What's New, built from the latest CHANGELOG.MD entry
+- Roadmap (in progress / planned / shipped), edited in content.go
+- Articles: latest Medium posts, fetched at build time; falls back to a
+  link if Medium is unreachable, never fails the build
+- FAQ, edited in content.go
+- "Last checked" time under the upstream status list
 
-  1. Passwords were injected into client-side JavaScript at deploy time, so
-     anyone could read them with View Source.
-  2. The agreement files were published as ordinary static files at
-     predictable URLs. /service-agreement.html loaded directly with no
-     password involved; the form only pointed an iframe at that public URL.
+Engineering Notes: Markdown files in notes/ are published under /notes/ on
+each build. Optional front matter (description, tags, dates); dates
+otherwise come from git history, so the deploy now checks out full history.
+Each note gets a table of contents, copy buttons on code blocks, linkable
+headings, related notes by shared tag, a byline and author box crediting
+covertdaemon (Cloud Engineer), and TechArticle structured data. The index has live
+search and tag filtering; each tag has its own page; /notes/feed.xml is an
+RSS feed. Every note is scanned for credential-like strings and the build
+fails on a match. First note: building a static site with Hugo, with a
+Lessons Learned section.
 
-A static host has no server-side compute and cannot enforce access control.
+Adds a 1200x630 link-preview image built from the Q brand mark.
 
-Removed protected.html and the three agreement documents, the injection step,
-and the workflow step that echoed the injected line into the build log. Blank
-templates now live on qcloud.systems. `go run . build` fails if a file named
-like one of the removed agreements reappears.
+Adds unit tests (go test ./..., make test), run in the deploy workflow.
 
-Delete the PROTECTED_PASSWORD_SA / _NDA / _BTA repository secrets — they are
-unused, and they were public while the gate was live.
+New pages: /security.html, /accessibility.html, /terms-of-use.html, and a
+custom 404.html. Changelog links point to CHANGELOG.MD on GitHub.
 
-Also replaces hand-maintained HTML with a Go generator (main.go, content.go,
-templates/), matching qcloud.systems. Build-time validation covers missing
-templates, missing documents, projects without URLs, and a missing CNAME,
-which would silently drop the custom domain.
+Generated on every build: sitemap.xml, robots.txt, and
+/.well-known/security.txt (RFC 9116, Expires one year out).
 
-Fixes two latent bugs: CONTRIBUTING.html was linked from the hub but never
-copied into the published output, and the beta testing agreement's password
-placeholder was never substituted while its file was never published.
+Every templated page gets canonical, Open Graph and Twitter card tags.
+The footer links to every policy page and shows version and build date.
+Sidebar links are root-relative so they work from secondary pages.
+Optional Cloudflare Web Analytics, emitted only when a token is set.
 
-Repaletted to match qcloud.systems. README rewritten — the previous version
-documented the password scheme as secure, including the claim that passwords
-were "never visible in the public source code".
+Everything runs at build time; the output is still plain static files on
+GitHub Pages. Adds github.com/yuin/goldmark for Markdown rendering.
 
-Co-Authored-By: Claude Opus 5 <noreply@anthropic.com>
+Trims the 2.0.0 and 3.0.0 changelog entries down to what changed, and
+removes the README section on the old protected area.
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

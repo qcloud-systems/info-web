@@ -1,0 +1,41 @@
+{{define "content"}}
+<section id="accessibility" class="prose">
+  <h1>Accessibility Statement</h1>
+  <p>
+    QCS wants this information hub to be usable by everyone, including people who rely on
+    assistive technology. We aim to meet the
+    <a href="https://www.w3.org/TR/WCAG22/" target="_blank" rel="noopener">Web Content Accessibility Guidelines (WCAG) 2.2</a>
+    at level AA.
+  </p>
+
+  <h2>What we do</h2>
+  <ul>
+    <li>A "Skip to content" link as the first item on every page</li>
+    <li>Semantic headings and landmarks so pages can be navigated by structure</li>
+    <li>Service status shown as text alongside colour, never by colour alone</li>
+    <li>Status updates announced to screen readers as they load</li>
+    <li>A layout that adapts to small screens and browser zoom</li>
+  </ul>
+
+  <h2>Known limitations</h2>
+  <ul>
+    <li>
+      The 90-day status bars are a visual summary and are hidden from screen readers. The
+      current state of each service is available as text in the same row.
+    </li>
+    <li>
+      Some linked third-party sites, such as Medium and GitHub, are outside our control and
+      may not meet the same standard.
+    </li>
+  </ul>
+
+  <h2>Feedback</h2>
+  <p>
+    If you run into an accessibility barrier on this site, please tell us by opening an issue on
+    <a href="{{.Site.Repo}}/issues" target="_blank" rel="noopener">GitHub</a>. Let us know the
+    page, what you were trying to do, and the browser or assistive technology you were using.
+  </p>
+
+  <p class="fineprint">This statement was last reviewed on October 10, 2026.</p>
+</section>
+{{end}}

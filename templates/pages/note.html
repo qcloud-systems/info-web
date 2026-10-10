@@ -1,0 +1,58 @@
+{{define "content"}}
+<section class="prose note">
+  <p class="breadcrumb"><a href="/notes/">&larr; All engineering notes</a></p>
+
+  {{if or .Author.Name (not .Note.Updated.IsZero) -}}
+  <p class="byline">
+    {{- with .Author.Name}}By <a href="{{$.Author.URL}}" target="_blank" rel="noopener author">{{.}}</a>{{with $.Author.Role}}, {{.}}{{end}}{{end}}
+    {{- if not .Note.Updated.IsZero}}{{if .Author.Name}} &middot; {{end}}Updated <time datetime="{{.Note.Updated.Format "2006-01-02"}}">{{.Note.Updated.Format "January 2, 2006"}}</time>{{end}}
+  </p>
+  {{- end}}
+  {{- with .Note.Tags}}
+  <p class="note-tags">
+    {{- range .}}<a href="/notes/tags/{{.Slug}}.html" class="tag-chip tag-chip-sm">{{.Name}}</a> {{end -}}
+  </p>
+  {{- end}}
+
+  {{with .Note.TOC -}}
+  <nav class="toc" aria-label="On this page">
+    <h2 class="toc-title">On this page</h2>
+    <ol>
+      {{range . -}}
+      <li class="toc-l{{.Level}}"><a href="#{{.ID}}">{{.Text}}</a></li>
+      {{end -}}
+    </ol>
+  </nav>
+  {{end -}}
+
+  <div class="note-body">
+    {{.Note.Body}}
+  </div>
+
+  {{with .Note.Related -}}
+  <aside class="related">
+    <h2>Related notes</h2>
+    <ul>
+      {{range .}}<li><a href="/notes/{{.Slug}}.html">{{.Title}}</a></li>{{end}}
+    </ul>
+  </aside>
+  {{end -}}
+
+  {{with .Author.Name -}}
+  <aside class="author-box">
+    <span class="brand-mark" aria-hidden="true">Q</span>
+    <div>
+      <p class="author-name">{{.}}</p>
+      <p class="author-role">{{$.Author.Role}}</p>
+      {{with $.Author.Bio}}<p class="author-bio">{{.}}</p>{{end}}
+      <a href="{{$.Author.URL}}" target="_blank" rel="noopener">GitHub &rarr;</a>
+    </div>
+  </aside>
+  {{end -}}
+
+  <p class="fineprint">
+    Spotted a mistake? <a href="{{.Site.Repo}}/blob/main/notes/{{.Note.Slug}}.md" target="_blank" rel="noopener">View the source on GitHub</a>.
+  </p>
+</section>
+<script src="/js/notes.js" defer></script>
+{{end}}

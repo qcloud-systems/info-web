@@ -2,14 +2,13 @@
 
 ![Status](https://img.shields.io/badge/status-active-brightgreen)
 ![License](https://img.shields.io/badge/license-MIT-blue)
-![Version](https://img.shields.io/badge/version-3.0.0-purple)
+![Version](https://img.shields.io/badge/version-3.1.0-purple)
 
 Source for **info.qcloud.systems**, a public reference hub for QCS projects.
 A Go program renders static HTML into `./public`, which GitHub Actions
 publishes to GitHub Pages.
 
-**Everything this site serves is public by design.** There is no gated area.
-Agreement templates live on [qcloud.systems](https://qcloud.systems/legal/),
+**Everything this site serves is public by design.** Agreement templates live on [qcloud.systems](https://qcloud.systems/legal/),
 and executed client documents are not published anywhere.
 
 ---
@@ -57,14 +56,31 @@ The only dependency is Go. There is no Node toolchain.
 
 ```
 main.go                  serve | build | check, plus the content validator
-content.go               site metadata, nav, project list
+content.go               site metadata, nav, projects, roadmap, FAQ, pages
+notes.go                 notes/*.md -> /notes/ pages: front matter, tags, TOC,
+                         git dates, related notes, search data, secret scanner
+notes_test.go            unit tests (go test ./... / make test)
+notes/                   Markdown notes, one file per page
+extras.go                build-time extras: What's New, Medium feed,
+                         sitemap.xml, robots.txt, .well-known/security.txt
+CHANGELOG.MD             latest entry feeds What's New; full log linked on GitHub
 templates/
-  base.html              shared chrome: sidebar, nav, footer
+  base.html              shared chrome: sidebar, nav, meta tags, footer
   pages/index.html       the hub page
+  pages/security.html    vulnerability disclosure policy
+  pages/accessibility.html  accessibility statement
+  pages/404.html         served by GitHub Pages for any missing path
+  pages/notes.html       the Engineering Notes index (search + tag filter)
+  pages/note.html        a single note (byline, TOC, related, author box)
+  pages/tag.html         one page per tag, e.g. /notes/tags/aws.html
+  partials/              shared snippets, loaded with every page
+static/js/notes.js       copy buttons, heading links, search and filtering
+static/og-image.png      1200x630 link-preview image
 static/                  copied verbatim into ./public, "static/" stripped
   css/site.css           site styles
   css/doc.css            shared styles for the long documents
   privacy-policy.html    hand-written, kept as authored
+  terms-of-use.html      hand-written, kept as authored
   CONTRIBUTING.html      hand-written, kept as authored
   CNAME                  custom domain — must survive every deploy
   favicon.ico
@@ -73,32 +89,47 @@ public/                  BUILD OUTPUT — wiped on every build, gitignored
 
 `build` also writes `.nojekyll` so Pages serves the output as-is.
 
+### Everyday content edits
+
+| To change…            | Edit                                         |
+| --------------------- | -------------------------------------------- |
+| What's New, changelog | Add a `## [x.y.z] — date` entry to `CHANGELOG.MD` |
+| Roadmap               | `roadmap()` in `content.go`                  |
+| FAQ                   | `faqs()` in `content.go`                     |
+| Prototypes            | `projects()` in `content.go`                 |
+| Articles              | Publish on Medium; the next deploy picks it up |
+| Analytics             | Set `CloudflareAnalytics` in `content.go`    |
+| Engineering Notes     | Add `notes/your-topic.md` starting with `# Title` |
+
+Notes are published on the next deploy. The file name becomes the URL, the
+first `# ` heading the title, and the first paragraph the summary on the
+index. An optional front matter block adds metadata:
+
+```markdown
 ---
+description: One sentence for search results and link previews.
+tags: [Hugo, AWS, Static Sites]
+---
+# How to Host a Hugo Site on Amazon S3
+```
 
-## Why the protected area was removed
+Published and updated dates come from git history automatically (the deploy
+checks out full history for this); `published:` / `updated:` override them.
+Each tag gets its own page, notes sharing tags are cross-linked, and every
+note is listed in `sitemap.xml` and the RSS feed at `/notes/feed.xml`.
 
-Earlier versions of this site had a `protected.html` page that asked for a
-password before showing agreements. **It did not restrict anything**, for two
-independent reasons:
+Set `Name` in `author()` in `content.go` to show a byline and author box on
+every note and to credit the author in search engines' structured data. Every note is scanned for things that look like credentials (cloud
+keys, tokens, private keys, `password = …`, passwords in URLs); a match fails
+the build so it never reaches the public site. Raw HTML in a note is escaped.
+In `make dev`, edits to a note show on refresh; a new note needs a restart.
 
-1. The passwords were injected into client-side JavaScript at deploy time, so
-   anyone could read them with View Source.
-2. The agreement files were published as ordinary static files at predictable
-   URLs. `/service-agreement.html` loaded directly, with no password involved.
-   The password form only pointed an iframe at that already-public URL.
+Articles are fetched from Medium at build time, so a new post appears on the
+next deploy. If Medium is unreachable the build still succeeds and the
+section falls back to a link.
 
-A static host has no server-side compute, so it cannot enforce access control.
-Any "protection" implemented in the browser is advisory at best, and here it
-was not even that.
-
-The page and those documents have been removed, and `go run . build` now
-**fails** if a file named like one of them reappears — see `forbidden` in
-`main.go`. Blank templates belong on qcloud.systems; executed documents are
-delivered privately and never published.
-
-If you still have `PROTECTED_PASSWORD_SA`, `PROTECTED_PASSWORD_NDA` or
-`PROTECTED_PASSWORD_BTA` configured as repository secrets, delete them. They
-are unused, and they were public while the old gate was live.
+`.well-known/security.txt` gets a fresh `Expires` date (one year out) on
+every build. Deploy at least once a year so it never expires.
 
 ---
 
@@ -118,7 +149,8 @@ are unused, and they were public while the old gate was live.
 2. Add a `Page` entry to `pages()` in `content.go`.
 
 `go run . check` fails on a missing template, a missing document, a project
-without a URL, or a missing `CNAME`.
+without a URL, a missing `CNAME`, an unknown roadmap stage, an incomplete FAQ
+entry, a changelog without a version heading, or a malformed analytics token.
 
 ---
 
@@ -150,9 +182,9 @@ Fork, branch, test locally with `make dev`, open a pull request.
 
 ## Version history
 
-- **3.0.0** — Go static site generator; removed the non-functional password
-  gate and moved agreements to qcloud.systems
-- **2.0.0** — Grey/blue redesign, GitHub Actions secret injection
+- **3.1.0** — Engineering Notes, roadmap, FAQ, articles, policy pages, SEO
+- **3.0.0** — Go static site generator; agreements moved to qcloud.systems
+- **2.0.0** — Grey/blue redesign, GitHub Actions deployment
 - **1.0.0** — Initial documentation hub
 
 ---

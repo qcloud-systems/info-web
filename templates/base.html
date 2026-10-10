@@ -7,6 +7,41 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{{.Page.Title}}</title>
   <meta name="description" content="{{.Page.Desc}}">
+  {{if .Page.NoIndex -}}
+  <meta name="robots" content="noindex">
+  {{else -}}
+  <link rel="canonical" href="{{.Canonical}}">
+  {{end -}}
+  {{if .Note.Slug -}}
+  <meta property="og:type" content="article">
+  {{- if not .Note.Published.IsZero}}
+  <meta property="article:published_time" content="{{.Note.Published.Format "2006-01-02T15:04:05Z07:00"}}">
+  {{- end}}
+  {{- if not .Note.Updated.IsZero}}
+  <meta property="article:modified_time" content="{{.Note.Updated.Format "2006-01-02T15:04:05Z07:00"}}">
+  {{- end}}
+  {{- range .Note.Tags}}
+  <meta property="article:tag" content="{{.Name}}">
+  {{- end}}
+  {{- else -}}
+  <meta property="og:type" content="website">
+  {{- end}}
+  <meta property="og:site_name" content="{{.Site.Name}} {{.Site.Tagline}}">
+  <meta property="og:title" content="{{.Page.Title}}">
+  <meta property="og:description" content="{{.Page.Desc}}">
+  <meta property="og:url" content="{{.Canonical}}">
+  <meta property="og:image" content="{{.Site.BaseURL}}/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="QCS Information Hub">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="{{.Site.BaseURL}}/og-image.png">
+  <meta name="twitter:title" content="{{.Page.Title}}">
+  <meta name="twitter:description" content="{{.Page.Desc}}">
+  <link rel="alternate" type="application/rss+xml" title="{{.Site.Name}} Engineering Notes" href="/notes/feed.xml">
+  {{- with .ArticleLD}}
+  <script type="application/ld+json">{{.}}</script>
+  {{- end}}
   <link rel="icon" type="image/x-icon" href="/favicon.ico">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/css/site.css">
@@ -36,14 +71,25 @@
       <div class="footer-links">
         <a href="{{.Site.MainURL}}" target="_blank" rel="noopener">qcloud.systems</a>
         <a href="/privacy-policy.html">Privacy Policy</a>
+        <a href="/terms-of-use.html">Terms of Use</a>
+        <a href="/security.html">Security</a>
+        <a href="/accessibility.html">Accessibility</a>
+        <a href="{{.Site.Repo}}/blob/main/CHANGELOG.MD" target="_blank" rel="noopener">Changelog</a>
         <a href="/CONTRIBUTING.html">Contributing</a>
         <a href="{{.Site.GitHub}}" target="_blank" rel="noopener">GitHub</a>
       </div>
-      <p class="footer-note">&copy; {{year}} {{.Site.Name}}. Public information hub.</p>
+      <p class="footer-note">
+        &copy; {{year}} {{.Site.Name}}. Public information hub.
+        {{- with .Latest.Version}} Version {{.}}.{{end}}
+        {{- if not .Built.IsZero}} Last updated <time datetime="{{.Built.Format "2006-01-02"}}">{{.Built.Format "January 2, 2006"}}</time>.{{end}}
+      </p>
     </footer>
   </main>
 
   <script src="/js/status.js" defer></script>
+  {{- with .Site.CloudflareAnalytics}}
+  <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "{{.}}"}'></script>
+  {{- end}}
 </body>
 
 </html>
