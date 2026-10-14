@@ -6,7 +6,7 @@
 
 Source for **info.qcloud.systems**, a public reference hub for QCS projects.
 A Go program renders static HTML into `./public`, which GitHub Actions
-publishes to GitHub Pages.
+publishes to managed static hosting.
 
 **Everything this site serves is public by design.** Agreement templates live on [qcloud.systems](https://qcloud.systems/legal/),
 and executed client documents are not published anywhere.
@@ -69,7 +69,7 @@ templates/
   pages/index.html       the hub page
   pages/security.html    vulnerability disclosure policy
   pages/accessibility.html  accessibility statement
-  pages/404.html         served by GitHub Pages for any missing path
+  pages/404.html         served by the host for any missing path
   pages/notes.html       the Engineering Notes index (search + tag filter)
   pages/note.html        a single note (byline, TOC, related, author box)
   pages/tag.html         one page per tag, e.g. /notes/tags/aws.html
@@ -157,19 +157,16 @@ entry, a changelog without a version heading, or a malformed analytics token.
 ## Deployment
 
 Pushing to `main` triggers `.github/workflows/deploy.yml`: `go vet`,
-`go run . build`, then publish `./public` via `peaceiris/actions-gh-pages`.
-SSL is managed by GitHub Pages.
-
-No secrets are required beyond the automatic `GITHUB_TOKEN`.
+`go test`, `go run . build`, then publish `./public` to the static host, which
+also provides HTTPS. Deployment needs no stored credentials.
 
 ---
 
-## DNS
+## Custom domain
 
-`static/CNAME` tells Pages which custom domain to serve, and the build copies
-it into the output on every deploy — the validator fails the build if it goes
-missing. At the registrar, `info` is a CNAME record pointing at
-`qcloud-systems.github.io`.
+`static/CNAME` holds the site's custom domain. The build copies it into the
+output on every deploy, and the validator fails the build if it goes missing,
+because losing it would silently drop the domain.
 
 ---
 
