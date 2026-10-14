@@ -31,11 +31,6 @@ port — both default to `:8080`:
 go run . serve -addr :8081
 ```
 
-After the first deploy of the Go rewrite, work through the post-deploy
-checklist in the `qcs-web` repo (`POST-DEPLOY.md`); three of its items apply
-to this repo. `ARCHITECTURE.md` in that repo explains the build strategy
-shared by both sites and how to extend it.
-
 ### Adding a status provider
 
 Add an entry to `statusServices()` in `content.go`. Set `Kind` to
@@ -167,6 +162,131 @@ also provides HTTPS. Deployment needs no stored credentials.
 `static/CNAME` holds the site's custom domain. The build copies it into the
 output on every deploy, and the validator fails the build if it goes missing,
 because losing it would silently drop the domain.
+
+---
+
+## Working in GitHub Codespaces
+
+### Day-to-day workflow
+
+`main` only accepts changes through pull requests, so every change goes on a
+branch:
+
+```bash
+git switch main && git pull           # start from the latest main
+git switch -c YYMMDDShortName          # e.g. 261014PrivacyRepair
+# ...edit, then run `make check` (and `make test` where available)...
+git add -A
+git commit -m "Short summary" -m "Longer explanation of what and why."
+git push -u origin YYMMDDShortName
+```
+
+Then open the pull request and merge it, either on github.com (use the
+**Compare & pull request** banner, then **Merge pull request**) or with
+`gh pr create --fill` and `gh pr merge --merge`. Merging to `main` deploys.
+
+Afterwards, bring your local copy up to date and delete the merged branch:
+
+```bash
+git switch main && git pull && git branch -d YYMMDDShortName
+```
+
+### Working on another repository in the same codespace
+
+A codespace's built-in token can only access the repository the codespace was
+created from. Cloning or pushing any other **private** repository fails with
+`403 Write access to repository not granted`, and SSH URLs fail because a
+codespace has no SSH key. Use HTTPS with your personal GitHub login instead.
+
+Sign in once per codespace, if `gh` is not already logged in with your account:
+
+```bash
+env -u GITHUB_TOKEN gh auth login      # GitHub.com → HTTPS → browser login
+```
+
+Clone with credentials stored in the new clone, so later `pull` and `push`
+work without extra steps:
+
+```bash
+cd /workspaces
+git clone \
+  -c credential.helper= \
+  -c 'credential.helper=!env -u GITHUB_TOKEN gh auth git-credential' \
+  https://github.com/OWNER/REPO.git
+```
+
+For a repository that was already cloned and now refuses to pull or push, run
+this once inside it:
+
+```bash
+git config credential.helper ''
+git config --add credential.helper '!env -u GITHUB_TOKEN gh auth git-credential'
+```
+
+In those repositories, prefix `gh` commands the same way, for example
+`env -u GITHUB_TOKEN gh pr create --fill`.
+
+Optional shortcut, saved to your shell profile in this codespace:
+
+```bash
+cat >> ~/.bashrc <<'BASHRC'
+ghclone() {
+  cd /workspaces && git clone \
+    -c credential.helper= \
+    -c 'credential.helper=!env -u GITHUB_TOKEN gh auth git-credential' \
+    "https://github.com/$1.git" && cd "$(basename "$1")"
+}
+BASHRC
+source ~/.bashrc
+ghclone OWNER/REPO
+```
+
+To see several repositories side by side in the Explorer, use **File → Add
+Folder to Workspace…**, or save a `.code-workspace` file in `/workspaces`
+(outside every repository) and open it with **File → Open Workspace from
+File…**.
+
+### Codespace usage and billing
+
+**Typical usage** (measured 2026-10-14 on a 2-core codespace):
+
+| Item | Usage | Notes |
+|---|---|---|
+| A cloned repository | a few MB each | Clones are tiny next to everything else |
+| Tools and caches in `~` | about 1.6 GB | Go module cache, CLI tools, editor settings |
+| Codespace disk overall | about 12 GB of 32 GB | Mostly the base image: OS, languages, tools |
+| Memory (RAM) | about 2–3 GB of 8 GB | Comes with the machine size; not billed separately |
+
+**Free monthly allowance** on a GitHub Free personal account:
+
+| | Included | Counts when |
+|---|---|---|
+| Compute | 120 core-hours (60 hours on a 2-core machine) | the codespace is **running** |
+| Storage | 15 GB-month | the codespace **exists**, running or stopped |
+
+One codespace kept for a whole month uses most of the storage allowance; a
+second codespace kept alongside it is what pushes usage over, not extra clones.
+
+**When GitHub charges:** only if a Codespaces spending limit above $0 is set.
+With the default $0 limit, codespaces stop when the allowance runs out and
+can be used again when it resets at the start of the next month. Nothing is
+billed and files are kept.
+
+**Check actual usage:** github.com/settings/billing, under Codespaces. The
+allowances above can change; GitHub's documentation page "About billing for
+GitHub Codespaces" has the current figures.
+
+**Keeping usage low:**
+
+- **Stop** the codespace when you finish (Command Palette → *Codespaces: Stop
+  Current Codespace*) rather than closing the tab; idle codespaces keep
+  running until they time out.
+- Shorten the idle timeout to 10–15 minutes at github.com/settings/codespaces.
+- Stay on a 2-core machine; larger machines use the allowance faster.
+- Keep one codespace and clone extra repositories into it, rather than
+  creating a codespace per repository.
+- Push your work before **deleting** a codespace; anything not pushed is lost.
+- Delete clones you no longer need once their work is pushed.
 
 ---
 
