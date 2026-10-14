@@ -296,8 +296,8 @@ func faqs() []FAQ {
 			A: `No. It reports only on the third-party platforms QCS projects depend on, read from each provider's own status feed.`,
 		},
 		{
-			Q: "Where can I find service agreements, NDAs, or beta testing terms?",
-			A: `Blank templates are published on <a href="https://qcloud.systems/legal/" target="_blank" rel="noopener">qcloud.systems</a>. Executed, client-specific documents are never posted publicly.`,
+			Q: "Where can I find QCS agreement templates and client policies?",
+			A: `Blank agreement templates and client policies are published on <a href="https://qcloud.systems/legal/" target="_blank" rel="noopener">qcloud.systems</a>. Executed, client-specific documents are never posted publicly.`,
 		},
 		{
 			Q: "How is wearable and health data handled?",

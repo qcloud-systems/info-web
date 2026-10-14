@@ -70,7 +70,7 @@ The format is based on [Semantic Versioning](https://semver.org/).
 ### Changed
 - Overhauled HTML structure for better semantic organization
 - Completely rewrote CSS with modern grey (#2d3e50-#34495e) and blue (#0066cc) theme
-- Updated deployment process to use GitHub Actions instead of basic GitHub Pages
+- Moved deployment to GitHub Actions
 - Improved README with comprehensive sections on deployment and DNS
 
 ### Fixed
