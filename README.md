@@ -8,6 +8,8 @@ Source for **info.qcloud.systems**, a public reference hub for QCS projects.
 A Go program renders static HTML into `./public`, which GitHub Actions
 publishes to managed static hosting.
 
+The `docs-site/` folder is a separate site, **docs.qcloud.systems**, built with MkDocs Material. See [docs-site/README.md](docs-site/README.md).
+
 **Everything this site serves is public by design.** Agreement templates live on [qcloud.systems](https://qcloud.systems/legal/),
 and executed client documents are not published anywhere.
 

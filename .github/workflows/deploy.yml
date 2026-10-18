@@ -3,6 +3,10 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches: [ main ]
+    # docs-site/ is docs.qcloud.systems, built separately by Cloudflare Pages.
+    paths-ignore:
+      - "docs-site/**"
+      - ".github/workflows/docs-site.yml"
 
 jobs:
   deploy:

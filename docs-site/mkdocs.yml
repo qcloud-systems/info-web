@@ -1,0 +1,148 @@
+site_name: QCS Knowledge Base
+site_url: https://docs.qcloud.systems/
+site_description: Engineering notes, self-hosting guides and product documentation from QCS.
+site_author: QCS
+copyright: "&copy; QCS &middot; Everything on this site is public"
+
+repo_url: https://github.com/qcloud-systems/info-web
+repo_name: qcloud-systems/info-web
+edit_uri: edit/main/docs-site/docs/
+
+theme:
+  name: material
+  custom_dir: overrides
+  language: en
+  logo: assets/images/q-mark.svg
+  favicon: assets/images/q-mark.svg
+  font:
+    text: Inter
+    code: JetBrains Mono
+  icon:
+    repo: fontawesome/brands/github
+  palette:
+    - media: "(prefers-color-scheme)"
+      toggle:
+        icon: material/brightness-auto
+        name: Switch to light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: custom
+      accent: custom
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: custom
+      accent: custom
+      toggle:
+        icon: material/weather-night
+        name: Switch to system preference
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.indexes
+    - navigation.top
+    - navigation.footer
+    - navigation.path
+    - navigation.instant
+    - navigation.instant.progress
+    - navigation.tracking
+    - search.suggest
+    - search.highlight
+    - search.share
+    - toc.follow
+    - content.code.copy
+    - content.code.annotate
+    - content.tabs.link
+    - content.action.edit
+
+extra_css:
+  - assets/stylesheets/qcs.css
+
+extra:
+  generator: false
+  social:
+    - icon: material/web
+      link: https://qcloud.systems
+      name: qcloud.systems
+    - icon: material/information-outline
+      link: https://info.qcloud.systems
+      name: QCS Information Hub
+    - icon: fontawesome/brands/github
+      link: https://github.com/qcloud-systems
+      name: QCS on GitHub
+    - icon: fontawesome/brands/medium
+      link: https://qcloudsystems.medium.com/
+      name: QCS on Medium
+
+hooks:
+  - hooks/secret_scan.py
+
+plugins:
+  - search
+  - tags
+
+markdown_extensions:
+  - abbr
+  - admonition
+  - attr_list
+  - def_list
+  - footnotes
+  - md_in_html
+  - tables
+  - toc:
+      permalink: true
+  - pymdownx.details
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.keys
+  - pymdownx.mark
+  - pymdownx.snippets:
+      base_path: [templates]
+      check_paths: true
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+
+nav:
+  - Home: index.md
+  - Engineering Notes:
+      - engineering-notes/index.md
+      - Infrastructure: engineering-notes/infrastructure/index.md
+      - Security: engineering-notes/security/index.md
+      - AWS: engineering-notes/aws/index.md
+      - Hugo:
+          - engineering-notes/hugo/index.md
+          - Building a Static Site with Hugo: engineering-notes/hugo/static-site-with-hugo.md
+      - GitHub: engineering-notes/github/index.md
+      - Automation: engineering-notes/automation/index.md
+  - Self-Hosting Guides:
+      - self-hosting/index.md
+      - Docker: self-hosting/docker/index.md
+      - Linux: self-hosting/linux/index.md
+      - Deployments: self-hosting/deployments/index.md
+      - Cloudflare: self-hosting/cloudflare/index.md
+      - Monitoring: self-hosting/monitoring/index.md
+  - Product Guides:
+      - products/index.md
+      - Installation: products/installation/index.md
+      - Configuration: products/configuration/index.md
+      - Administration: products/administration/index.md
+      - Troubleshooting: products/troubleshooting/index.md
+  - Tags: tags.md
+  - Contributing:
+      - contributing/index.md
+      - Page Templates: contributing/templates.md

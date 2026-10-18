@@ -1,0 +1,330 @@
+/* ==========================================================================
+   QCS Knowledge Base: brand layer over MkDocs Material.
+   Same palette and type as qcloud.systems and info.qcloud.systems, so the
+   three sites read as one family. Change colours here, not in templates.
+   ========================================================================== */
+
+:root {
+  --qcs-ink: #1a2332;
+  --qcs-ink-2: #243246;
+  --qcs-action: #0066cc;
+  --qcs-action-dk: #0052a3;
+  --qcs-accent: #6cc5e6;
+  --qcs-page: #f0f2f5;
+  --qcs-line: #e2e8f0;
+  --qcs-radius: 10px;
+}
+
+/* ---------- Light scheme ---------- */
+[data-md-color-scheme="default"] {
+  --md-primary-fg-color: var(--qcs-ink);
+  --md-primary-fg-color--light: var(--qcs-ink-2);
+  --md-primary-fg-color--dark: #121a26;
+  --md-primary-bg-color: #ffffff;
+  --md-accent-fg-color: var(--qcs-action);
+  --md-accent-fg-color--transparent: rgba(0, 102, 204, 0.1);
+  --md-typeset-a-color: var(--qcs-action);
+  --md-default-fg-color: #2d3e50;
+}
+
+/* ---------- Dark scheme ---------- */
+[data-md-color-scheme="slate"] {
+  --md-hue: 215;
+  --md-primary-fg-color: #121a26;
+  --md-primary-fg-color--light: var(--qcs-ink);
+  --md-primary-fg-color--dark: #0c121b;
+  --md-primary-bg-color: #e8eef5;
+  --md-accent-fg-color: var(--qcs-accent);
+  --md-accent-fg-color--transparent: rgba(108, 197, 230, 0.12);
+  --md-typeset-a-color: var(--qcs-accent);
+  --md-default-bg-color: #141c28;
+}
+
+/* ---------- Header ---------- */
+.md-header,
+.md-tabs {
+  background: linear-gradient(180deg, var(--qcs-ink) 0%, var(--qcs-ink-2) 100%);
+}
+
+.md-header__button.md-logo img {
+  height: 1.7rem;
+  width: 1.7rem;
+}
+
+.md-tabs__link {
+  font-weight: 500;
+}
+
+/* ---------- Typography ---------- */
+.md-typeset h1 {
+  color: var(--md-default-fg-color);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.md-typeset h2 {
+  font-weight: 650;
+}
+
+.md-typeset .md-button {
+  border-radius: 999px;
+  font-weight: 600;
+}
+
+.md-typeset .md-button--primary {
+  background-color: var(--qcs-action);
+  border-color: var(--qcs-action);
+  color: #fff;
+}
+
+.md-typeset .md-button--primary:hover,
+.md-typeset .md-button--primary:focus {
+  background-color: var(--qcs-action-dk);
+  border-color: var(--qcs-action-dk);
+}
+
+/* ---------- Cards ---------- */
+.md-typeset .grid.cards > ul > li,
+.md-typeset .grid > .card {
+  border-radius: var(--qcs-radius);
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+}
+
+.md-typeset .grid.cards > ul > li:hover,
+.md-typeset .grid > .card:hover {
+  transform: translateY(-2px);
+  border-color: transparent;
+  box-shadow: 0 10px 28px rgba(0, 102, 204, 0.12);
+}
+
+.md-typeset .grid.cards .lg {
+  color: var(--md-accent-fg-color);
+}
+
+/* ---------- Home: hero ---------- */
+.qcs-hero {
+  background:
+    radial-gradient(1200px 400px at 85% -10%, rgba(108, 197, 230, 0.22), transparent 60%),
+    linear-gradient(180deg, var(--qcs-ink-2) 0%, var(--qcs-ink) 100%);
+  color: #fff;
+}
+
+.qcs-hero__inner.md-grid {
+  box-sizing: border-box;
+  max-width: 52rem;
+  padding: 3.2rem 0.8rem 3.6rem;
+}
+
+.qcs-hero__mark {
+  display: block;
+  width: 3.2rem;
+  height: 3.2rem;
+  margin-bottom: 1rem;
+}
+
+.qcs-hero__eyebrow {
+  margin: 0 0 0.4rem;
+  color: var(--qcs-accent);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.qcs-hero__title {
+  margin: 0 0 0.8rem;
+  color: #fff;
+  font-size: clamp(1.7rem, 4.2vw, 2.6rem);
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+
+.qcs-hero__lede {
+  max-width: 36rem;
+  margin: 0 0 1.6rem;
+  color: rgba(255, 255, 255, 0.82);
+  font-size: 0.95rem;
+  line-height: 1.65;
+}
+
+.qcs-hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.qcs-hero .md-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.55rem 1.3rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.qcs-hero .md-button--primary {
+  background: var(--qcs-action);
+  border: 0.1rem solid var(--qcs-action);
+  color: #fff;
+}
+
+.qcs-hero .md-button--primary:hover {
+  background: var(--qcs-action-dk);
+  border-color: var(--qcs-action-dk);
+}
+
+.qcs-hero__search {
+  border: 0.1rem solid rgba(255, 255, 255, 0.35);
+  color: #fff;
+}
+
+.qcs-hero__search:hover {
+  border-color: var(--qcs-accent);
+  color: var(--qcs-accent);
+}
+
+.qcs-hero__search kbd {
+  padding: 0 0.35rem;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 4px;
+  font-size: 0.65rem;
+}
+
+/* Home has no sidebars: give the body a comfortable measure. */
+.md-content:has(.qcs-areas) .md-content__inner {
+  box-sizing: border-box;
+  max-width: 52rem;
+  margin: 0 auto 1.2rem;
+  padding: 0 0.8rem;
+}
+
+.md-main__inner:has(.qcs-areas) {
+  margin-top: 0.4rem;
+}
+
+.md-typeset .qcs-section-title:first-child {
+  margin-top: 1rem;
+}
+
+.md-typeset .qcs-section-title {
+  margin-top: 2.2rem;
+  font-size: 1.05rem;
+  font-weight: 650;
+  letter-spacing: 0.01em;
+}
+
+/* ---------- Home: learning path ---------- */
+.md-typeset ol.qcs-path {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  margin: 1rem 0 1.2rem;
+  padding: 0;
+  list-style: none;
+  counter-reset: qcs-step;
+}
+
+.md-typeset ol.qcs-path > li {
+  position: relative;
+  margin: 0;
+  padding: 2.4rem 0.8rem 0 0;
+  counter-increment: qcs-step;
+}
+
+/* Numbered node */
+.md-typeset ol.qcs-path > li::before {
+  content: counter(qcs-step);
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 1.7rem;
+  height: 1.7rem;
+  border-radius: 50%;
+  background: var(--qcs-accent);
+  color: var(--qcs-ink);
+  font-weight: 700;
+  font-size: 0.75rem;
+  box-shadow: 0 0 0 4px var(--md-default-bg-color);
+}
+
+/* Connector line */
+.md-typeset ol.qcs-path > li:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  top: 0.82rem;
+  left: 1.7rem;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--qcs-accent), var(--md-default-fg-color--lightest));
+}
+
+.qcs-path__step {
+  display: block;
+  font-weight: 650;
+  color: var(--md-default-fg-color);
+}
+
+.qcs-path__who {
+  display: block;
+  font-size: 0.7rem;
+  color: var(--md-default-fg-color--light);
+}
+
+/* ---------- Home: audience ---------- */
+.md-typeset .qcs-audience {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.6rem;
+  margin: 0.4rem 0 1rem;
+}
+
+.md-typeset .qcs-audience > div {
+  padding: 0.7rem 0.85rem;
+  border: 1px solid var(--md-default-fg-color--lightest);
+  border-left: 3px solid var(--md-accent-fg-color);
+  border-radius: var(--qcs-radius);
+  font-size: 0.72rem;
+  line-height: 1.5;
+}
+
+.md-typeset .qcs-audience p {
+  margin: 0;
+}
+
+.md-typeset .qcs-footnote {
+  margin-top: 2rem;
+  font-size: 0.7rem;
+  color: var(--md-default-fg-color--light);
+}
+
+/* ---------- Small screens ---------- */
+@media screen and (max-width: 44.9375em) {
+  .md-typeset ol.qcs-path {
+    grid-template-columns: 1fr;
+    gap: 0.9rem;
+  }
+
+  .md-typeset ol.qcs-path > li {
+    padding: 0.1rem 0 0 2.6rem;
+  }
+
+  .md-typeset ol.qcs-path > li:not(:last-child)::after {
+    top: 1.7rem;
+    left: 0.82rem;
+    right: auto;
+    bottom: -0.9rem;
+    width: 2px;
+    height: auto;
+    background: var(--md-default-fg-color--lightest);
+  }
+
+  .md-typeset .qcs-audience {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

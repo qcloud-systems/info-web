@@ -1,0 +1,28 @@
+{% extends "main.html" %}
+
+{#- The home page: a branded hero above the tabs, then the page body full width. -#}
+
+{% block tabs %}
+  {{ super() }}
+  <section class="qcs-hero" aria-labelledby="qcs-hero-title">
+    <div class="qcs-hero__inner md-grid">
+      <img class="qcs-hero__mark" src="{{ 'assets/images/q-mark.svg' | url }}" alt="" width="64" height="64">
+      <p class="qcs-hero__eyebrow">QCS Knowledge Base</p>
+      <h1 id="qcs-hero-title" class="qcs-hero__title">From first note to production.</h1>
+      <p class="qcs-hero__lede">
+        Engineering notes, self-hosting guides and product documentation in one place.
+        Learn how it works, run it yourself, then run it in production.
+      </p>
+      <div class="qcs-hero__actions">
+        <a href="{{ 'engineering-notes/' | url }}" class="md-button md-button--primary">Start with Engineering Notes</a>
+        <label for="__search" class="md-button qcs-hero__search" tabindex="0" role="button">
+          Search the docs <kbd>/</kbd>
+        </label>
+      </div>
+    </div>
+  </section>
+{% endblock %}
+
+{% block content %}
+  {{ page.content }}
+{% endblock %}

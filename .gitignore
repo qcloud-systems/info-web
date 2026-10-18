@@ -19,3 +19,8 @@ Thumbs.db
 .idea/
 *.swp
 *.swo
+
+# MkDocs knowledge base build output
+docs-site/site/
+__pycache__/
+.venv/
