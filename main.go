@@ -94,8 +94,9 @@ var cfToken = regexp.MustCompile(`^[0-9a-f]{32}$`)
 // forbidden names must never ship from this repo. They are the documents that
 // used to sit here behind a client-side password check that did not actually
 // restrict anything: the files were served at predictable public URLs and the
-// passwords were injected into page JavaScript at deploy time. Agreements now
-// live on qcloud.systems. This check exists so a copy cannot drift back in.
+// passwords were injected into page JavaScript at deploy time. Agreements are
+// no longer published from this repo. This check exists so a copy cannot drift
+// back in.
 var forbidden = []string{
 	"protected.html",
 	"service-agreement.html",
@@ -253,7 +254,7 @@ func validate() error {
 		for _, bad := range forbidden {
 			if strings.EqualFold(path.Base(p), bad) {
 				return fmt.Errorf("%s must not be published from this repo; "+
-					"agreements belong on qcloud.systems", p)
+					"agreements do not belong on this site", p)
 			}
 		}
 		return nil

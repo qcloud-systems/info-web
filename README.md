@@ -8,8 +8,8 @@ Source for **info.qcloud.systems**, a public reference hub for QCS projects.
 A Go program renders static HTML into `./public`, which GitHub Actions
 publishes to managed static hosting.
 
-**Everything this site serves is public by design.** Agreement templates live on [qcloud.systems](https://qcloud.systems/legal/),
-and executed client documents are not published anywhere.
+**Everything this site serves is public by design.** Agreements and executed
+client documents are not published from this repo.
 
 ---
 
@@ -24,8 +24,8 @@ make fmt vet  # gofmt + go vet
 
 Without `make`: `go run . serve`, `go run . build`, `go run . check`.
 
-To run this alongside qcloud.systems locally, give one of them a different
-port — both default to `:8080`:
+To run this alongside another local site that also uses `:8080`, give one of
+them a different port:
 
 ```bash
 go run . serve -addr :8081
@@ -134,7 +134,7 @@ every build. Deploy at least once a year so it never expires.
   accent (`#6cc5e6`) from the qcloud systems wordmark, on grey/white surfaces
 - **Typography**: Inter
 - **Layout**: fixed sidebar on desktop, stacked on narrow screens
-- Matches qcloud.systems so the two sites read as one family
+- QCS brand palette and type
 
 ---
 
@@ -300,7 +300,7 @@ Fork, branch, test locally with `make dev`, open a pull request.
 ## Version history
 
 - **3.1.0** — Engineering Notes, roadmap, FAQ, articles, policy pages, SEO
-- **3.0.0** — Go static site generator; agreements moved to qcloud.systems
+- **3.0.0** — Go static site generator; agreements removed from this site
 - **2.0.0** — Grey/blue redesign, GitHub Actions deployment
 - **1.0.0** — Initial documentation hub
 
@@ -309,7 +309,6 @@ Fork, branch, test locally with `make dev`, open a pull request.
 ## Links
 
 - **Site**: https://info.qcloud.systems
-- **Main site**: https://qcloud.systems
 - **GitHub**: https://github.com/qcloud-systems
 
 ---
