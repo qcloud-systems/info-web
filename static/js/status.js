@@ -1,15 +1,15 @@
 /* Upstream service status, with a 90-day bar per provider.
  *
- * Two adapters:
- *   statuspage  /api/v2/status.json     current indicator
- *               /api/v2/incidents.json  recent incidents -> daily bars
- *   instatus    /summary.json           current state only, no history
+ * Two adapters, one per feed format (set by each row's data-kind):
+ *   api-v2   /api/v2/status.json     current indicator
+ *            /api/v2/incidents.json  recent incidents -> daily bars
+ *   summary  /summary.json           current state only, no history
  *
  * Both are served with permissive CORS headers, so this runs entirely in the
  * browser with no proxy and no credentials.
  *
- * On the bars: Statuspage publishes no uptime-history API -- the bars on
- * their own pages come from internal data. These are reconstructed from
+ * On the bars: these feeds publish no uptime-history API -- the bars on
+ * providers' own status pages come from internal data. These are reconstructed from
  * reported incidents, so a day is red because the provider *posted* an
  * incident covering it. An outage nobody posted shows green. That limit is
  * stated on the page itself; do not present these as measured uptime.
@@ -25,7 +25,7 @@
   var TIMEOUT_MS = 8000;
   var DAY_MS = 86400000;
 
-  // Statuspage top-level indicator -> presentation.
+  // api-v2 top-level indicator -> presentation.
   var INDICATOR = {
     none: { state: 'ok', text: 'Operational' },
     minor: { state: 'warn', text: 'Minor issue' },
@@ -34,8 +34,8 @@
     maintenance: { state: 'info', text: 'Maintenance' }
   };
 
-  // Instatus page.status -> presentation.
-  var INSTATUS = {
+  // summary page.status -> presentation.
+  var SUMMARY = {
     UP: { state: 'ok', text: 'Operational' },
     HASISSUES: { state: 'bad', text: 'Service issues' },
     UNDERMAINTENANCE: { state: 'info', text: 'Maintenance' }
@@ -163,7 +163,7 @@
     }
   }
 
-  function handleStatuspage(item, bars) {
+  function handleApiV2(item, bars) {
     var api = item.getAttribute('data-api');
     var incidentsURL = item.getAttribute('data-incidents');
 
@@ -199,11 +199,11 @@
       });
   }
 
-  function handleInstatus(item) {
+  function handleSummary(item) {
     fetchJSON(item.getAttribute('data-api'))
       .then(function (body) {
         var raw = body && body.page && body.page.status;
-        var mapped = INSTATUS[raw];
+        var mapped = SUMMARY[raw];
         if (!mapped) {
           paintHead(item, 'unknown', 'Unknown');
           return;
@@ -222,12 +222,12 @@
       var barHost = item.querySelector('.status-bars');
       var bars = barHost ? buildBars(barHost) : [];
 
-      if (item.getAttribute('data-kind') === 'instatus') {
+      if (item.getAttribute('data-kind') === 'summary') {
         // No public history; the bars stay neutral by design.
         if (barHost) { barHost.setAttribute('data-history', 'none'); }
-        handleInstatus(item);
+        handleSummary(item);
       } else {
-        handleStatuspage(item, bars);
+        handleApiV2(item, bars);
       }
     }
     stampChecked();

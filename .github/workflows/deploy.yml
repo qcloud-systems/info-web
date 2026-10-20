@@ -1,4 +1,4 @@
-name: Deploy to GitHub Pages
+name: Deploy
 
 on:
   push:
@@ -35,7 +35,7 @@ jobs:
       - name: Build site
         run: go run . build
 
-      - name: Deploy to GitHub Pages
+      - name: Publish site
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}

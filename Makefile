@@ -5,7 +5,7 @@
 dev:
 	go run . serve -addr :8080
 
-# Render the static site into ./public (what GitHub Pages publishes).
+# Render the static site into ./public (what gets published).
 build:
 	go run . build
 

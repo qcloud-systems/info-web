@@ -2,7 +2,7 @@
 
 ![Status](https://img.shields.io/badge/status-active-brightgreen)
 ![License](https://img.shields.io/badge/license-MIT-blue)
-![Version](https://img.shields.io/badge/version-3.2.0-purple)
+![Version](https://img.shields.io/badge/version-3.2.1-purple)
 
 Source for **info.qcloud.systems**, the QCS Trust & Status Center: upstream
 service status, notices (incidents, maintenance, security advisories, service
@@ -38,13 +38,12 @@ accountable. Its sections, in home-page order:
 These are easy to break by accident and expensive to get wrong. Read them
 before changing structure, URLs, or the engine.
 
-1. **Never change the site address or the policy URLs.** The Privacy Policy
-   URL (`/privacy-policy.html`) is the one registered for the Garmin Health API
-   integration, and `/.well-known/security.txt` points researchers at
-   `/security.html`. Renaming the subdomain or moving `privacy-policy.html`,
-   `security.html` or `terms-of-use.html` breaks those references. If a move is
-   ever unavoidable, keep a page at the old URL that redirects to the new one,
-   and update the Garmin registration first.
+1. **Never change the site address or the policy URLs.**
+   `/.well-known/security.txt` points researchers at `/security.html`, and the
+   policy pages (`/privacy-policy.html`, `/terms-of-use.html`, `/security.html`)
+   may be linked from elsewhere. Renaming the subdomain or moving those files
+   breaks those references. If a move is ever unavoidable, keep a page at the
+   old URL that redirects to the new one.
 2. **Keep How It's Built accurate.** That page documents the code in detail
    and is meant to show the engine is understood. Any pull request that
    changes behaviour must update `templates/pages/how-its-built.html` in the
@@ -103,14 +102,20 @@ go run . serve -addr :8081
 
 ### Adding a status provider
 
-Add an entry to `statusServices()` in `content.go`. Set `Kind` to
-`kindStatuspage` or `kindInstatus` — Statuspage entries need both `/api/v2/`
-URLs, Instatus entries must leave `Incidents` empty, and `go run . check`
-enforces both. A provider that serves no CORS-enabled JSON cannot be added
-without a server-side proxy.
+Add an entry to `statusServices()` in `content.go` with a `Role` (what the
+provider does; this is the only label shown) and the `Kind` matching its feed
+format:
+
+- `kindAPIv2` — the feed has `/api/v2/status.json` and
+  `/api/v2/incidents.json`; set both `API` and `Incidents`.
+- `kindSummary` — the feed has a single `/summary.json`; leave `Incidents`
+  empty.
+
+`go run . check` enforces both. A provider whose feed does not allow
+cross-origin requests cannot be added without a server-side proxy.
 
 The daily bars are built from each provider's reported incidents, which is
-the only history Statuspage exposes. They track disclosure, not measured
+the only history these feeds expose. They track disclosure, not measured
 uptime.
 
 The only dependency is Go. There is no Node toolchain.
@@ -165,7 +170,6 @@ public/                  BUILD OUTPUT — wiped on every build, gitignored
 | Roadmap               | `roadmap()` in `content.go`                  |
 | FAQ                   | `faqs()` in `content.go`                     |
 | Notice categories     | `noticeCategories()` in `content.go`         |
-| Analytics             | Set `CloudflareAnalytics` in `content.go`    |
 | Notices               | Add `notices/short-name.md` starting with `# Title` |
 
 ### Publishing a notice
@@ -376,6 +380,7 @@ Fork, branch, test locally with `make dev`, open a pull request.
 
 ## Version history
 
+- **3.2.1** — Vendor-neutral site, docs and code
 - **3.2.0** — Trust & Status Center: notices engine, How It's Built page
 - **3.1.0** — Engineering Notes, roadmap, FAQ, articles, policy pages, SEO
 - **3.0.0** — Go static site generator; agreements removed from this site

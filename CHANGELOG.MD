@@ -6,6 +6,25 @@ The format is based on [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [3.2.1] — 2026-10-20
+### Changed
+- The site, its documentation, and its code are now vendor-neutral: hosting
+  and service providers are described by what they do, not by name.
+- Upstream status feeds are identified by format rather than product, and
+  status providers are labelled by role only.
+
+- The Privacy Policy now covers this site only: what it collects (hosting
+  logs only), what visitors' browsers fetch from other services, and visitor
+  rights. Health-data and wearable-integration terms belonged to a separate
+  project and were removed.
+- Brand marketing services are announced as now available on the home page.
+
+### Removed
+- The optional web analytics setting, which was never enabled.
+- The Rizal Center roadmap item.
+
+---
+
 ## [3.2.0] — 2026-10-20
 ### Added
 - **Trust & Status Center** — the site now focuses on service status, notices,
@@ -47,7 +66,7 @@ The format is based on [Semantic Versioning](https://semver.org/).
 - Link previews (Open Graph and Twitter cards) with a branded preview image,
   canonical URLs, and structured data for search engines.
 - A "last checked" time under the upstream status list.
-- Optional Cloudflare Web Analytics, off until a token is set in `content.go`.
+- An optional web analytics setting, off by default (removed in 3.2.1).
 - Unit tests, run on every deploy.
 
 ### Changed

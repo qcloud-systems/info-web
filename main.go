@@ -3,7 +3,7 @@
 //	go run . serve    # dev server on :8080, re-reads templates each request
 //	go run . build    # render the static site into ./public
 //
-// build produces the directory that GitHub Pages publishes. Everything this
+// build produces the directory that static hosting publishes. Everything this
 // site emits is public by design; there is no gated content here, and the
 // build fails if a file that looks like an agreement reappears.
 package main
@@ -21,7 +21,6 @@ import (
 	"os"
 	"path"
 	"path/filepath"
-	"regexp"
 	"strings"
 	"time"
 )
@@ -84,9 +83,6 @@ func roadmapGroups() []RoadmapGroup {
 	}
 	return groups
 }
-
-// cfToken matches a Cloudflare Web Analytics beacon token.
-var cfToken = regexp.MustCompile(`^[0-9a-f]{32}$`)
 
 // forbidden names must never ship from this repo. They are the documents that
 // used to sit here behind a client-side password check that did not actually
@@ -162,7 +158,7 @@ func validate() error {
 		}
 	}
 
-	// GitHub Pages needs the custom domain file to survive every deploy.
+	// The host needs the custom domain file to survive every deploy.
 	if _, err := fs.Stat(staticFS, "static/CNAME"); err != nil {
 		return errors.New("static/CNAME is missing; the custom domain would be dropped on deploy")
 	}
@@ -170,9 +166,6 @@ func validate() error {
 	s := site()
 	if !strings.HasPrefix(s.BaseURL, "https://") || strings.HasSuffix(s.BaseURL, "/") {
 		return fmt.Errorf("site BaseURL must be https with no trailing slash, got %q", s.BaseURL)
-	}
-	if s.CloudflareAnalytics != "" && !cfToken.MatchString(s.CloudflareAnalytics) {
-		return fmt.Errorf("CloudflareAnalytics must be a 32-character hex token, got %q", s.CloudflareAnalytics)
 	}
 
 	for _, it := range roadmap() {
@@ -221,42 +214,40 @@ func validate() error {
 	seenRole := map[string]bool{}
 	for _, s := range statusServices() {
 		if s.Role == "" {
-			return fmt.Errorf("status service %q has no Role; the page renders "+
-				"Role, not Name, so an empty one shows a blank row", s.Name)
+			return fmt.Errorf("status service with API %q has no Role; the page "+
+				"shows only the Role, so an empty one renders a blank row", s.API)
 		}
 		if seenRole[s.Role] {
-			return fmt.Errorf("status service %q reuses Role %q; roles are the "+
-				"only label shown, so duplicates are indistinguishable", s.Name, s.Role)
+			return fmt.Errorf("status service %q is listed twice; roles are the "+
+				"only label shown, so duplicates are indistinguishable", s.Role)
 		}
 		seenRole[s.Role] = true
 
 		switch s.Kind {
-		case kindStatuspage:
+		case kindAPIv2:
 			if !strings.HasSuffix(s.API, "/api/v2/status.json") {
-				return fmt.Errorf("status service %q: statuspage API must end in "+
-					"/api/v2/status.json, got %q", s.Name, s.API)
+				return fmt.Errorf("status service %q: api-v2 API must end in "+
+					"/api/v2/status.json, got %q", s.Role, s.API)
 			}
 			if !strings.HasSuffix(s.Incidents, "/api/v2/incidents.json") {
-				return fmt.Errorf("status service %q: statuspage incidents must end in "+
-					"/api/v2/incidents.json, got %q", s.Name, s.Incidents)
+				return fmt.Errorf("status service %q: api-v2 incidents must end in "+
+					"/api/v2/incidents.json, got %q", s.Role, s.Incidents)
 			}
-		case kindInstatus:
+		case kindSummary:
 			if s.Incidents != "" {
-				return fmt.Errorf("status service %q: instatus exposes no incident "+
-					"history, so Incidents must be empty", s.Name)
+				return fmt.Errorf("status service %q: summary feeds expose no incident "+
+					"history, so Incidents must be empty", s.Role)
 			}
 		default:
 			return fmt.Errorf("status service %q: unknown kind %q (want %q or %q)",
-				s.Name, s.Kind, kindStatuspage, kindInstatus)
+				s.Role, s.Kind, kindAPIv2, kindSummary)
 		}
 
-		for label, u := range map[string]string{"API": s.API, "Page": s.Page} {
-			if !strings.HasPrefix(u, "https://") {
-				return fmt.Errorf("status service %q: %s must be https, got %q", s.Name, label, u)
-			}
+		if !strings.HasPrefix(s.API, "https://") {
+			return fmt.Errorf("status service %q: API must be https, got %q", s.Role, s.API)
 		}
 		if s.Incidents != "" && !strings.HasPrefix(s.Incidents, "https://") {
-			return fmt.Errorf("status service %q: Incidents must be https, got %q", s.Name, s.Incidents)
+			return fmt.Errorf("status service %q: Incidents must be https, got %q", s.Role, s.Incidents)
 		}
 	}
 
@@ -489,7 +480,7 @@ func build() error {
 		}
 	}
 
-	// Tell GitHub Pages not to run the content through Jekyll.
+	// Tell the host to serve the output as-is, without its own processing.
 	if err := os.WriteFile(filepath.Join(*out, ".nojekyll"), nil, 0o644); err != nil {
 		return err
 	}

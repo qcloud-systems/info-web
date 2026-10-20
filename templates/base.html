@@ -86,9 +86,6 @@
   </main>
 
   <script src="/js/status.js" defer></script>
-  {{- with .Site.CloudflareAnalytics}}
-  <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "{{.}}"}'></script>
-  {{- end}}
 </body>
 
 </html>
