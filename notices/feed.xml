@@ -5,7 +5,7 @@
     <link>https://info.qcloud.systems/notices/</link>
     <description>Incident reports, maintenance windows, security advisories, and service changes from QCS.</description>
     <language>en</language>
-    <lastBuildDate>Tue, 20 Oct 2026 01:22:44 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 20 Oct 2026 02:53:06 +0000</lastBuildDate>
     <atom:link href="https://info.qcloud.systems/notices/feed.xml" rel="self" type="application/rss+xml"></atom:link>
     <item>
       <title>Introducing the QCS Trust &amp; Status Center</title>

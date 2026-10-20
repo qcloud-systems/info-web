@@ -60,6 +60,14 @@
   <p>
     Everything published here is public, dated, and kept current.
   </p>
+  <div class="callout">
+    <h3>Now available: brand marketing services</h3>
+    <p>
+      Establishing your brand online? QCS registers a domain in your business's own name and
+      builds a branded landing page for it. You own the domain from day one.
+      <a href="/#contact">Get in touch</a> to get started.
+    </p>
+  </div>
   <p class="actions">
     <a href="/#status" class="btn btn-primary">Check service status</a>
     <a href="/notices/" class="btn btn-quiet">Read notices</a>
@@ -78,7 +86,7 @@
   </p>
 
   <ul class="status-list" role="status" aria-live="polite">
-    <li class="status-item" data-kind="statuspage" data-api="https://status.supabase.com/api/v2/status.json" data-incidents="https://status.supabase.com/api/v2/incidents.json">
+    <li class="status-item" data-kind="api-v2" data-api="https://status.supabase.com/api/v2/status.json" data-incidents="https://status.supabase.com/api/v2/incidents.json">
       <div class="status-head">
         <span class="status-dot" data-state="loading" aria-hidden="true"></span>
         <span class="status-name">Database</span>
@@ -90,7 +98,7 @@
         <span class="status-scale-end">today</span>
       </div>
     </li>
-    <li class="status-item" data-kind="statuspage" data-api="https://www.githubstatus.com/api/v2/status.json" data-incidents="https://www.githubstatus.com/api/v2/incidents.json">
+    <li class="status-item" data-kind="api-v2" data-api="https://www.githubstatus.com/api/v2/status.json" data-incidents="https://www.githubstatus.com/api/v2/incidents.json">
       <div class="status-head">
         <span class="status-dot" data-state="loading" aria-hidden="true"></span>
         <span class="status-name">Source control &amp; CI</span>
@@ -102,7 +110,7 @@
         <span class="status-scale-end">today</span>
       </div>
     </li>
-    <li class="status-item" data-kind="statuspage" data-api="https://www.cloudflarestatus.com/api/v2/status.json" data-incidents="https://www.cloudflarestatus.com/api/v2/incidents.json">
+    <li class="status-item" data-kind="api-v2" data-api="https://www.cloudflarestatus.com/api/v2/status.json" data-incidents="https://www.cloudflarestatus.com/api/v2/incidents.json">
       <div class="status-head">
         <span class="status-dot" data-state="loading" aria-hidden="true"></span>
         <span class="status-name">CDN &amp; DNS</span>
@@ -114,7 +122,7 @@
         <span class="status-scale-end">today</span>
       </div>
     </li>
-    <li class="status-item" data-kind="statuspage" data-api="https://status.flyio.net/api/v2/status.json" data-incidents="https://status.flyio.net/api/v2/incidents.json">
+    <li class="status-item" data-kind="api-v2" data-api="https://status.flyio.net/api/v2/status.json" data-incidents="https://status.flyio.net/api/v2/incidents.json">
       <div class="status-head">
         <span class="status-dot" data-state="loading" aria-hidden="true"></span>
         <span class="status-name">Edge hosting</span>
@@ -126,7 +134,7 @@
         <span class="status-scale-end">today</span>
       </div>
     </li>
-    <li class="status-item" data-kind="instatus" data-api="https://railway.instatus.com/summary.json">
+    <li class="status-item" data-kind="summary" data-api="https://railway.instatus.com/summary.json">
       <div class="status-head">
         <span class="status-dot" data-state="loading" aria-hidden="true"></span>
         <span class="status-name">Application backend</span>
@@ -172,14 +180,14 @@
 <section id="whats-new">
   <h1>What's New</h1>
   <p class="release-meta">
-    Version <strong>3.2.0</strong> &middot; 2026-10-20
+    Version <strong>3.2.1</strong> &middot; 2026-10-20
   </p>
   <ul>
-    <li><strong>Trust &amp; Status Center</strong> — the site now focuses on service status, notices, and policies.</li>
-    <li><strong>Notices</strong> — incident reports, maintenance windows, security advisories, and service changes, with categories, search, and an RSS feed.</li>
-    <li><strong>How It's Built</strong> — a page explaining how the Go generator behind this site works, from validation to the notices engine.</li>
-    <li><strong>Policies</strong> section grouping the Privacy Policy, Security Policy, Terms of Use, and Accessibility Statement.</li>
-    <li>Notice categories are checked at build time; an unknown category fails the build.</li>
+    <li>The site, its documentation, and its code are now vendor-neutral: hosting and service providers are described by what they do, not by name.</li>
+    <li>Upstream status feeds are identified by format rather than product, and status providers are labelled by role only.</li>
+    <li>The Privacy Policy now covers this site only: what it collects (hosting logs only), what visitors' browsers fetch from other services, and visitor rights. Health-data and wearable-integration terms belonged to a separate project and were removed.</li>
+    <li>Brand marketing services are announced as now available on the home page.</li>
+    <li>The optional web analytics setting, which was never enabled.</li>
     </ul>
   <p class="actions">
     <a href="https://github.com/qcloud-systems/info-web/blob/main/CHANGELOG.MD" class="btn btn-quiet" target="_blank" rel="noopener">Full changelog</a>
@@ -192,10 +200,7 @@
   <div class="roadmap">
     <div class="roadmap-col" data-stage="in-progress">
       <h3>In progress</h3>
-      <div class="roadmap-item">
-        <h4>Rizal Center</h4>
-        <p>Interactive platform for community and organizational information.</p>
-      </div>
+      <p class="roadmap-empty">Nothing here right now.</p>
       </div>
     <div class="roadmap-col" data-stage="planned">
       <h3>Planned</h3>
@@ -224,7 +229,7 @@
   <div class="projects-grid">
     <div class="project-card">
       <h3>Privacy Policy</h3>
-      <p>What data QCS collects, how it is protected, and your rights, including Garmin Health API data.</p>
+      <p>What little information this site involves, how it is handled, and your rights.</p>
       <a href="/privacy-policy.html" class="btn-primary">Read Policy &rarr;</a>
     </div>
     <div class="project-card">
@@ -257,8 +262,8 @@
       <p>No. It reports only on the third-party platforms QCS projects depend on, read from each provider's own status feed.</p>
     </details>
     <details>
-      <summary>How is wearable and health data handled?</summary>
-      <p>See the <a href="/privacy-policy.html">Privacy Policy</a>, including the section on Garmin Health API compliance.</p>
+      <summary>Does this site track visitors?</summary>
+      <p>No. It sets no cookies and runs no analytics or tracking scripts. The <a href="/privacy-policy.html">Privacy Policy</a> explains the little information that is involved in serving a website.</p>
     </details>
     <details>
       <summary>How do I report a security vulnerability?</summary>
@@ -311,7 +316,7 @@
         <a href="https://github.com/qcloud-systems" target="_blank" rel="noopener">GitHub</a>
       </div>
       <p class="footer-note">
-        &copy; 2026 QCS. Trust &amp; Status Center. Version 3.2.0. Last updated <time datetime="2026-10-20">October 20, 2026</time>.
+        &copy; 2026 QCS. Trust &amp; Status Center. Version 3.2.1. Last updated <time datetime="2026-10-20">October 20, 2026</time>.
       </p>
     </footer>
   </main>
