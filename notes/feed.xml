@@ -5,7 +5,7 @@
     <link>https://info.qcloud.systems/notes/</link>
     <description>Engineering insights on infrastructure, tooling, and software development.</description>
     <language>en</language>
-    <lastBuildDate>Wed, 14 Oct 2026 21:59:34 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 20 Oct 2026 01:05:19 +0000</lastBuildDate>
     <atom:link href="https://info.qcloud.systems/notes/feed.xml" rel="self" type="application/rss+xml"></atom:link>
     <item>
       <title>Building a Static Site with Hugo</title>
