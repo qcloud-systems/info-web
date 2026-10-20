@@ -1,25 +1,26 @@
 package main
 
-// Engineering Notes: Markdown files in notes/ published under /notes/.
+// Notices: Markdown files in notices/ published under /notices/ -- incident
+// reports, maintenance windows, security advisories and service changes.
 //
-// Drop a .md file into notes/ and it is published on the next build -- no
-// other edit needed. The file name becomes the URL (notes/hugo-static-site.md
-// -> /notes/hugo-static-site.html), the first "# " heading becomes the title,
+// Drop a .md file into notices/ and it is published on the next build -- no
+// other edit needed. The file name becomes the URL (notices/api-outage.md
+// -> /notices/api-outage.html), the first "# " heading becomes the title,
 // and the first paragraph becomes the summary on the index.
 //
-// A note may start with an optional front matter block:
+// A notice may start with an optional front matter block:
 //
 //	---
 //	description: One sentence for search results and link previews.
-//	tags: [Hugo, AWS, Static Sites]
+//	categories: [Incident, Security Advisory]
 //	published: 2026-10-10
 //	updated: 2026-10-12
 //	---
 //
-// Dates default to the note's first and latest commit in git history, so
+// Dates default to the notice's first and latest commit in git history, so
 // they normally need no maintenance; set them only to override.
 //
-// This repository and site are public, so every note is scanned for things
+// This repository and site are public, so every notice is scanned for things
 // that look like credentials before it can ship; see secretPatterns.
 
 import (
@@ -46,46 +47,46 @@ import (
 	"github.com/yuin/goldmark/text"
 )
 
-//go:embed notes
-var notesFS embed.FS
+//go:embed notices
+var noticesFS embed.FS
 
-// Note is one rendered Markdown note.
-type Note struct {
+// Notice is one rendered Markdown notice.
+type Notice struct {
 	Slug        string
 	Title       string
 	Summary     string
 	Description string
-	Tags        []Tag
+	Categories  []Category
 	Published   time.Time
 	Updated     time.Time
 	Body        template.HTML
 	TOC         []TOCEntry
-	Related     []NoteLink
-	// Text is the note as plain text, for the search box.
+	Related     []NoticeLink
+	// Text is the notice as plain text, for the search box.
 	Text string
 }
 
-// Tag is a topic label. Name is shown; Slug is used in URLs and filtering.
-type Tag struct {
+// Category is a topic label. Name is shown; Slug is used in URLs and filtering.
+type Category struct {
 	Name string
 	Slug string
 }
 
-// TagGroup is a tag and the notes carrying it, for tag pages and the index.
-type TagGroup struct {
-	Tag   Tag
-	Notes []Note
+// CategoryGroup is a category and the notices carrying it, for category pages and the index.
+type CategoryGroup struct {
+	Category Category
+	Notices  []Notice
 }
 
-// TOCEntry is one heading in a note's table of contents.
+// TOCEntry is one heading in a notice's table of contents.
 type TOCEntry struct {
 	Level int
 	ID    string
 	Text  string
 }
 
-// NoteLink is a lightweight reference to another note.
-type NoteLink struct {
+// NoticeLink is a lightweight reference to another notice.
+type NoticeLink struct {
 	Slug  string
 	Title string
 }
@@ -93,23 +94,23 @@ type NoteLink struct {
 // minTOC is the fewest headings worth a table of contents.
 const minTOC = 3
 
-// maxRelated caps the "Related notes" list.
+// maxRelated caps the "Related notices" list.
 const maxRelated = 3
 
-// searchTextLimit caps the plain text per note shipped to the search box.
+// searchTextLimit caps the plain text per notice shipped to the search box.
 const searchTextLimit = 6000
 
-// noteMD renders notes with GitHub-flavoured Markdown (tables, task lists,
+// noticeMD renders notices with GitHub-flavoured Markdown (tables, task lists,
 // strikethrough, autolinks) and gives each heading an id so sections can be
-// linked. Raw HTML in a note is escaped, not rendered.
-var noteMD = goldmark.New(
+// linked. Raw HTML in a notice is escaped, not rendered.
+var noticeMD = goldmark.New(
 	goldmark.WithExtensions(extension.GFM),
 	goldmark.WithParserOptions(parser.WithAutoHeadingID()),
 )
 
-var noteSlug = regexp.MustCompile(`^[a-z0-9]+(-[a-z0-9]+)*$`)
+var noticeSlug = regexp.MustCompile(`^[a-z0-9]+(-[a-z0-9]+)*$`)
 
-// secretPatterns are checked against every note. A match fails the build:
+// secretPatterns are checked against every notice. A match fails the build:
 // once pushed, the text is public in git history even if removed later, so
 // the only safe place to catch it is before it is committed.
 var secretPatterns = map[string]*regexp.Regexp{
@@ -124,85 +125,85 @@ var secretPatterns = map[string]*regexp.Regexp{
 	"credentials in a URL": regexp.MustCompile(`[a-z][a-z0-9+.-]*://[^/\s:@]+:[^/\s@]+@`),
 }
 
-// notesSource is notes/ on disk in live dev mode, otherwise the copy
+// noticesSource is notices/ on disk in live dev mode, otherwise the copy
 // embedded at compile time.
-func notesSource(fromDisk bool) fs.FS {
+func noticesSource(fromDisk bool) fs.FS {
 	if fromDisk {
 		return os.DirFS(".")
 	}
-	return notesFS
+	return noticesFS
 }
 
 var (
-	embeddedOnce  sync.Once
-	embeddedNotes []Note
-	embeddedErr   error
+	embeddedOnce    sync.Once
+	embeddedNotices []Notice
+	embeddedErr     error
 )
 
-// loadNotes reads, checks and renders every note, newest first. The embedded
+// loadNotices reads, checks and renders every notice, newest first. The embedded
 // set never changes while the program runs, so it is loaded once; in live dev
-// mode notes are re-read on every call so edits show on refresh.
-func loadNotes(fromDisk bool) ([]Note, error) {
+// mode notices are re-read on every call so edits show on refresh.
+func loadNotices(fromDisk bool) ([]Notice, error) {
 	if fromDisk {
-		return readNotes(notesSource(true))
+		return readNotices(noticesSource(true))
 	}
-	embeddedOnce.Do(func() { embeddedNotes, embeddedErr = readNotes(notesFS) })
-	return embeddedNotes, embeddedErr
+	embeddedOnce.Do(func() { embeddedNotices, embeddedErr = readNotices(noticesFS) })
+	return embeddedNotices, embeddedErr
 }
 
-func readNotes(src fs.FS) ([]Note, error) {
-	files, err := fs.Glob(src, "notes/*.md")
+func readNotices(src fs.FS) ([]Notice, error) {
+	files, err := fs.Glob(src, "notices/*.md")
 	if err != nil {
 		return nil, err
 	}
 
-	var notes []Note
+	var notices []Notice
 	for _, f := range files {
-		n, err := readNote(src, f)
+		n, err := readNotice(src, f)
 		if err != nil {
 			return nil, err
 		}
-		notes = append(notes, n)
+		notices = append(notices, n)
 	}
 
-	// Newest first; undated notes (not yet committed) sort by title.
-	sort.SliceStable(notes, func(i, j int) bool {
-		a, b := notes[i].Updated, notes[j].Updated
+	// Newest first; undated notices (not yet committed) sort by title.
+	sort.SliceStable(notices, func(i, j int) bool {
+		a, b := notices[i].Updated, notices[j].Updated
 		if !a.Equal(b) {
 			return a.After(b)
 		}
-		return notes[i].Title < notes[j].Title
+		return notices[i].Title < notices[j].Title
 	})
-	linkRelated(notes)
-	return notes, nil
+	linkRelated(notices)
+	return notices, nil
 }
 
-func readNote(src fs.FS, f string) (Note, error) {
+func readNotice(src fs.FS, f string) (Notice, error) {
 	slug := strings.TrimSuffix(path.Base(f), ".md")
-	if !noteSlug.MatchString(slug) {
-		return Note{}, fmt.Errorf("%s: file name must be lowercase words joined by hyphens, like docker-setup.md", f)
+	if !noticeSlug.MatchString(slug) {
+		return Notice{}, fmt.Errorf("%s: file name must be lowercase words joined by hyphens, like api-outage.md", f)
 	}
 	raw, err := fs.ReadFile(src, f)
 	if err != nil {
-		return Note{}, err
+		return Notice{}, err
 	}
 	for name, re := range secretPatterns {
 		if loc := re.FindIndex(raw); loc != nil {
 			line := bytes.Count(raw[:loc[0]], []byte("\n")) + 1
-			return Note{}, fmt.Errorf("%s:%d looks like it contains a secret (%s); remove it before publishing "+
+			return Notice{}, fmt.Errorf("%s:%d looks like it contains a secret (%s); remove it before publishing "+
 				"(this site and repo are public)", f, line, name)
 		}
 	}
 
 	fm, body, err := splitFrontMatter(raw)
 	if err != nil {
-		return Note{}, fmt.Errorf("%s: %w", f, err)
+		return Notice{}, fmt.Errorf("%s: %w", f, err)
 	}
 
-	n := Note{Slug: slug}
-	n.Title, n.Summary = noteHeader(body)
+	n := Notice{Slug: slug}
+	n.Title, n.Summary = noticeHeader(body)
 	if n.Title == "" {
-		return Note{}, fmt.Errorf("%s: needs a \"# Title\" heading as its first line (after any front matter)", f)
+		return Notice{}, fmt.Errorf("%s: needs a \"# Title\" heading as its first line (after any front matter)", f)
 	}
 	n.Description = fm.Description
 	if n.Description == "" {
@@ -211,7 +212,7 @@ func readNote(src fs.FS, f string) (Note, error) {
 	if n.Description == "" {
 		n.Description = n.Title
 	}
-	n.Tags = fm.Tags
+	n.Categories = fm.Categories
 
 	n.Published, n.Updated = gitDates(f)
 	if !fm.Published.IsZero() {
@@ -224,21 +225,21 @@ func readNote(src fs.FS, f string) (Note, error) {
 		n.Updated = n.Published
 	}
 
-	doc := noteMD.Parser().Parse(text.NewReader(body))
+	doc := noticeMD.Parser().Parse(text.NewReader(body))
 	n.TOC = tableOfContents(doc, body)
 	n.Text = searchText(doc, body)
 	var buf bytes.Buffer
-	if err := noteMD.Renderer().Render(&buf, body, doc); err != nil {
-		return Note{}, fmt.Errorf("%s: %w", f, err)
+	if err := noticeMD.Renderer().Render(&buf, body, doc); err != nil {
+		return Notice{}, fmt.Errorf("%s: %w", f, err)
 	}
 	n.Body = template.HTML(buf.String())
 	return n, nil
 }
 
-// frontMatter is the optional metadata block at the top of a note.
+// frontMatter is the optional metadata block at the top of a notice.
 type frontMatter struct {
 	Description string
-	Tags        []Tag
+	Categories  []Category
 	Published   time.Time
 	Updated     time.Time
 }
@@ -276,12 +277,12 @@ func splitFrontMatter(raw []byte) (frontMatter, []byte, error) {
 		switch key {
 		case "description":
 			fm.Description = strings.Trim(val, `"'`)
-		case "tags":
-			tags, err := parseTags(val)
+		case "categories":
+			categories, err := parseCategories(val)
 			if err != nil {
 				return fm, nil, err
 			}
-			fm.Tags = tags
+			fm.Categories = categories
 		case "published", "updated":
 			t, err := time.Parse("2006-01-02", val)
 			if err != nil {
@@ -293,42 +294,42 @@ func splitFrontMatter(raw []byte) (frontMatter, []byte, error) {
 				fm.Updated = t
 			}
 		default:
-			return fm, nil, fmt.Errorf("front matter: unknown key %q (want description, tags, published or updated)", key)
+			return fm, nil, fmt.Errorf("front matter: unknown key %q (want description, categories, published or updated)", key)
 		}
 	}
 	return fm, []byte(body), nil
 }
 
-// parseTags accepts "[A, B]" or "A, B".
-func parseTags(val string) ([]Tag, error) {
+// parseCategories accepts "[A, B]" or "A, B".
+func parseCategories(val string) ([]Category, error) {
 	val = strings.TrimSuffix(strings.TrimPrefix(strings.TrimSpace(val), "["), "]")
-	var tags []Tag
+	var categories []Category
 	seen := map[string]bool{}
 	for _, name := range strings.Split(val, ",") {
 		name = strings.Trim(strings.TrimSpace(name), `"'`)
 		if name == "" {
 			continue
 		}
-		slug := tagSlug(name)
-		if !noteSlug.MatchString(slug) {
-			return nil, fmt.Errorf("front matter: tag %q must use letters, numbers and spaces only", name)
+		slug := categorySlug(name)
+		if !noticeSlug.MatchString(slug) {
+			return nil, fmt.Errorf("front matter: category %q must use letters, numbers and spaces only", name)
 		}
 		if !seen[slug] {
 			seen[slug] = true
-			tags = append(tags, Tag{Name: name, Slug: slug})
+			categories = append(categories, Category{Name: name, Slug: slug})
 		}
 	}
-	return tags, nil
+	return categories, nil
 }
 
-func tagSlug(name string) string {
+func categorySlug(name string) string {
 	return strings.Join(strings.Fields(strings.ToLower(name)), "-")
 }
 
 // gitDates returns the first and latest commit times touching file. Outside a
-// git checkout, or for a note not yet committed, both are zero.
+// git checkout, or for a notice not yet committed, both are zero.
 //
-// CI must check out full history (fetch-depth: 0) or every note would show
+// CI must check out full history (fetch-depth: 0) or every notice would show
 // the date of the single commit a shallow clone contains.
 func gitDates(file string) (first, last time.Time) {
 	out, err := exec.Command("git", "log", "--follow", "--format=%cI", "--", file).Output()
@@ -344,9 +345,9 @@ func gitDates(file string) (first, last time.Time) {
 	return first, last
 }
 
-// noteHeader returns the "# " title on the first non-blank line and the first
+// noticeHeader returns the "# " title on the first non-blank line and the first
 // paragraph after it, with Markdown emphasis and code marks stripped.
-func noteHeader(b []byte) (title, summary string) {
+func noticeHeader(b []byte) (title, summary string) {
 	lines := strings.Split(string(b), "\n")
 	i := 0
 	for i < len(lines) && strings.TrimSpace(lines[i]) == "" {
@@ -379,7 +380,7 @@ func noteHeader(b []byte) (title, summary string) {
 
 var mdLink = regexp.MustCompile(`\[([^\]]+)\]\([^)]*\)`)
 
-// tableOfContents lists the note's level-2 and level-3 headings. Short notes
+// tableOfContents lists the notice's level-2 and level-3 headings. Short notices
 // get none; a contents box over three lines of text is clutter.
 func tableOfContents(doc ast.Node, src []byte) []TOCEntry {
 	var toc []TOCEntry
@@ -423,8 +424,8 @@ func plainText(n ast.Node, src []byte) string {
 	return b.String()
 }
 
-// searchText flattens the whole note, code blocks included, so a search for
-// a command or flag finds the note that uses it.
+// searchText flattens the whole notice, code blocks included, so a search for
+// a command or flag finds the notice that uses it.
 func searchText(doc ast.Node, src []byte) string {
 	var b strings.Builder
 	ast.Walk(doc, func(n ast.Node, entering bool) (ast.WalkStatus, error) {
@@ -454,106 +455,106 @@ func searchText(doc ast.Node, src []byte) string {
 	return s
 }
 
-// linkRelated fills each note's Related list with the notes sharing the most
-// tags. Notes with no tags in common are never listed.
-func linkRelated(notes []Note) {
-	for i := range notes {
+// linkRelated fills each notice's Related list with the notices sharing the most
+// categories. Notices with no categories in common are never listed.
+func linkRelated(notices []Notice) {
+	for i := range notices {
 		mine := map[string]bool{}
-		for _, t := range notes[i].Tags {
+		for _, t := range notices[i].Categories {
 			mine[t.Slug] = true
 		}
 		type cand struct {
-			link  NoteLink
+			link  NoticeLink
 			score int
 		}
 		var cands []cand
-		for j := range notes {
+		for j := range notices {
 			if i == j {
 				continue
 			}
 			score := 0
-			for _, t := range notes[j].Tags {
+			for _, t := range notices[j].Categories {
 				if mine[t.Slug] {
 					score++
 				}
 			}
 			if score > 0 {
-				cands = append(cands, cand{NoteLink{notes[j].Slug, notes[j].Title}, score})
+				cands = append(cands, cand{NoticeLink{notices[j].Slug, notices[j].Title}, score})
 			}
 		}
 		sort.SliceStable(cands, func(a, b int) bool { return cands[a].score > cands[b].score })
 		for k := 0; k < len(cands) && k < maxRelated; k++ {
-			notes[i].Related = append(notes[i].Related, cands[k].link)
+			notices[i].Related = append(notices[i].Related, cands[k].link)
 		}
 	}
 }
 
-// tagGroups returns every tag in use, alphabetically, with its notes. The
+// categoryGroups returns every category in use, alphabetically, with its notices. The
 // first spelling seen is the one displayed.
-func tagGroups(notes []Note) []TagGroup {
-	bySlug := map[string]*TagGroup{}
-	for _, n := range notes {
-		for _, t := range n.Tags {
+func categoryGroups(notices []Notice) []CategoryGroup {
+	bySlug := map[string]*CategoryGroup{}
+	for _, n := range notices {
+		for _, t := range n.Categories {
 			g, ok := bySlug[t.Slug]
 			if !ok {
-				g = &TagGroup{Tag: t}
+				g = &CategoryGroup{Category: t}
 				bySlug[t.Slug] = g
 			}
-			g.Notes = append(g.Notes, n)
+			g.Notices = append(g.Notices, n)
 		}
 	}
-	groups := make([]TagGroup, 0, len(bySlug))
+	groups := make([]CategoryGroup, 0, len(bySlug))
 	for _, g := range bySlug {
 		groups = append(groups, *g)
 	}
-	sort.Slice(groups, func(i, j int) bool { return groups[i].Tag.Slug < groups[j].Tag.Slug })
+	sort.Slice(groups, func(i, j int) bool { return groups[i].Category.Slug < groups[j].Category.Slug })
 	return groups
 }
 
-// notePages returns the Engineering Notes index, one page per tag, and one
-// page per note.
-func notePages(notes []Note) []Page {
+// noticePages returns the Notices index, one page per category, and one
+// page per notice.
+func noticePages(notices []Notice) []Page {
 	ps := []Page{{
-		Path:     "notes/index.html",
-		Template: "notes.html",
-		Title:    "Engineering Notes — QCS Information Hub",
-		Desc:     "Engineering insights on infrastructure, tooling, and software development, drawn from real-world implementation.",
+		Path:     "notices/index.html",
+		Template: "notices.html",
+		Title:    "Notices — QCS Trust & Status Center",
+		Desc:     "Incident reports, maintenance windows, security advisories, and service changes from QCS.",
 	}}
-	for _, g := range tagGroups(notes) {
+	for _, g := range categoryGroups(notices) {
 		ps = append(ps, Page{
-			Path:     "notes/tags/" + g.Tag.Slug + ".html",
-			Template: "tag.html",
-			Title:    g.Tag.Name + " — QCS Engineering Notes",
-			Desc:     "Engineering notes on " + g.Tag.Name + ": practical guidance drawn from real-world implementation.",
-			Tag:      g.Tag.Slug,
+			Path:     "notices/categories/" + g.Category.Slug + ".html",
+			Template: "category.html",
+			Title:    g.Category.Name + " — QCS Notices",
+			Desc:     "QCS notices in the " + g.Category.Name + " category.",
+			Category: g.Category.Slug,
 		})
 	}
-	for _, n := range notes {
+	for _, n := range notices {
 		ps = append(ps, Page{
-			Path:     "notes/" + n.Slug + ".html",
-			Template: "note.html",
-			Title:    n.Title + " — QCS Engineering Notes",
+			Path:     "notices/" + n.Slug + ".html",
+			Template: "notice.html",
+			Title:    n.Title + " — QCS Notices",
 			Desc:     n.Description,
-			Note:     n.Slug,
+			Notice:   n.Slug,
 		})
 	}
 	return ps
 }
 
-// searchIndex is the JSON the Notes index page embeds for its search box.
-func searchIndex(notes []Note) (template.JS, error) {
+// searchIndex is the JSON the Notices index page embeds for its search box.
+func searchIndex(notices []Notice) (template.JS, error) {
 	type entry struct {
-		Slug    string   `json:"slug"`
-		Title   string   `json:"title"`
-		Summary string   `json:"summary"`
-		Tags    []string `json:"tags"`
-		Text    string   `json:"text"`
+		Slug       string   `json:"slug"`
+		Title      string   `json:"title"`
+		Summary    string   `json:"summary"`
+		Categories []string `json:"categories"`
+		Text       string   `json:"text"`
 	}
-	entries := make([]entry, 0, len(notes))
-	for _, n := range notes {
-		e := entry{Slug: n.Slug, Title: n.Title, Summary: n.Description, Text: n.Text, Tags: []string{}}
-		for _, t := range n.Tags {
-			e.Tags = append(e.Tags, t.Name)
+	entries := make([]entry, 0, len(notices))
+	for _, n := range notices {
+		e := entry{Slug: n.Slug, Title: n.Title, Summary: n.Description, Text: n.Text, Categories: []string{}}
+		for _, t := range n.Categories {
+			e.Categories = append(e.Categories, t.Name)
 		}
 		entries = append(entries, e)
 	}
@@ -562,9 +563,9 @@ func searchIndex(notes []Note) (template.JS, error) {
 	return template.JS(b), err
 }
 
-// articleJSONLD is schema.org TechArticle structured data for one note, so
+// articleJSONLD is schema.org Article structured data for one notice, so
 // search engines can show it as a technical article with author and dates.
-func articleJSONLD(s Site, a Author, n Note) (template.JS, error) {
+func articleJSONLD(s Site, a Author, n Notice) (template.JS, error) {
 	type thing map[string]any
 	var author thing
 	if a.Name != "" {
@@ -574,11 +575,11 @@ func articleJSONLD(s Site, a Author, n Note) (template.JS, error) {
 	}
 	doc := thing{
 		"@context":         "https://schema.org",
-		"@type":            "TechArticle",
+		"@type":            "Article",
 		"headline":         n.Title,
 		"description":      n.Description,
-		"url":              pageURL(s, "notes/"+n.Slug+".html"),
-		"mainEntityOfPage": pageURL(s, "notes/"+n.Slug+".html"),
+		"url":              pageURL(s, "notices/"+n.Slug+".html"),
+		"mainEntityOfPage": pageURL(s, "notices/"+n.Slug+".html"),
 		"image":            s.BaseURL + "/og-image.png",
 		"author":           author,
 		"publisher":        thing{"@type": "Organization", "name": s.Name, "url": s.BaseURL},
@@ -589,9 +590,9 @@ func articleJSONLD(s Site, a Author, n Note) (template.JS, error) {
 	if !n.Updated.IsZero() {
 		doc["dateModified"] = n.Updated.Format(time.RFC3339)
 	}
-	if len(n.Tags) > 0 {
+	if len(n.Categories) > 0 {
 		var kw []string
-		for _, t := range n.Tags {
+		for _, t := range n.Categories {
 			kw = append(kw, t.Name)
 		}
 		doc["keywords"] = strings.Join(kw, ", ")

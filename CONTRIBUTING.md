@@ -1,6 +1,6 @@
 # Contributing Guidelines
 
-Thank you for your interest in contributing to the QCloud Systems documentation site.
+Thank you for your interest in contributing to the QCS Trust & Status Center.
 To maintain consistency and quality, please follow the guidelines below.
 
 ---
@@ -17,14 +17,19 @@ make check    # validate content without writing anything
 make fmt vet  # gofmt + go vet
 ```
 
-Run `make check` before opening a pull request. It fails on a missing
-template, a missing document, a project without a URL, or a missing `CNAME`.
+Run `make check` and `make test` before opening a pull request. The build
+fails on a missing template or document, a missing `CNAME`, a notice with an
+unknown or missing category, anything in a notice that looks like a
+credential, and the other rules listed on the site's How It's Built page.
+If your change alters how the generator behaves, update
+`templates/pages/how-its-built.html` in the same pull request.
 
 ### Where things live
 
 - `templates/base.html` — shared sidebar, nav and footer
 - `templates/pages/*.html` — one file per page, each defines `"content"`
-- `content.go` — site metadata, nav links, the project list
+- `content.go` — site metadata, nav links, roadmap, FAQ, notice categories
+- `notices/*.md` — notices, one Markdown file each; see README.md
 - `static/` — copied verbatim into the output, with the `static/` prefix
   stripped, so `static/css/site.css` is served at `/css/site.css`
 - `public/` — build output. It is wiped on every build and gitignored; never
@@ -33,10 +38,8 @@ template, a missing document, a project without a URL, or a missing `CNAME`.
 ### What does not belong here
 
 This site is **entirely public**. Do not add gated areas, passwords, or any
-document that should not be world-readable. A static host cannot enforce
-access control, and an earlier attempt to do so here leaked in two separate
-ways (see CHANGELOG 3.0.0). The build will reject files named like the
-removed agreements.
+document that should not be world-readable: a static host cannot enforce
+access control. The build rejects files named like agreement documents.
 
 Client-facing agreement templates do not belong in this repo.
 
@@ -44,8 +47,8 @@ Client-facing agreement templates do not belong in this repo.
 
 ## Branching Strategy
 
-- `main` — Production-ready documentation.
-- `feature/<name>` — New documentation sections or layout enhancements.
+- `main` — Production. Changes reach it only through pull requests.
+- `feature/<name>` — New sections, notices, or layout enhancements.
 - `fix/<name>` — Bug fixes, typos, or minor improvements.
 
 ---

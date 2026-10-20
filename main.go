@@ -37,24 +37,22 @@ var funcs = template.FuncMap{
 }
 
 type data struct {
-	Site      Site
-	Page      Page
-	Canonical string
-	Projects  []Project
-	Status    []StatusService
-	Roadmap   []RoadmapGroup
-	FAQs      []FAQ
-	Notes     []Note
-	Note      Note
-	Tags      []TagGroup
-	Tag       TagGroup
-	Author    Author
-	// Search is the Notes index search data; ArticleLD is a note's
+	Site       Site
+	Page       Page
+	Canonical  string
+	Status     []StatusService
+	Roadmap    []RoadmapGroup
+	FAQs       []FAQ
+	Notices    []Notice
+	Notice     Notice
+	Categories []CategoryGroup
+	Category   CategoryGroup
+	Author     Author
+	// Search is the Notices index search data; ArticleLD is a notice's
 	// structured data. Both are JSON, empty on pages that do not use them.
 	Search    template.JS
 	ArticleLD template.JS
 	Latest    Release
-	Posts     []Post
 	Built     time.Time
 }
 
@@ -66,9 +64,8 @@ type RoadmapGroup struct {
 }
 
 // buildInfo is gathered once per build (or once per dev-server start) rather
-// than per page, so the Medium feed is fetched a single time.
+// than per page, so every page reports the same build time.
 type buildInfo struct {
-	Posts []Post
 	Built time.Time
 }
 
@@ -139,13 +136,13 @@ func main() {
 	}
 }
 
-// allPages is pages() plus the Notes index and one page per note.
+// allPages is pages() plus the Notices index and one page per notice.
 func allPages(fromDisk bool) ([]Page, error) {
-	notes, err := loadNotes(fromDisk)
+	notices, err := loadNotices(fromDisk)
 	if err != nil {
 		return nil, err
 	}
-	return append(pages(), notePages(notes)...), nil
+	return append(pages(), noticePages(notices)...), nil
 }
 
 func validate() error {
@@ -195,9 +192,26 @@ func validate() error {
 		return err
 	}
 
-	for _, p := range projects() {
-		if p.URL == "" {
-			return fmt.Errorf("project %q has no URL", p.Name)
+	// Notices may only use the categories in noticeCategories(). A typo would
+	// otherwise create a new category page and split the index silently.
+	allowed := map[string]bool{}
+	for _, c := range noticeCategories() {
+		allowed[categorySlug(c)] = true
+	}
+	notices, err := loadNotices(false)
+	if err != nil {
+		return err
+	}
+	for _, n := range notices {
+		if len(n.Categories) == 0 {
+			return fmt.Errorf("notice %q needs at least one category (one of %s)",
+				n.Slug, strings.Join(noticeCategories(), ", "))
+		}
+		for _, c := range n.Categories {
+			if !allowed[c.Slug] {
+				return fmt.Errorf("notice %q: unknown category %q (want one of %s)",
+					n.Slug, c.Name, strings.Join(noticeCategories(), ", "))
+			}
 		}
 	}
 
@@ -291,62 +305,60 @@ func render(w io.Writer, p Page, fromDisk bool, info buildInfo) error {
 	if err != nil {
 		return err
 	}
-	notes, err := loadNotes(fromDisk)
+	notices, err := loadNotices(fromDisk)
 	if err != nil {
 		return err
 	}
 	s := site()
 	a := author()
-	tags := tagGroups(notes)
+	categories := categoryGroups(notices)
 
-	var note Note
-	for _, n := range notes {
-		if n.Slug == p.Note {
-			note = n
+	var notice Notice
+	for _, n := range notices {
+		if n.Slug == p.Notice {
+			notice = n
 		}
 	}
-	if p.Note != "" && note.Slug == "" {
-		return fmt.Errorf("note %q no longer exists; restart the dev server", p.Note)
+	if p.Notice != "" && notice.Slug == "" {
+		return fmt.Errorf("notice %q no longer exists; restart the dev server", p.Notice)
 	}
-	var tag TagGroup
-	for _, g := range tags {
-		if g.Tag.Slug == p.Tag {
-			tag = g
+	var category CategoryGroup
+	for _, g := range categories {
+		if g.Category.Slug == p.Category {
+			category = g
 		}
 	}
-	if p.Tag != "" && tag.Tag.Slug == "" {
-		return fmt.Errorf("tag %q is no longer used; restart the dev server", p.Tag)
+	if p.Category != "" && category.Category.Slug == "" {
+		return fmt.Errorf("category %q is no longer used; restart the dev server", p.Category)
 	}
 
 	var search, articleLD template.JS
-	if p.Template == "notes.html" {
-		if search, err = searchIndex(notes); err != nil {
+	if p.Template == "notices.html" {
+		if search, err = searchIndex(notices); err != nil {
 			return err
 		}
 	}
-	if note.Slug != "" {
-		if articleLD, err = articleJSONLD(s, a, note); err != nil {
+	if notice.Slug != "" {
+		if articleLD, err = articleJSONLD(s, a, notice); err != nil {
 			return err
 		}
 	}
 	return tpl.ExecuteTemplate(w, "base.html", data{
-		Site:      s,
-		Page:      p,
-		Canonical: pageURL(s, p.Path),
-		Projects:  projects(),
-		Status:    statusServices(),
-		Roadmap:   roadmapGroups(),
-		FAQs:      faqs(),
-		Notes:     notes,
-		Note:      note,
-		Tags:      tags,
-		Tag:       tag,
-		Author:    a,
-		Search:    search,
-		ArticleLD: articleLD,
-		Latest:    latest,
-		Posts:     info.Posts,
-		Built:     info.Built,
+		Site:       s,
+		Page:       p,
+		Canonical:  pageURL(s, p.Path),
+		Status:     statusServices(),
+		Roadmap:    roadmapGroups(),
+		FAQs:       faqs(),
+		Notices:    notices,
+		Notice:     notice,
+		Categories: categories,
+		Category:   category,
+		Author:     a,
+		Search:     search,
+		ArticleLD:  articleLD,
+		Latest:     latest,
+		Built:      info.Built,
 	})
 }
 
@@ -355,8 +367,8 @@ func serve() error {
 	live := flag.Bool("live", true, "read templates and static files from disk (dev)")
 	flag.Parse()
 
-	// The page list is read once at startup, so a newly added note needs a
-	// restart; edits to an existing note show on refresh.
+	// The page list is read once at startup, so a newly added notice needs a
+	// restart; edits to an existing notice show on refresh.
 	all, err := allPages(*live)
 	if err != nil {
 		return err
@@ -380,12 +392,12 @@ func serve() error {
 		assets = http.FileServer(http.FS(sub))
 	}
 
-	info := buildInfo{Posts: fetchPosts(site().MediumFeed), Built: time.Now().UTC()}
-	notes, err := loadNotes(*live)
+	info := buildInfo{Built: time.Now().UTC()}
+	notices, err := loadNotices(*live)
 	if err != nil {
 		return err
 	}
-	extra := generated(site(), all, notes, info.Built)
+	extra := generated(site(), all, notices, info.Built)
 
 	mux := http.NewServeMux()
 	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
@@ -432,7 +444,7 @@ func build() error {
 		return err
 	}
 
-	info := buildInfo{Posts: fetchPosts(site().MediumFeed), Built: time.Now().UTC()}
+	info := buildInfo{Built: time.Now().UTC()}
 
 	all, err := allPages(false)
 	if err != nil {
@@ -462,11 +474,11 @@ func build() error {
 		return err
 	}
 
-	notes, err := loadNotes(false)
+	notices, err := loadNotices(false)
 	if err != nil {
 		return err
 	}
-	extra := generated(site(), all, notes, info.Built)
+	extra := generated(site(), all, notices, info.Built)
 	for name, b := range extra {
 		dst := filepath.Join(*out, filepath.FromSlash(name))
 		if err := os.MkdirAll(filepath.Dir(dst), 0o755); err != nil {

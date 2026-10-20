@@ -1,11 +1,11 @@
 package main
 
-// Build-time extras: the What's New summary, the Medium articles feed, and the
-// generated machine-readable files (robots.txt, sitemap.xml, security.txt).
+// Build-time extras: the What's New summary and the generated machine-readable
+// files (robots.txt, sitemap.xml, security.txt, and the notices RSS feed).
 //
 // All of this runs when the site is built, never in the visitor's browser
-// and never on a server -- the published output stays plain static files on
-// GitHub Pages, which is what keeps hosting free.
+// and never on a server -- the published output stays plain static files,
+// which is what keeps hosting free.
 
 import (
 	"bytes"
@@ -13,9 +13,6 @@ import (
 	"encoding/xml"
 	"fmt"
 	"html/template"
-	"io"
-	"log"
-	"net/http"
 	"os"
 	"regexp"
 	"strings"
@@ -105,69 +102,9 @@ func latestRelease(src []byte) (Release, error) {
 	return r, nil
 }
 
-// Post is one Medium article.
-type Post struct {
-	Title string
-	URL   string
-	Date  time.Time
-}
-
-const maxPosts = 3
-
-// fetchPosts reads the newest articles from the Medium RSS feed. Any failure
-// returns no posts and a logged warning: the Articles section then shows a
-// plain link to Medium instead.
-func fetchPosts(feedURL string) []Post {
-	if feedURL == "" {
-		return nil
-	}
-	client := &http.Client{Timeout: 10 * time.Second}
-	res, err := client.Get(feedURL)
-	if err != nil {
-		log.Printf("warning: articles feed: %v (section will link to Medium)", err)
-		return nil
-	}
-	defer res.Body.Close()
-	if res.StatusCode != http.StatusOK {
-		log.Printf("warning: articles feed: HTTP %d (section will link to Medium)", res.StatusCode)
-		return nil
-	}
-
-	var feed struct {
-		Items []struct {
-			Title   string `xml:"title"`
-			Link    string `xml:"link"`
-			PubDate string `xml:"pubDate"`
-		} `xml:"channel>item"`
-	}
-	if err := xml.NewDecoder(io.LimitReader(res.Body, 4<<20)).Decode(&feed); err != nil {
-		log.Printf("warning: articles feed: %v (section will link to Medium)", err)
-		return nil
-	}
-
-	var posts []Post
-	for _, it := range feed.Items {
-		if len(posts) == maxPosts {
-			break
-		}
-		// Only link out over https; anything else in the feed is skipped.
-		if it.Title == "" || !strings.HasPrefix(it.Link, "https://") {
-			continue
-		}
-		p := Post{Title: strings.TrimSpace(it.Title), URL: it.Link}
-		if t, err := time.Parse(time.RFC1123, it.PubDate); err == nil {
-			p.Date = t
-		} else if t, err := time.Parse(time.RFC1123Z, it.PubDate); err == nil {
-			p.Date = t
-		}
-		posts = append(posts, p)
-	}
-	return posts
-}
-
 // generated returns the machine-readable files written alongside the pages,
 // keyed by output path.
-func generated(s Site, all []Page, notes []Note, built time.Time) map[string][]byte {
+func generated(s Site, all []Page, notices []Notice, built time.Time) map[string][]byte {
 	var sitemap strings.Builder
 	sitemap.WriteString(`<?xml version="1.0" encoding="UTF-8"?>` + "\n")
 	sitemap.WriteString(`<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">` + "\n")
@@ -197,7 +134,7 @@ func generated(s Site, all []Page, notes []Note, built time.Time) map[string][]b
 	}, "\n") + "\n"
 
 	return map[string][]byte{
-		"notes/feed.xml":           notesFeed(s, notes, built),
+		"notices/feed.xml":         noticesFeed(s, notices, built),
 		"sitemap.xml":              []byte(sitemap.String()),
 		"robots.txt":               []byte(robots),
 		".well-known/security.txt": []byte(security),
@@ -205,14 +142,14 @@ func generated(s Site, all []Page, notes []Note, built time.Time) map[string][]b
 }
 
 // pageURL is the canonical URL for an output path; a directory's index.html
-// maps to the directory itself ("notes/index.html" -> "/notes/").
+// maps to the directory itself ("notices/index.html" -> "/notices/").
 func pageURL(s Site, p string) string {
 	return s.BaseURL + "/" + strings.TrimSuffix(p, "index.html")
 }
 
-// notesFeed is an RSS 2.0 feed of the engineering notes, newest first, for
+// noticesFeed is an RSS 2.0 feed of the notices, newest first, for
 // feed readers and developer news aggregators.
-func notesFeed(s Site, notes []Note, built time.Time) []byte {
+func noticesFeed(s Site, notices []Notice, built time.Time) []byte {
 	type item struct {
 		Title       string   `xml:"title"`
 		Link        string   `xml:"link"`
@@ -242,22 +179,22 @@ func notesFeed(s Site, notes []Note, built time.Time) []byte {
 		Channel channel  `xml:"channel"`
 	}
 
-	feedURL := s.BaseURL + "/notes/feed.xml"
+	feedURL := s.BaseURL + "/notices/feed.xml"
 	ch := channel{
-		Title:       s.Name + " Engineering Notes",
-		Link:        pageURL(s, "notes/index.html"),
-		Description: "Engineering insights on infrastructure, tooling, and software development.",
+		Title:       s.Name + " Trust & Status Center: Notices",
+		Link:        pageURL(s, "notices/index.html"),
+		Description: "Incident reports, maintenance windows, security advisories, and service changes from QCS.",
 		Language:    "en",
 		BuildDate:   built.Format(time.RFC1123Z),
 		Self:        atomLink{Href: feedURL, Rel: "self", Type: "application/rss+xml"},
 	}
-	for _, n := range notes {
-		u := pageURL(s, "notes/"+n.Slug+".html")
+	for _, n := range notices {
+		u := pageURL(s, "notices/"+n.Slug+".html")
 		it := item{Title: n.Title, Link: u, GUID: u, Description: n.Description}
 		if !n.Updated.IsZero() {
 			it.PubDate = n.Updated.Format(time.RFC1123Z)
 		}
-		for _, t := range n.Tags {
+		for _, t := range n.Categories {
 			it.Categories = append(it.Categories, t.Name)
 		}
 		ch.Items = append(ch.Items, it)

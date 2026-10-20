@@ -1,0 +1,40 @@
+{{define "content"}}
+<section id="notices">
+  <h1>Notices</h1>
+  <p>
+    Incident reports, maintenance windows, security advisories, and service changes from QCS,
+    newest first.
+  </p>
+
+  {{if .Notices -}}
+  <div class="notices-tools">
+    <label class="notices-search">
+      <span class="visually-hidden">Search notices</span>
+      <input type="search" id="notices-search" placeholder="Search notices&hellip;" autocomplete="off">
+    </label>
+    {{if .Categories -}}
+    <nav class="category-list" aria-label="Filter by category">
+      <a href="/notices/" class="category-chip" data-category="" aria-current="true">All</a>
+      {{range .Categories -}}
+      <a href="/notices/categories/{{.Category.Slug}}.html" class="category-chip" data-category="{{.Category.Name}}">{{.Category.Name}} <span class="category-count">{{len .Notices}}</span></a>
+      {{end -}}
+    </nav>
+    {{end -}}
+  </div>
+  <p class="notices-status" id="notices-status" role="status" aria-live="polite"></p>
+
+  <div class="projects-grid" id="notices-grid">
+    {{range .Notices}}{{template "notice-card" .}}{{end -}}
+  </div>
+  <script type="application/json" id="notices-index">{{.Search}}</script>
+  {{else -}}
+  <p>No notices have been published yet.</p>
+  {{end -}}
+
+  <p class="fineprint">
+    Subscribe with <a href="/notices/feed.xml">RSS</a> to hear about incidents and changes as
+    they are published.
+  </p>
+</section>
+<script src="/js/notices.js" defer></script>
+{{end}}

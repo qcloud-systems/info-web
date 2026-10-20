@@ -2,7 +2,7 @@ package main
 
 import "html/template"
 
-// Site-level content for the public information hub.
+// Site-level content for the QCS Trust & Status Center.
 //
 // This site is deliberately public in full. Nothing here is gated, and
 // nothing client-specific belongs here -- agreements and customer documents
@@ -13,17 +13,13 @@ type Site struct {
 	Tagline string
 	Domain  string
 	// BaseURL is the canonical origin, used for canonical links, Open Graph
-	// tags, sitemap.xml and robots.txt. No trailing slash.
+	// categories, sitemap.xml and robots.txt. No trailing slash.
 	BaseURL string
 	GitHub  string
 	// Repo is this site's own repository; the security policy points
 	// reporters at its private advisory form.
 	Repo   string
 	Medium string
-	// MediumFeed is fetched at build time for the Articles section. A failed
-	// fetch is logged and the section falls back to a link -- it never fails
-	// the build, because Medium being down is not a reason to block a deploy.
-	MediumFeed string
 	// CloudflareAnalytics is a Cloudflare Web Analytics beacon token. Empty
 	// means no analytics script is emitted at all. Cloudflare's analytics is
 	// free and cookieless; the token is public by design (it ships in the
@@ -44,15 +40,16 @@ type Page struct {
 	Title    string
 	Desc     string
 	NoIndex  bool
-	// Note is the slug of the note this page renders; empty for other pages.
-	Note string
-	// Tag is the slug of the tag this page lists; empty for other pages.
-	Tag string
+	// Notice is the slug of the notice this page renders; empty for other pages.
+	Notice string
+	// Category is the slug of the category this page lists; empty for other pages.
+	Category string
 }
 
-// Author is credited on every engineering note: a byline at the top, an
-// author box at the bottom, and the author in the structured data search
-// engines read. Leave Name empty to omit the byline and author box.
+// Author is credited on every notice: a byline at the top, an author box at
+// the bottom, and the author in the structured data search engines read.
+// Leave Name empty to publish notices in the organization's name instead,
+// which is what a trust center should do.
 type Author struct {
 	Name string
 	Role string
@@ -62,10 +59,7 @@ type Author struct {
 
 func author() Author {
 	return Author{
-		Name: "covertdaemon",
-		Role: "Cloud Engineer",
-		URL:  "https://github.com/qcloud-systems",
-		Bio:  "Infrastructure without lock-in. Software engineering, automation, and multi-cloud platforms.",
+		Name: "", // notices are published as QCS, not an individual
 	}
 }
 
@@ -89,14 +83,6 @@ type FAQ struct {
 	A template.HTML
 }
 
-// Project is one entry in the prototypes grid.
-type Project struct {
-	Name string
-	Desc string
-	URL  string
-	CTA  string
-}
-
 // StatusService is an upstream provider whose health is polled from the
 // browser. Only services running Atlassian Statuspage are listed: they expose
 // a CORS-enabled summary at /api/v2/status.json, so no proxy is needed.
@@ -110,7 +96,7 @@ type StatusService struct {
 	// of the system is degraded; naming vendors publishes an inventory of
 	// the stack and buys nothing for the reader.
 	//
-	// Note this is not concealment -- see the comment on statusServices.
+	// Notice this is not concealment -- see the comment on statusServices.
 	Role string
 	// Name is the vendor, for maintainers. Never rendered.
 	Name string
@@ -206,40 +192,27 @@ func statusServices() []StatusService {
 
 func site() Site {
 	return Site{
-		Name:       "QCS",
-		Tagline:    "Information Hub",
-		Domain:     "info.qcloud.systems",
-		BaseURL:    "https://info.qcloud.systems",
-		GitHub:     "https://github.com/qcloud-systems",
-		Repo:       "https://github.com/qcloud-systems/info-web",
-		Medium:     "https://qcloudsystems.medium.com/",
-		MediumFeed: "https://qcloudsystems.medium.com/feed",
+		Name:    "QCS",
+		Tagline: "Trust & Status Center",
+		Domain:  "info.qcloud.systems",
+		BaseURL: "https://info.qcloud.systems",
+		GitHub:  "https://github.com/qcloud-systems",
+		Repo:    "https://github.com/qcloud-systems/info-web",
+		Medium:  "https://qcloudsystems.medium.com/",
 		// Paste a Cloudflare Web Analytics token here to turn analytics on.
 		CloudflareAnalytics: "",
 		// Hrefs are root-relative ("/#status", not "#status") so the sidebar
 		// still works from the secondary pages.
 		Nav: []NavLink{
 			{Label: "Overview", Href: "/#overview"},
-			{Label: "What's New", Href: "/#whats-new"},
 			{Label: "Status", Href: "/#status"},
-			{Label: "Prototypes", Href: "/#prototypes"},
+			{Label: "Notices", Href: "/notices/"},
+			{Label: "What's New", Href: "/#whats-new"},
 			{Label: "Roadmap", Href: "/#roadmap"},
-			{Label: "Articles", Href: "/#articles"},
-			{Label: "Documentation", Href: "/#documentation"},
-			{Label: "Engineering Notes", Href: "/notes/"},
+			{Label: "Policies", Href: "/#policies"},
 			{Label: "FAQ", Href: "/#faq"},
+			{Label: "How It's Built", Href: "/how-its-built.html"},
 			{Label: "Contact", Href: "/#contact"},
-		},
-	}
-}
-
-func projects() []Project {
-	return []Project{
-		{
-			Name: "Rizal Center",
-			Desc: "An interactive platform showcasing community and organizational information.",
-			URL:  "https://rizalcenter.app",
-			CTA:  "Visit Prototype",
 		},
 	}
 }
@@ -249,28 +222,13 @@ func projects() []Project {
 func roadmap() []RoadmapItem {
 	return []RoadmapItem{
 		{
-			Title: "Search engine indexing",
-			Desc:  "Register this site with Google Search Console and Bing Webmaster Tools and submit its sitemap.",
-			Stage: stagePlanned,
-		},
-		{
-			Title: "Search-friendly note titles",
-			Desc:  "Retitle engineering notes to match how people search, such as \"How to Host a Hugo Site on Amazon S3\".",
-			Stage: stagePlanned,
-		},
-		{
-			Title: "Engineering notes on Medium",
-			Desc:  "Cross-post engineering notes to Medium, credited to this site as the original source.",
-			Stage: stagePlanned,
-		},
-		{
 			Title: "QCS service status",
-			Desc:  "A status section for QCS's own services, alongside the upstream providers already tracked.",
+			Desc:  "Status for QCS's own services, alongside the upstream providers already tracked.",
 			Stage: stagePlanned,
 		},
 		{
-			Title: "Expanded technical documentation",
-			Desc:  "Architecture guides, API references, and deployment procedures for active projects.",
+			Title: "Search engine indexing",
+			Desc:  "Register this site with search engines and submit its sitemap.",
 			Stage: stagePlanned,
 		},
 		{
@@ -279,15 +237,25 @@ func roadmap() []RoadmapItem {
 			Stage: stageInProgress,
 		},
 		{
-			Title: "Information hub rebuild",
-			Desc:  "This site, rebuilt as a Go static site with upstream status and policy pages.",
+			Title: "Trust & Status Center",
+			Desc:  "This site, refocused on service status, notices, and policies, with its build documented.",
 			Stage: stageShipped,
 		},
 	}
 }
 
+// noticeCategories are the only categories a notice may use; validate()
+// rejects anything else. Order is the display order on the Notices index.
+func noticeCategories() []string {
+	return []string{"Incident", "Maintenance", "Security Advisory", "Service Change"}
+}
+
 func faqs() []FAQ {
 	return []FAQ{
+		{
+			Q: "Where are incidents and planned maintenance announced?",
+			A: `On the <a href="/notices/">Notices</a> page, which also has an RSS feed you can subscribe to.`,
+		},
 		{
 			Q: "Is the status section a status page for QCS services?",
 			A: `No. It reports only on the third-party platforms QCS projects depend on, read from each provider's own status feed.`,
@@ -299,6 +267,10 @@ func faqs() []FAQ {
 		{
 			Q: "How do I report a security vulnerability?",
 			A: `Please report it privately &mdash; not in a public issue. The <a href="/security.html">Security Policy</a> explains how.`,
+		},
+		{
+			Q: "How is this site built?",
+			A: `It is a small Go program that renders static pages at build time. <a href="/how-its-built.html">How It's Built</a> walks through every part of it.`,
 		},
 		{
 			Q: "How can I suggest a correction or improvement to this site?",
@@ -314,26 +286,32 @@ func pages() []Page {
 		{
 			Path:     "index.html",
 			Template: "index.html",
-			Title:    "QCS — Information Hub",
-			Desc:     "A public reference for QCS infrastructure, documentation, prototypes, and active projects.",
+			Title:    "QCS — Trust & Status Center",
+			Desc:     "Service status, notices, and policies for QCS: how QCS keeps services reliable and handles data and security.",
+		},
+		{
+			Path:     "how-its-built.html",
+			Template: "how-its-built.html",
+			Title:    "How It's Built — QCS Trust & Status Center",
+			Desc:     "How this site is built: a Go static site generator with a Markdown notices engine, build-time validation, and a secret scanner.",
 		},
 		{
 			Path:     "security.html",
 			Template: "security.html",
-			Title:    "Security Policy — QCS Information Hub",
+			Title:    "Security Policy — QCS Trust & Status Center",
 			Desc:     "How to report a security vulnerability to QCS.",
 		},
 		{
 			Path:     "accessibility.html",
 			Template: "accessibility.html",
-			Title:    "Accessibility — QCS Information Hub",
+			Title:    "Accessibility — QCS Trust & Status Center",
 			Desc:     "QCS's accessibility commitment for this site, known limitations, and how to give feedback.",
 		},
 		{
 			// GitHub Pages serves /404.html for any missing path.
 			Path:     "404.html",
 			Template: "404.html",
-			Title:    "Page Not Found — QCS Information Hub",
+			Title:    "Page Not Found — QCS Trust & Status Center",
 			Desc:     "The page you were looking for does not exist.",
 			NoIndex:  true,
 		},

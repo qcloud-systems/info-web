@@ -12,15 +12,15 @@
   {{else -}}
   <link rel="canonical" href="{{.Canonical}}">
   {{end -}}
-  {{if .Note.Slug -}}
+  {{if .Notice.Slug -}}
   <meta property="og:type" content="article">
-  {{- if not .Note.Published.IsZero}}
-  <meta property="article:published_time" content="{{.Note.Published.Format "2006-01-02T15:04:05Z07:00"}}">
+  {{- if not .Notice.Published.IsZero}}
+  <meta property="article:published_time" content="{{.Notice.Published.Format "2006-01-02T15:04:05Z07:00"}}">
   {{- end}}
-  {{- if not .Note.Updated.IsZero}}
-  <meta property="article:modified_time" content="{{.Note.Updated.Format "2006-01-02T15:04:05Z07:00"}}">
+  {{- if not .Notice.Updated.IsZero}}
+  <meta property="article:modified_time" content="{{.Notice.Updated.Format "2006-01-02T15:04:05Z07:00"}}">
   {{- end}}
-  {{- range .Note.Tags}}
+  {{- range .Notice.Categories}}
   <meta property="article:tag" content="{{.Name}}">
   {{- end}}
   {{- else -}}
@@ -33,12 +33,12 @@
   <meta property="og:image" content="{{.Site.BaseURL}}/og-image.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="QCS Information Hub">
+  <meta property="og:image:alt" content="QCS Trust &amp; Status Center">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:image" content="{{.Site.BaseURL}}/og-image.png">
   <meta name="twitter:title" content="{{.Page.Title}}">
   <meta name="twitter:description" content="{{.Page.Desc}}">
-  <link rel="alternate" type="application/rss+xml" title="{{.Site.Name}} Engineering Notes" href="/notes/feed.xml">
+  <link rel="alternate" type="application/rss+xml" title="{{.Site.Name}} Notices" href="/notices/feed.xml">
   {{- with .ArticleLD}}
   <script type="application/ld+json">{{.}}</script>
   {{- end}}
@@ -78,7 +78,7 @@
         <a href="{{.Site.GitHub}}" target="_blank" rel="noopener">GitHub</a>
       </div>
       <p class="footer-note">
-        &copy; {{year}} {{.Site.Name}}. Public information hub.
+        &copy; {{year}} {{.Site.Name}}. Trust &amp; Status Center.
         {{- with .Latest.Version}} Version {{.}}.{{end}}
         {{- if not .Built.IsZero}} Last updated <time datetime="{{.Built.Format "2006-01-02"}}">{{.Built.Format "January 2, 2006"}}</time>.{{end}}
       </p>

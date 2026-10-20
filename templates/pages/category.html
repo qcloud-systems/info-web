@@ -1,0 +1,21 @@
+{{define "content"}}
+<section id="category">
+  <p class="breadcrumb"><a href="/notices/">&larr; All notices</a></p>
+  <h1>{{.Category.Category.Name}}</h1>
+  <p>
+    QCS notices in the {{.Category.Category.Name}} category.
+    {{len .Category.Notices}} notice{{if ne (len .Category.Notices) 1}}s{{end}}.
+  </p>
+  <div class="projects-grid">
+    {{range .Category.Notices}}{{template "notice-card" .}}{{end -}}
+  </div>
+  {{if gt (len .Categories) 1 -}}
+  <h3 class="subhead">Other categories</h3>
+  <nav class="category-list" aria-label="Other categories">
+    {{range .Categories}}{{if ne .Category.Slug $.Category.Category.Slug -}}
+    <a href="/notices/categories/{{.Category.Slug}}.html" class="category-chip">{{.Category.Name}} <span class="category-count">{{len .Notices}}</span></a>
+    {{end}}{{end -}}
+  </nav>
+  {{end -}}
+</section>
+{{end}}

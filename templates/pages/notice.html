@@ -1,20 +1,20 @@
 {{define "content"}}
-<section class="prose note">
-  <p class="breadcrumb"><a href="/notes/">&larr; All engineering notes</a></p>
+<section class="prose notice">
+  <p class="breadcrumb"><a href="/notices/">&larr; All notices</a></p>
 
-  {{if or .Author.Name (not .Note.Updated.IsZero) -}}
+  {{if or .Author.Name (not .Notice.Updated.IsZero) -}}
   <p class="byline">
     {{- with .Author.Name}}By <a href="{{$.Author.URL}}" target="_blank" rel="noopener author">{{.}}</a>{{with $.Author.Role}}, {{.}}{{end}}{{end}}
-    {{- if not .Note.Updated.IsZero}}{{if .Author.Name}} &middot; {{end}}Updated <time datetime="{{.Note.Updated.Format "2006-01-02"}}">{{.Note.Updated.Format "January 2, 2006"}}</time>{{end}}
+    {{- if not .Notice.Updated.IsZero}}{{if .Author.Name}} &middot; {{end}}Updated <time datetime="{{.Notice.Updated.Format "2006-01-02"}}">{{.Notice.Updated.Format "January 2, 2006"}}</time>{{end}}
   </p>
   {{- end}}
-  {{- with .Note.Tags}}
-  <p class="note-tags">
-    {{- range .}}<a href="/notes/tags/{{.Slug}}.html" class="tag-chip tag-chip-sm">{{.Name}}</a> {{end -}}
+  {{- with .Notice.Categories}}
+  <p class="notice-categories">
+    {{- range .}}<a href="/notices/categories/{{.Slug}}.html" class="category-chip category-chip-sm">{{.Name}}</a> {{end -}}
   </p>
   {{- end}}
 
-  {{with .Note.TOC -}}
+  {{with .Notice.TOC -}}
   <nav class="toc" aria-label="On this page">
     <h2 class="toc-title">On this page</h2>
     <ol>
@@ -25,15 +25,15 @@
   </nav>
   {{end -}}
 
-  <div class="note-body">
-    {{.Note.Body}}
+  <div class="notice-body">
+    {{.Notice.Body}}
   </div>
 
-  {{with .Note.Related -}}
+  {{with .Notice.Related -}}
   <aside class="related">
-    <h2>Related notes</h2>
+    <h2>Related notices</h2>
     <ul>
-      {{range .}}<li><a href="/notes/{{.Slug}}.html">{{.Title}}</a></li>{{end}}
+      {{range .}}<li><a href="/notices/{{.Slug}}.html">{{.Title}}</a></li>{{end}}
     </ul>
   </aside>
   {{end -}}
@@ -51,8 +51,8 @@
   {{end -}}
 
   <p class="fineprint">
-    Spotted a mistake? <a href="{{.Site.Repo}}/blob/main/notes/{{.Note.Slug}}.md" target="_blank" rel="noopener">View the source on GitHub</a>.
+    Spotted a mistake? <a href="{{.Site.Repo}}/blob/main/notices/{{.Notice.Slug}}.md" target="_blank" rel="noopener">View the source on GitHub</a>.
   </p>
 </section>
-<script src="/js/notes.js" defer></script>
+<script src="/js/notices.js" defer></script>
 {{end}}
