@@ -570,7 +570,7 @@ func articleJSONLD(s Site, a Author, n Note) (template.JS, error) {
 	if a.Name != "" {
 		author = thing{"@type": "Person", "name": a.Name, "jobTitle": a.Role, "url": a.URL}
 	} else {
-		author = thing{"@type": "Organization", "name": s.Name, "url": s.MainURL}
+		author = thing{"@type": "Organization", "name": s.Name, "url": s.BaseURL}
 	}
 	doc := thing{
 		"@context":         "https://schema.org",
@@ -581,7 +581,7 @@ func articleJSONLD(s Site, a Author, n Note) (template.JS, error) {
 		"mainEntityOfPage": pageURL(s, "notes/"+n.Slug+".html"),
 		"image":            s.BaseURL + "/og-image.png",
 		"author":           author,
-		"publisher":        thing{"@type": "Organization", "name": s.Name, "url": s.MainURL},
+		"publisher":        thing{"@type": "Organization", "name": s.Name, "url": s.BaseURL},
 	}
 	if !n.Published.IsZero() {
 		doc["datePublished"] = n.Published.Format(time.RFC3339)

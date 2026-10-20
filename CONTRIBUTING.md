@@ -38,7 +38,7 @@ access control, and an earlier attempt to do so here leaked in two separate
 ways (see CHANGELOG 3.0.0). The build will reject files named like the
 removed agreements.
 
-Client-facing agreement templates belong on qcloud.systems.
+Client-facing agreement templates do not belong in this repo.
 
 ---
 

@@ -45,8 +45,8 @@ The format is based on [Semantic Versioning](https://semver.org/).
 - `Makefile` with `dev`, `build`, `check`, `fmt`, `vet`, `clean`.
 
 ### Changed
-- Agreement templates moved to qcloud.systems.
-- Repalette to match qcloud.systems: charcoal ink `#1a2332`, action blue
+- Agreement templates removed from this site.
+- Repalette to the QCS brand colours: charcoal ink `#1a2332`, action blue
   `#0066cc`, sky-blue accent `#6cc5e6` taken from the wordmark.
 - Deploy workflow builds with Go and publishes `./public`.
 - README rewritten.

@@ -6,7 +6,7 @@ import "html/template"
 //
 // This site is deliberately public in full. Nothing here is gated, and
 // nothing client-specific belongs here -- agreements and customer documents
-// live on qcloud.systems. See README.md for the reasoning.
+// are not published from this repo. See README.md for the reasoning.
 
 type Site struct {
 	Name    string
@@ -24,7 +24,6 @@ type Site struct {
 	// fetch is logged and the section falls back to a link -- it never fails
 	// the build, because Medium being down is not a reason to block a deploy.
 	MediumFeed string
-	MainURL    string
 	// CloudflareAnalytics is a Cloudflare Web Analytics beacon token. Empty
 	// means no analytics script is emitted at all. Cloudflare's analytics is
 	// free and cookieless; the token is public by design (it ships in the
@@ -215,7 +214,6 @@ func site() Site {
 		Repo:       "https://github.com/qcloud-systems/info-web",
 		Medium:     "https://qcloudsystems.medium.com/",
 		MediumFeed: "https://qcloudsystems.medium.com/feed",
-		MainURL:    "https://qcloud.systems",
 		// Paste a Cloudflare Web Analytics token here to turn analytics on.
 		CloudflareAnalytics: "",
 		// Hrefs are root-relative ("/#status", not "#status") so the sidebar
@@ -231,7 +229,6 @@ func site() Site {
 			{Label: "Engineering Notes", Href: "/notes/"},
 			{Label: "FAQ", Href: "/#faq"},
 			{Label: "Contact", Href: "/#contact"},
-			{Label: "qcloud.systems", Href: "https://qcloud.systems", External: true},
 		},
 	}
 }
@@ -294,10 +291,6 @@ func faqs() []FAQ {
 		{
 			Q: "Is the status section a status page for QCS services?",
 			A: `No. It reports only on the third-party platforms QCS projects depend on, read from each provider's own status feed.`,
-		},
-		{
-			Q: "Where can I find QCS agreement templates and client policies?",
-			A: `Blank agreement templates and client policies are published on <a href="https://qcloud.systems/legal/" target="_blank" rel="noopener">qcloud.systems</a>. Executed, client-specific documents are never posted publicly.`,
 		},
 		{
 			Q: "How is wearable and health data handled?",
