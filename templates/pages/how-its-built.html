@@ -135,7 +135,7 @@ static/    ─┘                       └─► static assets (CSS, JS, images
     title, and the first paragraph becomes the summary. Each file goes through these stages:
   </p>
   <ol>
-    <li><strong>Secret scan.</strong> The raw file is checked against nine patterns for credentials: cloud access keys, private keys, GitHub, Slack and Stripe tokens, Google API keys, JSON Web Tokens, <code>password = …</code> assignments, and passwords embedded in URLs. A match fails the build and reports the file and line. This happens first because once text is pushed to a public repository it stays in its history even if deleted later.</li>
+    <li><strong>Secret scan.</strong> The raw file is checked against nine patterns for credentials: cloud access keys, private keys, GitHub, chat-platform and payment-platform tokens, Google API keys, JSON Web Tokens, <code>password = …</code> assignments, and passwords embedded in URLs. A match fails the build and reports the file and line. This happens first because once text is pushed to a public repository it stays in its history even if deleted later.</li>
     <li><strong>Front matter.</strong> An optional block at the top sets a description, categories, and dates. The parser accepts only those four keys and rejects unknown ones, so a typo fails loudly instead of being ignored.</li>
     <li><strong>Categories.</strong> Every notice must use at least one approved category: Incident, Maintenance, Security Advisory, or Service Change. Anything else fails the build.</li>
     <li><strong>Dates from git.</strong> Unless the front matter overrides them, a notice's published and updated dates are its first and latest commit in the repository's history. Dates never need maintaining by hand. CI checks out the full history so this works there too.</li>
@@ -197,7 +197,7 @@ static/    ─┘                       └─► static assets (CSS, JS, images
   <ul>
     <li>A page refers to a template that does not exist, or a listed document is missing.</li>
     <li>The custom domain file is missing, which would silently detach the site from its address.</li>
-    <li>The site address is not HTTPS, or an analytics token is malformed.</li>
+    <li>The site address is not HTTPS.</li>
     <li>A roadmap item has an unknown stage, or an FAQ entry is missing its question or answer.</li>
     <li>A notice has no category, an unapproved category, unknown front matter, or a malformed date.</li>
     <li>A notice contains anything that looks like a credential.</li>

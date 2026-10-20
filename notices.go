@@ -114,15 +114,15 @@ var noticeSlug = regexp.MustCompile(`^[a-z0-9]+(-[a-z0-9]+)*$`)
 // once pushed, the text is public in git history even if removed later, so
 // the only safe place to catch it is before it is committed.
 var secretPatterns = map[string]*regexp.Regexp{
-	"AWS access key":       regexp.MustCompile(`\b(AKIA|ASIA)[0-9A-Z]{16}\b`),
-	"private key":          regexp.MustCompile(`-----BEGIN [A-Z ]*PRIVATE KEY-----`),
-	"GitHub token":         regexp.MustCompile(`\b(ghp|gho|ghu|ghs|ghr)_[A-Za-z0-9]{36}\b|\bgithub_pat_[A-Za-z0-9_]{22,}\b`),
-	"Slack token":          regexp.MustCompile(`\bxox[abprs]-[A-Za-z0-9-]{10,}\b`),
-	"Stripe secret key":    regexp.MustCompile(`\b(sk|rk)_live_[A-Za-z0-9]{16,}\b`),
-	"Google API key":       regexp.MustCompile(`\bAIza[0-9A-Za-z_-]{35}\b`),
-	"JWT":                  regexp.MustCompile(`\beyJ[A-Za-z0-9_-]{10,}\.eyJ[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,}`),
-	"password assignment":  regexp.MustCompile(`(?i)\b(password|passwd|pwd|secret|api[_-]?key|token)\s*[:=]\s*["']?[^\s"'<>]{6,}`),
-	"credentials in a URL": regexp.MustCompile(`[a-z][a-z0-9+.-]*://[^/\s:@]+:[^/\s@]+@`),
+	"AWS access key":              regexp.MustCompile(`\b(AKIA|ASIA)[0-9A-Z]{16}\b`),
+	"private key":                 regexp.MustCompile(`-----BEGIN [A-Z ]*PRIVATE KEY-----`),
+	"GitHub token":                regexp.MustCompile(`\b(ghp|gho|ghu|ghs|ghr)_[A-Za-z0-9]{36}\b|\bgithub_pat_[A-Za-z0-9_]{22,}\b`),
+	"chat platform token":         regexp.MustCompile(`\bxox[abprs]-[A-Za-z0-9-]{10,}\b`),
+	"payment platform secret key": regexp.MustCompile(`\b(sk|rk)_live_[A-Za-z0-9]{16,}\b`),
+	"Google API key":              regexp.MustCompile(`\bAIza[0-9A-Za-z_-]{35}\b`),
+	"JWT":                         regexp.MustCompile(`\beyJ[A-Za-z0-9_-]{10,}\.eyJ[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,}`),
+	"password assignment":         regexp.MustCompile(`(?i)\b(password|passwd|pwd|secret|api[_-]?key|token)\s*[:=]\s*["']?[^\s"'<>]{6,}`),
+	"credentials in a URL":        regexp.MustCompile(`[a-z][a-z0-9+.-]*://[^/\s:@]+:[^/\s@]+@`),
 }
 
 // noticesSource is notices/ on disk in live dev mode, otherwise the copy
