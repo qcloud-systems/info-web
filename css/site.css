@@ -608,7 +608,7 @@ strong {
   background: var(--surface);
 }
 
-/* ===================== Engineering notes ===================== */
+/* ===================== Notices ===================== */
 
 .visually-hidden {
   position: absolute;
@@ -619,11 +619,11 @@ strong {
   white-space: nowrap;
 }
 
-.notes-tools {
+.notices-tools {
   margin: 24px 0 8px;
 }
 
-.notes-search input {
+.notices-search input {
   width: 100%;
   max-width: 520px;
   padding: 11px 14px;
@@ -635,20 +635,20 @@ strong {
   border-radius: 8px;
 }
 
-.notes-search input:focus {
+.notices-search input:focus {
   outline: none;
   border-color: var(--action);
   box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.15);
 }
 
-.tag-list {
+.category-list {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
   margin-top: 14px;
 }
 
-.tag-chip {
+.category-chip {
   display: inline-block;
   padding: 5px 12px;
   border: 1px solid var(--line);
@@ -660,48 +660,48 @@ strong {
   text-decoration: none;
 }
 
-.tag-chip:hover {
+.category-chip:hover {
   border-color: var(--action);
   color: var(--action);
 }
 
-.tag-chip[aria-current="true"] {
+.category-chip[aria-current="true"] {
   background: var(--action);
   border-color: var(--action);
   color: #fff;
 }
 
-.tag-chip-sm {
+.category-chip-sm {
   padding: 2px 9px;
   font-size: 12px;
 }
 
-.tag-count {
+.category-count {
   opacity: 0.65;
   margin-left: 2px;
 }
 
-.notes-status {
+.notices-status {
   min-height: 1em;
   font-size: 13px;
   color: var(--muted);
   margin: 10px 0 0;
 }
 
-.note-card[hidden] {
+.notice-card[hidden] {
   display: none;
 }
 
-.note-card h3 a {
+.notice-card h3 a {
   color: var(--ink);
   text-decoration: none;
 }
 
-.note-card h3 a:hover {
+.notice-card h3 a:hover {
   color: var(--action);
 }
 
-.note-meta {
+.notice-meta {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -715,11 +715,11 @@ strong {
   margin-bottom: 10px;
 }
 
-.note-tags {
+.notice-categories {
   margin-bottom: 22px;
 }
 
-.note .toc {
+.prose .toc {
   background: #f8fafc;
   border: 1px solid var(--line);
   border-radius: 8px;
@@ -728,7 +728,7 @@ strong {
   max-width: var(--measure);
 }
 
-.note .toc-title {
+.prose .toc-title {
   font-size: 13px;
   text-transform: uppercase;
   letter-spacing: 0.06em;
@@ -736,18 +736,18 @@ strong {
   margin: 0 0 8px;
 }
 
-.note .toc ol {
+.prose .toc ol {
   list-style: none;
   margin: 0;
   padding: 0;
 }
 
-.note .toc li {
+.prose .toc li {
   margin: 4px 0;
   font-size: 14px;
 }
 
-.note .toc .toc-l3 {
+.prose .toc .toc-l3 {
   padding-left: 16px;
 }
 

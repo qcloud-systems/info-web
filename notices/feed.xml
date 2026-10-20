@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>QCS Trust &amp; Status Center: Notices</title>
+    <link>https://info.qcloud.systems/notices/</link>
+    <description>Incident reports, maintenance windows, security advisories, and service changes from QCS.</description>
+    <language>en</language>
+    <lastBuildDate>Tue, 20 Oct 2026 01:22:44 +0000</lastBuildDate>
+    <atom:link href="https://info.qcloud.systems/notices/feed.xml" rel="self" type="application/rss+xml"></atom:link>
+    <item>
+      <title>Introducing the QCS Trust &amp; Status Center</title>
+      <link>https://info.qcloud.systems/notices/trust-and-status-center.html</link>
+      <guid>https://info.qcloud.systems/notices/trust-and-status-center.html</guid>
+      <pubDate>Tue, 20 Oct 2026 01:20:57 +0000</pubDate>
+      <description>info.qcloud.systems is now the QCS Trust &amp; Status Center, focused on service status, notices, and policies.</description>
+      <category>Service Change</category>
+    </item>
+  </channel>
+</rss>

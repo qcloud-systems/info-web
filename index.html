@@ -4,23 +4,23 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>QCS — Information Hub</title>
-  <meta name="description" content="A public reference for QCS infrastructure, documentation, prototypes, and active projects.">
+  <title>QCS — Trust &amp; Status Center</title>
+  <meta name="description" content="Service status, notices, and policies for QCS: how QCS keeps services reliable and handles data and security.">
   <link rel="canonical" href="https://info.qcloud.systems/">
   <meta property="og:type" content="website">
-  <meta property="og:site_name" content="QCS Information Hub">
-  <meta property="og:title" content="QCS — Information Hub">
-  <meta property="og:description" content="A public reference for QCS infrastructure, documentation, prototypes, and active projects.">
+  <meta property="og:site_name" content="QCS Trust &amp; Status Center">
+  <meta property="og:title" content="QCS — Trust &amp; Status Center">
+  <meta property="og:description" content="Service status, notices, and policies for QCS: how QCS keeps services reliable and handles data and security.">
   <meta property="og:url" content="https://info.qcloud.systems/">
   <meta property="og:image" content="https://info.qcloud.systems/og-image.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="QCS Information Hub">
+  <meta property="og:image:alt" content="QCS Trust &amp; Status Center">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:image" content="https://info.qcloud.systems/og-image.png">
-  <meta name="twitter:title" content="QCS — Information Hub">
-  <meta name="twitter:description" content="A public reference for QCS infrastructure, documentation, prototypes, and active projects.">
-  <link rel="alternate" type="application/rss+xml" title="QCS Engineering Notes" href="/notes/feed.xml">
+  <meta name="twitter:title" content="QCS — Trust &amp; Status Center">
+  <meta name="twitter:description" content="Service status, notices, and policies for QCS: how QCS keeps services reliable and handles data and security.">
+  <link rel="alternate" type="application/rss+xml" title="QCS Notices" href="/notices/feed.xml">
   <link rel="icon" type="image/x-icon" href="/favicon.ico">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/css/site.css">
@@ -33,19 +33,18 @@
     <div class="sidebar-header">
       <span class="brand-mark">Q</span>
       <p class="logo">QCS</p>
-      <p class="tagline">Information Hub</p>
+      <p class="tagline">Trust &amp; Status Center</p>
     </div>
 
     <nav class="sidebar-nav" aria-label="Primary">
       <a href="/#overview">Overview</a>
-      <a href="/#whats-new">What&#39;s New</a>
       <a href="/#status">Status</a>
-      <a href="/#prototypes">Prototypes</a>
+      <a href="/notices/">Notices</a>
+      <a href="/#whats-new">What&#39;s New</a>
       <a href="/#roadmap">Roadmap</a>
-      <a href="/#articles">Articles</a>
-      <a href="/#documentation">Documentation</a>
-      <a href="/notes/">Engineering Notes</a>
+      <a href="/#policies">Policies</a>
       <a href="/#faq">FAQ</a>
+      <a href="/how-its-built.html">How It&#39;s Built</a>
       <a href="/#contact">Contact</a>
       </nav>
   </aside>
@@ -53,34 +52,17 @@
   <main id="main" class="content">
     
 <section id="overview">
-  <h1>QCS Information Hub</h1>
+  <h1>QCS Trust &amp; Status Center</h1>
   <p>
-    A public reference for information, documentation, and active projects related to
-    QCS infrastructure and development.
+    One place to check the health of the services QCS depends on, read notices about
+    incidents and changes, and review how QCS handles data and security.
   </p>
   <p>
-    This site is a central reference for technical documentation, prototypes, and project
-    updates. Everything published here is intended to be public.
+    Everything published here is public, dated, and kept current.
   </p>
   <p class="actions">
-    <a href="/#documentation" class="btn btn-primary">Browse documentation</a>
-  </p>
-</section>
-
-<section id="whats-new">
-  <h1>What's New</h1>
-  <p class="release-meta">
-    Version <strong>3.1.0</strong> &middot; 2026-10-10
-  </p>
-  <ul>
-    <li><strong>What's New</strong> — the latest release highlights, right on the home page.</li>
-    <li><strong>Roadmap</strong> — what's in progress, what's planned, and what has shipped.</li>
-    <li><strong>Articles</strong> — the latest QCS posts from Medium.</li>
-    <li><strong>FAQ</strong> — answers to common questions about this hub and QCS services.</li>
-    <li><strong>Engineering Notes</strong> — practical how-tos, written in Markdown, starting with building a static site with Hugo. Includes search, topic tags with their own pages, a table of contents, copy buttons on code, linkable headings, related notes, updated dates, and an RSS feed.</li>
-    </ul>
-  <p class="actions">
-    <a href="https://github.com/qcloud-systems/info-web/blob/main/CHANGELOG.MD" class="btn btn-quiet" target="_blank" rel="noopener">Full changelog</a>
+    <a href="/#status" class="btn btn-primary">Check service status</a>
+    <a href="/notices/" class="btn btn-quiet">Read notices</a>
   </p>
 </section>
 
@@ -168,22 +150,40 @@
 
 </section>
 
-<section id="prototypes">
-  <h1>Prototypes &amp; Active Projects</h1>
-  <p>Documentation and information about QCS projects.</p>
-  <ul>
-    <li>Infrastructure documentation</li>
-    <li>API references</li>
-    <li>Architecture guides</li>
-    <li>Deployment procedures</li>
-  </ul>
+<section id="notices">
+  <h1>Latest Notices</h1>
+  <p>Incident reports, maintenance windows, security advisories, and service changes.</p>
   <div class="projects-grid">
-    <div class="project-card">
-      <h3>Rizal Center</h3>
-      <p>An interactive platform showcasing community and organizational information.</p>
-      <a href="https://rizalcenter.app" target="_blank" rel="noopener" class="btn-primary">Visit Prototype &rarr;</a>
-    </div>
-    </div>
+    
+<div class="project-card notice-card" data-slug="trust-and-status-center">
+  <h3><a href="/notices/trust-and-status-center.html">Introducing the QCS Trust &amp; Status Center</a></h3>
+  <p>info.qcloud.systems is now the QCS Trust &amp; Status Center, focused on service status, notices, and policies.</p>
+  <p class="notice-meta"><time datetime="2026-10-20">Updated Oct 20, 2026</time> <a href="/notices/categories/service-change.html" class="category-chip category-chip-sm">Service Change</a>
+  </p>
+  <a href="/notices/trust-and-status-center.html" class="btn-primary">Read Note &rarr;</a>
+</div>
+</div>
+  <p class="actions">
+    <a href="/notices/" class="btn btn-quiet">All notices</a>
+    <a href="/notices/feed.xml" class="btn btn-quiet">Subscribe with RSS</a>
+  </p>
+</section>
+
+<section id="whats-new">
+  <h1>What's New</h1>
+  <p class="release-meta">
+    Version <strong>3.2.0</strong> &middot; 2026-10-20
+  </p>
+  <ul>
+    <li><strong>Trust &amp; Status Center</strong> — the site now focuses on service status, notices, and policies.</li>
+    <li><strong>Notices</strong> — incident reports, maintenance windows, security advisories, and service changes, with categories, search, and an RSS feed.</li>
+    <li><strong>How It's Built</strong> — a page explaining how the Go generator behind this site works, from validation to the notices engine.</li>
+    <li><strong>Policies</strong> section grouping the Privacy Policy, Security Policy, Terms of Use, and Accessibility Statement.</li>
+    <li>Notice categories are checked at build time; an unknown category fails the build.</li>
+    </ul>
+  <p class="actions">
+    <a href="https://github.com/qcloud-systems/info-web/blob/main/CHANGELOG.MD" class="btn btn-quiet" target="_blank" rel="noopener">Full changelog</a>
+  </p>
 </section>
 
 <section id="roadmap">
@@ -200,105 +200,47 @@
     <div class="roadmap-col" data-stage="planned">
       <h3>Planned</h3>
       <div class="roadmap-item">
-        <h4>Search engine indexing</h4>
-        <p>Register this site with Google Search Console and Bing Webmaster Tools and submit its sitemap.</p>
-      </div>
-      <div class="roadmap-item">
-        <h4>Search-friendly note titles</h4>
-        <p>Retitle engineering notes to match how people search, such as &#34;How to Host a Hugo Site on Amazon S3&#34;.</p>
-      </div>
-      <div class="roadmap-item">
-        <h4>Engineering notes on Medium</h4>
-        <p>Cross-post engineering notes to Medium, credited to this site as the original source.</p>
-      </div>
-      <div class="roadmap-item">
         <h4>QCS service status</h4>
-        <p>A status section for QCS&#39;s own services, alongside the upstream providers already tracked.</p>
+        <p>Status for QCS&#39;s own services, alongside the upstream providers already tracked.</p>
       </div>
       <div class="roadmap-item">
-        <h4>Expanded technical documentation</h4>
-        <p>Architecture guides, API references, and deployment procedures for active projects.</p>
+        <h4>Search engine indexing</h4>
+        <p>Register this site with search engines and submit its sitemap.</p>
       </div>
       </div>
     <div class="roadmap-col" data-stage="shipped">
       <h3>Shipped</h3>
       <div class="roadmap-item">
-        <h4>Information hub rebuild</h4>
-        <p>This site, rebuilt as a Go static site with upstream status and policy pages.</p>
+        <h4>Trust &amp; Status Center</h4>
+        <p>This site, refocused on service status, notices, and policies, with its build documented.</p>
       </div>
       </div>
     </div>
 </section>
 
-<section id="articles">
-  <h1>Articles</h1>
-  <p>
-    Articles on QCS projects, infrastructure, and engineering will appear here as they are
-    published. In the meantime, follow along on Medium.
-  </p>
-  <p class="actions">
-    <a href="https://qcloudsystems.medium.com/" class="btn btn-quiet" target="_blank" rel="noopener">QCS on Medium</a>
-  </p>
-</section>
-
-<section id="documentation">
-  <h1>Documentation</h1>
-  <p>
-    Technical documentation, guides, and reference materials for QCS development and
-    infrastructure &mdash; architecture diagrams, setup instructions, and best practices.
-  </p>
-
-  <h3 class="subhead">Available Documents</h3>
+<section id="policies">
+  <h1>Policies</h1>
+  <p>How QCS handles personal data, security reports, accessibility, and use of this site.</p>
   <div class="projects-grid">
     <div class="project-card">
       <h3>Privacy Policy</h3>
-      <p>
-        Privacy policy and data handling practices for QCS services, including Garmin
-        Health API compliance and user rights.
-      </p>
+      <p>What data QCS collects, how it is protected, and your rights, including Garmin Health API data.</p>
       <a href="/privacy-policy.html" class="btn-primary">Read Policy &rarr;</a>
     </div>
     <div class="project-card">
-      <h3>Terms of Use</h3>
-      <p>
-        The terms that apply to using this information hub and its content.
-      </p>
-      <a href="/terms-of-use.html" class="btn-primary">Read Terms &rarr;</a>
-    </div>
-    <div class="project-card">
       <h3>Security Policy</h3>
-      <p>
-        How to report a vulnerability privately, and what to expect after you do.
-      </p>
+      <p>How to report a vulnerability privately, and what to expect after you do.</p>
       <a href="/security.html" class="btn-primary">Read Policy &rarr;</a>
     </div>
     <div class="project-card">
+      <h3>Terms of Use</h3>
+      <p>The terms that apply to using this site and its content.</p>
+      <a href="/terms-of-use.html" class="btn-primary">Read Terms &rarr;</a>
+    </div>
+    <div class="project-card">
       <h3>Accessibility</h3>
-      <p>
-        Our accessibility commitment, known limitations, and how to send feedback.
-      </p>
+      <p>Our accessibility commitment, known limitations, and how to send feedback.</p>
       <a href="/accessibility.html" class="btn-primary">Read Statement &rarr;</a>
-    </div>
-    <div class="project-card">
-      <h3>Changelog</h3>
-      <p>
-        Release history for this site, newest first, kept on GitHub.
-      </p>
-      <a href="https://github.com/qcloud-systems/info-web/blob/main/CHANGELOG.MD" target="_blank" rel="noopener" class="btn-primary">View Changelog &rarr;</a>
-    </div>
-    <div class="project-card">
-      <h3>Engineering Notes</h3>
-      <p>
-        Practical how-tos on infrastructure, tooling, and development, learned hands-on.
-      </p>
-      <a href="/notes/" class="btn-primary">Browse Engineering Notes &rarr;</a>
-    </div>
-    <div class="project-card">
-      <h3>Contributing Guidelines</h3>
-      <p>
-        How to report issues, suggest improvements, and submit updates to this hub.
-      </p>
-      <a href="/CONTRIBUTING.html" class="btn-primary">Read Guidelines &rarr;</a>
     </div>
   </div>
 </section>
@@ -306,6 +248,10 @@
 <section id="faq">
   <h1>Frequently Asked Questions</h1>
   <div class="faq">
+    <details>
+      <summary>Where are incidents and planned maintenance announced?</summary>
+      <p>On the <a href="/notices/">Notices</a> page, which also has an RSS feed you can subscribe to.</p>
+    </details>
     <details>
       <summary>Is the status section a status page for QCS services?</summary>
       <p>No. It reports only on the third-party platforms QCS projects depend on, read from each provider's own status feed.</p>
@@ -319,6 +265,10 @@
       <p>Please report it privately &mdash; not in a public issue. The <a href="/security.html">Security Policy</a> explains how.</p>
     </details>
     <details>
+      <summary>How is this site built?</summary>
+      <p>It is a small Go program that renders static pages at build time. <a href="/how-its-built.html">How It's Built</a> walks through every part of it.</p>
+    </details>
+    <details>
       <summary>How can I suggest a correction or improvement to this site?</summary>
       <p>Open an issue on <a href="https://github.com/qcloud-systems/info-web" target="_blank" rel="noopener">GitHub</a>, or see the <a href="/CONTRIBUTING.html">Contributing Guidelines</a>.</p>
     </details>
@@ -326,22 +276,23 @@
 </section>
 
 <section id="contact">
-  <h1>Contact &amp; Collaboration</h1>
+  <h1>Contact</h1>
   <p>
-    For questions or feedback about QCS projects, reach us on
-    <a href="https://qcloudsystems.medium.com/" target="_blank" rel="noopener">Medium</a> or
-    <a href="https://github.com/qcloud-systems" target="_blank" rel="noopener">GitHub</a>.
+    For questions about QCS services, these policies, or a notice, reach us on
+    <a href="https://github.com/qcloud-systems" target="_blank" rel="noopener">GitHub</a> or
+    <a href="https://qcloudsystems.medium.com/" target="_blank" rel="noopener">Medium</a>.
+    Security issues should be reported privately, as described in the
+    <a href="/security.html">Security Policy</a>.
   </p>
 
-  <h3 class="subhead">Contribute to This Hub</h3>
+  <h3 class="subhead">Improve This Site</h3>
   <p>
-    This information hub is maintained as an open project. We welcome contributions,
-    feedback, and improvements from the community.
+    The source for this site is public. Corrections and suggestions are welcome.
   </p>
   <ul>
-    <li><strong>Report Issues:</strong> Found an error or outdated information? Open an issue on our repository.</li>
-    <li><strong>Submit Updates:</strong> Have improvements to suggest? See our contributing guidelines for the submission process.</li>
-    <li><strong>Documentation:</strong> Help us improve technical documentation and guides.</li>
+    <li><strong>Report an error:</strong> open an issue on the <a href="https://github.com/qcloud-systems/info-web/issues" target="_blank" rel="noopener">repository</a>.</li>
+    <li><strong>Suggest a change:</strong> see the contributing guidelines for the pull request process.</li>
+    <li><strong>See how it works:</strong> <a href="/how-its-built.html">How It's Built</a> explains the code behind this site.</li>
   </ul>
   <p class="actions">
     <a href="/CONTRIBUTING.html" class="btn btn-quiet">View Contributing Guidelines</a>
@@ -360,7 +311,7 @@
         <a href="https://github.com/qcloud-systems" target="_blank" rel="noopener">GitHub</a>
       </div>
       <p class="footer-note">
-        &copy; 2026 QCS. Public information hub. Version 3.1.0. Last updated <time datetime="2026-10-20">October 20, 2026</time>.
+        &copy; 2026 QCS. Trust &amp; Status Center. Version 3.2.0. Last updated <time datetime="2026-10-20">October 20, 2026</time>.
       </p>
     </footer>
   </main>

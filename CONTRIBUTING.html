@@ -13,11 +13,11 @@
   <div class="document-container">
     <div class="doc-header">
       <h1>Contributing Guidelines</h1>
-      <p>QCS Documentation Hub</p>
+      <p>QCS Trust &amp; Status Center</p>
     </div>
 
     <p>
-      Thank you for your interest in contributing to the QCloud Systems documentation site.
+      Thank you for your interest in contributing to the QCS Trust &amp; Status Center.
       To maintain consistency and quality, please follow the guidelines below.
     </p>
 
@@ -25,8 +25,8 @@
 
     <h2>Branching Strategy</h2>
     <ul>
-      <li><code>main</code> — Production-ready documentation.</li>
-      <li><code>feature/&lt;name&gt;</code> — New documentation sections or layout enhancements.</li>
+      <li><code>main</code> — Production. Changes reach it only through pull requests.</li>
+      <li><code>feature/&lt;name&gt;</code> — New sections, notices, or layout enhancements.</li>
       <li><code>fix/&lt;name&gt;</code> — Bug fixes, typos, or minor improvements.</li>
     </ul>
 
@@ -43,12 +43,14 @@
 
     <hr>
 
-    <h2>Documentation Standards</h2>
+    <h2>Content Standards</h2>
     <ul>
       <li>Keep content concise, technical, and accurate.</li>
       <li>Use consistent heading levels (<code>h1</code>, <code>h2</code>, <code>h3</code>).</li>
       <li>Prefer lists and code blocks for clarity.</li>
       <li>Avoid unnecessary dependencies — keep the site static and lightweight.</li>
+      <li>Everything here is public: never include credentials, client documents, or internal details.</li>
+      <li>If a change alters how the site is built, update the <a href="/how-its-built.html">How It's Built</a> page in the same pull request.</li>
     </ul>
 
     <hr>
@@ -86,7 +88,7 @@
     </p>
 
     <div class="back-link">
-      <a href="/">← Back to Hub</a>
+      <a href="/">← Back to home</a>
     </div>
   </div>
 </body>
