@@ -1,17 +1,87 @@
-# QCS — Information Hub
+# QCS — Trust & Status Center
 
 ![Status](https://img.shields.io/badge/status-active-brightgreen)
 ![License](https://img.shields.io/badge/license-MIT-blue)
-![Version](https://img.shields.io/badge/version-3.1.0-purple)
+![Version](https://img.shields.io/badge/version-3.2.0-purple)
 
-Source for **info.qcloud.systems**, a public reference hub for QCS projects.
-A Go program renders static HTML into `./public`, which GitHub Actions
-publishes to managed static hosting.
+Source for **info.qcloud.systems**, the QCS Trust & Status Center: upstream
+service status, notices (incidents, maintenance, security advisories, service
+changes), the roadmap, and QCS's policies. A Go program renders static HTML
+into `./public`, which GitHub Actions publishes to managed static hosting.
+
+How the generator works is documented on the site itself, at
+`/how-its-built.html` (source: `templates/pages/how-its-built.html`).
 
 **Everything this site serves is public by design.** Agreements and executed
 client documents are not published from this repo.
 
 ---
+
+## What this site is
+
+The Trust & Status Center has one job: show that QCS is reliable and
+accountable. Its sections, in home-page order:
+
+| Section | Source | Purpose |
+|---|---|---|
+| Overview | `templates/pages/index.html` | What the site is, with links to status and notices |
+| Status | `statusServices()` in `content.go`, `static/js/status.js` | Live status of the upstream providers QCS depends on |
+| Notices | `notices/*.md` | Incident reports, maintenance, security advisories, service changes |
+| What's New | `CHANGELOG.MD` (latest entry) | Release highlights for this site |
+| Roadmap | `roadmap()` in `content.go` | In progress, planned, shipped |
+| Policies | `static/*.html`, `templates/pages/*.html` | Privacy, Security, Terms of Use, Accessibility |
+| FAQ | `faqs()` in `content.go` | Trust and status questions |
+| How It's Built | `templates/pages/how-its-built.html` | Public documentation of the Go generator |
+
+## Rules that keep it working
+
+These are easy to break by accident and expensive to get wrong. Read them
+before changing structure, URLs, or the engine.
+
+1. **Never change the site address or the policy URLs.** The Privacy Policy
+   URL (`/privacy-policy.html`) is the one registered for the Garmin Health API
+   integration, and `/.well-known/security.txt` points researchers at
+   `/security.html`. Renaming the subdomain or moving `privacy-policy.html`,
+   `security.html` or `terms-of-use.html` breaks those references. If a move is
+   ever unavoidable, keep a page at the old URL that redirects to the new one,
+   and update the Garmin registration first.
+2. **Keep How It's Built accurate.** That page documents the code in detail
+   and is meant to show the engine is understood. Any pull request that
+   changes behaviour must update `templates/pages/how-its-built.html` in the
+   same pull request. Check in particular:
+   - the dependency count and approximate size (*At a glance*)
+   - the list of build-failing rules (*Validation and safety*), against
+     `validate()` in `main.go`
+   - the secret patterns (*The notices engine*, step 1), against
+     `secretPatterns` in `notices.go`, including how many there are
+   - the notice categories, against `noticeCategories()` in `content.go`
+   - the tests table (*Testing and CI*), against `notices_test.go`
+   - the CI steps, against `.github/workflows/deploy.yml`
+3. **Everything here is public.** The repository and the site are public. Do
+   not add gated content, credentials, client documents, or internal details.
+   Notices are scanned for credential-like strings and the build fails on a
+   match, but the scanner cannot catch everything: read each notice before
+   merging.
+4. **No links to other QCS sites.** This site stands alone. Links to the QCS
+   GitHub organization and Medium profile are fine; links to other QCS
+   websites, or the names of other QCS repositories, are not.
+5. **Notices speak for QCS.** They are published in the organization's name.
+   `Name` in `author()` in `content.go` is intentionally empty; setting it adds
+   a personal byline and author box to every notice.
+6. **Deploy at least once a year.** `security.txt` gets a new `Expires` date
+   (one year out) on every build; without a deploy it eventually expires.
+
+### Before merging any change
+
+```bash
+make fmt vet     # formatting and static analysis
+make test        # unit tests, including validation of the real content
+make check       # content validation only
+make dev         # preview at http://localhost:8080 (restart after adding a notice)
+```
+
+CI runs `go vet`, `go test` and the build again on merge; a failure at any
+step leaves the live site unchanged.
 
 ## Quick start
 
@@ -51,29 +121,32 @@ The only dependency is Go. There is no Node toolchain.
 
 ```
 main.go                  serve | build | check, plus the content validator
-content.go               site metadata, nav, projects, roadmap, FAQ, pages
-notes.go                 notes/*.md -> /notes/ pages: front matter, tags, TOC,
-                         git dates, related notes, search data, secret scanner
-notes_test.go            unit tests (go test ./... / make test)
-notes/                   Markdown notes, one file per page
-extras.go                build-time extras: What's New, Medium feed,
-                         sitemap.xml, robots.txt, .well-known/security.txt
+content.go               site metadata, nav, roadmap, FAQ, notice categories, pages
+notices.go               the notices engine: notices/*.md -> /notices/ pages, with
+                         front matter, categories, TOC, git dates, related
+                         notices, search data, structured data, secret scanner
+notices_test.go          unit tests (go test ./... / make test)
+notices/                 Markdown notices, one file per notice
+extras.go                build-time extras: What's New, sitemap.xml, robots.txt,
+                         .well-known/security.txt, notices RSS feed
 CHANGELOG.MD             latest entry feeds What's New; full log linked on GitHub
 templates/
   base.html              shared chrome: sidebar, nav, meta tags, footer
-  pages/index.html       the hub page
+  pages/index.html       the home page
+  pages/how-its-built.html  documentation of this generator, published on the site
+  pages/notices.html     the Notices index (search + category filter)
+  pages/notice.html      a single notice (TOC, related notices)
+  pages/category.html    one page per category, e.g. /notices/categories/incident.html
   pages/security.html    vulnerability disclosure policy
   pages/accessibility.html  accessibility statement
   pages/404.html         served by the host for any missing path
-  pages/notes.html       the Engineering Notes index (search + tag filter)
-  pages/note.html        a single note (byline, TOC, related, author box)
-  pages/tag.html         one page per tag, e.g. /notes/tags/aws.html
   partials/              shared snippets, loaded with every page
-static/js/notes.js       copy buttons, heading links, search and filtering
-static/og-image.png      1200x630 link-preview image
 static/                  copied verbatim into ./public, "static/" stripped
   css/site.css           site styles
   css/doc.css            shared styles for the long documents
+  js/status.js           live upstream status, fetched in the browser
+  js/notices.js          copy buttons, heading links, search and filtering
+  og-image.png           1200x630 link-preview image
   privacy-policy.html    hand-written, kept as authored
   terms-of-use.html      hand-written, kept as authored
   CONTRIBUTING.html      hand-written, kept as authored
@@ -91,37 +164,41 @@ public/                  BUILD OUTPUT — wiped on every build, gitignored
 | What's New, changelog | Add a `## [x.y.z] — date` entry to `CHANGELOG.MD` |
 | Roadmap               | `roadmap()` in `content.go`                  |
 | FAQ                   | `faqs()` in `content.go`                     |
-| Prototypes            | `projects()` in `content.go`                 |
-| Articles              | Publish on Medium; the next deploy picks it up |
+| Notice categories     | `noticeCategories()` in `content.go`         |
 | Analytics             | Set `CloudflareAnalytics` in `content.go`    |
-| Engineering Notes     | Add `notes/your-topic.md` starting with `# Title` |
+| Notices               | Add `notices/short-name.md` starting with `# Title` |
 
-Notes are published on the next deploy. The file name becomes the URL, the
+### Publishing a notice
+
+Notices are published on the next deploy. The file name becomes the URL, the
 first `# ` heading the title, and the first paragraph the summary on the
-index. An optional front matter block adds metadata:
+index. Every notice needs at least one category from `noticeCategories()`
+(Incident, Maintenance, Security Advisory, Service Change); anything else
+fails the build.
 
 ```markdown
 ---
 description: One sentence for search results and link previews.
-tags: [Hugo, AWS, Static Sites]
+categories: [Incident]
 ---
-# How to Host a Hugo Site on Amazon S3
+# API errors on 12 November
+
+Between 14:05 and 14:40 UTC some requests failed. ...
 ```
 
 Published and updated dates come from git history automatically (the deploy
 checks out full history for this); `published:` / `updated:` override them.
-Each tag gets its own page, notes sharing tags are cross-linked, and every
-note is listed in `sitemap.xml` and the RSS feed at `/notes/feed.xml`.
+Each category gets its own page, notices sharing categories are cross-linked,
+and every notice is listed in `sitemap.xml` and the RSS feed at
+`/notices/feed.xml`.
 
-Set `Name` in `author()` in `content.go` to show a byline and author box on
-every note and to credit the author in search engines' structured data. Every note is scanned for things that look like credentials (cloud
-keys, tokens, private keys, `password = …`, passwords in URLs); a match fails
-the build so it never reaches the public site. Raw HTML in a note is escaped.
-In `make dev`, edits to a note show on refresh; a new note needs a restart.
+Every notice is scanned for things that look like credentials (cloud keys,
+tokens, private keys, `password = …`, passwords in URLs); a match fails the
+build so it never reaches the public site. Raw HTML in a notice is escaped.
+In `make dev`, edits to a notice show on refresh; a new notice needs a restart.
 
-Articles are fetched from Medium at build time, so a new post appears on the
-next deploy. If Medium is unreachable the build still succeeds and the
-section falls back to a link.
+Notices are published in QCS's name. To credit an individual instead, set
+`Name` in `author()` in `content.go`; that adds a byline and author box.
 
 `.well-known/security.txt` gets a fresh `Expires` date (one year out) on
 every build. Deploy at least once a year so it never expires.
@@ -299,6 +376,7 @@ Fork, branch, test locally with `make dev`, open a pull request.
 
 ## Version history
 
+- **3.2.0** — Trust & Status Center: notices engine, How It's Built page
 - **3.1.0** — Engineering Notes, roadmap, FAQ, articles, policy pages, SEO
 - **3.0.0** — Go static site generator; agreements removed from this site
 - **2.0.0** — Grey/blue redesign, GitHub Actions deployment

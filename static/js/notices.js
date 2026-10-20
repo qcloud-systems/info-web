@@ -1,12 +1,12 @@
-/* Engineering Notes enhancements.
+/* Notices enhancements.
  *
- * On a note:   "Copy" buttons on code blocks, and a link icon on each section
+ * On a notice: "Copy" buttons on code blocks, and a link icon on each section
  *              heading so a specific answer can be shared.
- * On the index: live search over every note (titles, summaries, tags, full
- *              text including code) and in-place filtering by tag.
+ * On the index: live search over every notice (titles, summaries, categories, full
+ *              text including code) and in-place filtering by category.
  *
- * All of it is progressive enhancement. Without JavaScript the notes still
- * read normally, and the tag chips are ordinary links to static tag pages.
+ * All of it is progressive enhancement. Without JavaScript the notices still
+ * read normally, and the category chips are ordinary links to static category pages.
  */
 (function () {
   'use strict';
@@ -15,7 +15,7 @@
 
   function addCopyButtons() {
     if (!navigator.clipboard || !window.isSecureContext) { return; }
-    var blocks = document.querySelectorAll('.note-body pre');
+    var blocks = document.querySelectorAll('.notice-body pre');
     for (var i = 0; i < blocks.length; i++) {
       (function (pre) {
         var btn = document.createElement('button');
@@ -46,7 +46,7 @@
   // ---- heading anchor links ----
 
   function addHeadingAnchors() {
-    var heads = document.querySelectorAll('.note-body h2[id], .note-body h3[id]');
+    var heads = document.querySelectorAll('.notice-body h2[id], .notice-body h3[id]');
     for (var i = 0; i < heads.length; i++) {
       var a = document.createElement('a');
       a.className = 'heading-anchor';
@@ -57,28 +57,28 @@
     }
   }
 
-  // ---- index search and tag filter ----
+  // ---- index search and category filter ----
 
   function setupIndex() {
-    var data = document.getElementById('notes-index');
-    var input = document.getElementById('notes-search');
-    var grid = document.getElementById('notes-grid');
+    var data = document.getElementById('notices-index');
+    var input = document.getElementById('notices-search');
+    var grid = document.getElementById('notices-grid');
     if (!data || !input || !grid) { return; }
 
-    var notes;
-    try { notes = JSON.parse(data.textContent); } catch (e) { return; }
+    var notices;
+    try { notices = JSON.parse(data.textContent); } catch (e) { return; }
 
     var bySlug = {};
-    for (var i = 0; i < notes.length; i++) {
-      var n = notes[i];
-      n.haystack = [n.title, n.summary, n.tags.join(' '), n.text].join(' ').toLowerCase();
+    for (var i = 0; i < notices.length; i++) {
+      var n = notices[i];
+      n.haystack = [n.title, n.summary, n.categories.join(' '), n.text].join(' ').toLowerCase();
       bySlug[n.slug] = n;
     }
 
-    var cards = grid.querySelectorAll('.note-card');
-    var chips = document.querySelectorAll('.tag-list .tag-chip[data-tag]');
-    var status = document.getElementById('notes-status');
-    var activeTag = '';
+    var cards = grid.querySelectorAll('.notice-card');
+    var chips = document.querySelectorAll('.category-list .category-chip[data-category]');
+    var status = document.getElementById('notices-status');
+    var activeCategory = '';
 
     function apply() {
       var words = input.value.toLowerCase().split(/\s+/).filter(Boolean);
@@ -86,7 +86,7 @@
       for (var i = 0; i < cards.length; i++) {
         var n = bySlug[cards[i].getAttribute('data-slug')];
         var ok = !!n;
-        if (ok && activeTag) { ok = n.tags.indexOf(activeTag) !== -1; }
+        if (ok && activeCategory) { ok = n.categories.indexOf(activeCategory) !== -1; }
         for (var w = 0; ok && w < words.length; w++) {
           ok = n.haystack.indexOf(words[w]) !== -1;
         }
@@ -94,12 +94,12 @@
         if (ok) { shown++; }
       }
       for (var c = 0; c < chips.length; c++) {
-        var on = chips[c].getAttribute('data-tag') === activeTag;
+        var on = chips[c].getAttribute('data-category') === activeCategory;
         if (on) { chips[c].setAttribute('aria-current', 'true'); } else { chips[c].removeAttribute('aria-current'); }
       }
       if (status) {
-        status.textContent = (words.length || activeTag)
-          ? shown + ' of ' + cards.length + ' notes' + (activeTag ? ' tagged ' + activeTag : '')
+        status.textContent = (words.length || activeCategory)
+          ? shown + ' of ' + cards.length + ' notices' + (activeCategory ? ' in ' + activeCategory : '')
           : '';
       }
     }
@@ -108,7 +108,7 @@
     for (var c = 0; c < chips.length; c++) {
       chips[c].addEventListener('click', function (ev) {
         ev.preventDefault();
-        activeTag = this.getAttribute('data-tag');
+        activeCategory = this.getAttribute('data-category');
         apply();
       });
     }

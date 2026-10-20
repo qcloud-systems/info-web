@@ -37,17 +37,17 @@ func TestSecretPatterns(t *testing.T) {
 	}
 }
 
-func TestNoteHeader(t *testing.T) {
-	src := "\n# My Note\n\nFirst **bold** line,\nwith `code`.\n\nSecond paragraph.\n"
-	title, summary := noteHeader([]byte(src))
-	if title != "My Note" {
-		t.Errorf("title = %q, want %q", title, "My Note")
+func TestNoticeHeader(t *testing.T) {
+	src := "\n# My Notice\n\nFirst **bold** line,\nwith `code`.\n\nSecond paragraph.\n"
+	title, summary := noticeHeader([]byte(src))
+	if title != "My Notice" {
+		t.Errorf("title = %q, want %q", title, "My Notice")
 	}
 	if want := "First bold line, with code."; summary != want {
 		t.Errorf("summary = %q, want %q", summary, want)
 	}
 
-	if title, _ := noteHeader([]byte("No heading here\n")); title != "" {
+	if title, _ := noticeHeader([]byte("No heading here\n")); title != "" {
 		t.Errorf("expected no title without a heading, got %q", title)
 	}
 }
@@ -55,9 +55,9 @@ func TestNoteHeader(t *testing.T) {
 func TestPageURL(t *testing.T) {
 	s := Site{BaseURL: "https://example.com"}
 	cases := map[string]string{
-		"index.html":       "https://example.com/",
-		"notes/index.html": "https://example.com/notes/",
-		"security.html":    "https://example.com/security.html",
+		"index.html":         "https://example.com/",
+		"notices/index.html": "https://example.com/notices/",
+		"security.html":      "https://example.com/security.html",
 	}
 	for in, want := range cases {
 		if got := pageURL(s, in); got != want {
@@ -81,7 +81,7 @@ func TestLatestRelease(t *testing.T) {
 }
 
 // TestContentValid runs the same checks as `go run . check` against the real
-// content, so a bad note or roadmap entry fails `go test` too.
+// content, so a bad notice or roadmap entry fails `go test` too.
 func TestContentValid(t *testing.T) {
 	if err := validate(); err != nil {
 		t.Fatal(err)
@@ -89,16 +89,16 @@ func TestContentValid(t *testing.T) {
 }
 
 func TestFrontMatter(t *testing.T) {
-	src := "---\ndescription: \"A note.\"\ntags: [Hugo, AWS, Static Sites]\nupdated: 2026-10-12\n---\n# Title\n"
+	src := "---\ndescription: \"A notice.\"\ncategories: [Incident, Maintenance, Security Advisory]\nupdated: 2026-10-12\n---\n# Title\n"
 	fm, body, err := splitFrontMatter([]byte(src))
 	if err != nil {
 		t.Fatal(err)
 	}
-	if fm.Description != "A note." {
+	if fm.Description != "A notice." {
 		t.Errorf("description = %q", fm.Description)
 	}
-	if len(fm.Tags) != 3 || fm.Tags[2] != (Tag{Name: "Static Sites", Slug: "static-sites"}) {
-		t.Errorf("tags = %+v", fm.Tags)
+	if len(fm.Categories) != 3 || fm.Categories[2] != (Category{Name: "Security Advisory", Slug: "security-advisory"}) {
+		t.Errorf("categories = %+v", fm.Categories)
 	}
 	if fm.Updated.Format("2006-01-02") != "2026-10-12" {
 		t.Errorf("updated = %v", fm.Updated)
@@ -109,15 +109,15 @@ func TestFrontMatter(t *testing.T) {
 
 	// No front matter: body passes through untouched.
 	if _, body, err := splitFrontMatter([]byte("# Plain\n")); err != nil || string(body) != "# Plain\n" {
-		t.Errorf("plain note: body %q, err %v", body, err)
+		t.Errorf("plain notice: body %q, err %v", body, err)
 	}
 
 	bad := map[string]string{
 		"typo key":     "---\ntitel: x\n---\n# T\n",
 		"bad date":     "---\nupdated: Oct 12\n---\n# T\n",
-		"unclosed":     "---\ntags: [a]\n# T\n",
-		"bad tag":      "---\ntags: [C++]\n---\n# T\n",
-		"repeated key": "---\ntags: [a]\ntags: [b]\n---\n# T\n",
+		"unclosed":     "---\ncategories: [Incident]\n# T\n",
+		"bad category": "---\ncategories: [C++]\n---\n# T\n",
+		"repeated key": "---\ncategories: [Incident]\ncategories: [Maintenance]\n---\n# T\n",
 	}
 	for name, src := range bad {
 		if _, _, err := splitFrontMatter([]byte(src)); err == nil {
@@ -128,7 +128,7 @@ func TestFrontMatter(t *testing.T) {
 
 func TestTableOfContents(t *testing.T) {
 	src := []byte("# Title\n\n## One\n\n### One `a`\n\n## Two\n")
-	doc := noteMD.Parser().Parse(text.NewReader(src))
+	doc := noticeMD.Parser().Parse(text.NewReader(src))
 	toc := tableOfContents(doc, src)
 	if len(toc) != 3 {
 		t.Fatalf("toc = %+v", toc)
@@ -138,40 +138,40 @@ func TestTableOfContents(t *testing.T) {
 	}
 
 	short := []byte("# Title\n\n## Only one\n")
-	if toc := tableOfContents(noteMD.Parser().Parse(text.NewReader(short)), short); toc != nil {
-		t.Errorf("short note should have no TOC, got %+v", toc)
+	if toc := tableOfContents(noticeMD.Parser().Parse(text.NewReader(short)), short); toc != nil {
+		t.Errorf("short notice should have no TOC, got %+v", toc)
 	}
 }
 
 func TestLinkRelated(t *testing.T) {
-	tag := func(names ...string) []Tag {
-		var ts []Tag
+	category := func(names ...string) []Category {
+		var ts []Category
 		for _, n := range names {
-			ts = append(ts, Tag{Name: n, Slug: tagSlug(n)})
+			ts = append(ts, Category{Name: n, Slug: categorySlug(n)})
 		}
 		return ts
 	}
-	notes := []Note{
-		{Slug: "a", Title: "A", Tags: tag("Go", "AWS")},
-		{Slug: "b", Title: "B", Tags: tag("AWS")},
-		{Slug: "c", Title: "C", Tags: tag("Go", "AWS")},
-		{Slug: "d", Title: "D", Tags: tag("Docker")},
+	notices := []Notice{
+		{Slug: "a", Title: "A", Categories: category("Incident", "Maintenance")},
+		{Slug: "b", Title: "B", Categories: category("Maintenance")},
+		{Slug: "c", Title: "C", Categories: category("Incident", "Maintenance")},
+		{Slug: "d", Title: "D", Categories: category("Service Change")},
 	}
-	linkRelated(notes)
-	if got := notes[0].Related; len(got) != 2 || got[0].Slug != "c" || got[1].Slug != "b" {
+	linkRelated(notices)
+	if got := notices[0].Related; len(got) != 2 || got[0].Slug != "c" || got[1].Slug != "b" {
 		t.Errorf("related to a = %+v, want c (2 shared) then b (1 shared)", got)
 	}
-	if got := notes[3].Related; len(got) != 0 {
-		t.Errorf("d shares no tags but got %+v", got)
+	if got := notices[3].Related; len(got) != 0 {
+		t.Errorf("d shares no categories but got %+v", got)
 	}
 }
 
-func TestNotesFeed(t *testing.T) {
+func TestNoticesFeed(t *testing.T) {
 	s := Site{Name: "QCS", BaseURL: "https://example.com"}
-	feed := string(notesFeed(s, []Note{{Slug: "x", Title: "X & Y", Description: "d"}}, time.Now()))
+	feed := string(noticesFeed(s, []Notice{{Slug: "x", Title: "X & Y", Description: "d"}}, time.Now()))
 	for _, want := range []string{
 		"<rss version=\"2.0\"",
-		"<link>https://example.com/notes/x.html</link>",
+		"<link>https://example.com/notices/x.html</link>",
 		"<title>X &amp; Y</title>",
 		"rel=\"self\"",
 	} {

@@ -6,6 +6,30 @@ The format is based on [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [3.2.0] — 2026-10-20
+### Added
+- **Trust & Status Center** — the site now focuses on service status, notices,
+  and policies.
+- **Notices** — incident reports, maintenance windows, security advisories, and
+  service changes, with categories, search, and an RSS feed.
+- **How It's Built** — a page explaining how the Go generator behind this site
+  works, from validation to the notices engine.
+- **Policies** section grouping the Privacy Policy, Security Policy, Terms of
+  Use, and Accessibility Statement.
+- Notice categories are checked at build time; an unknown category fails the
+  build.
+
+### Changed
+- The Markdown engine that powered Engineering Notes now powers Notices.
+- Home page, navigation, roadmap, and FAQ reorganized around status and trust.
+
+### Removed
+- Engineering Notes, the Articles section, Prototypes, and the general
+  Documentation section.
+- Links and references to other QCS sites.
+
+---
+
 ## [3.1.0] — 2026-10-10
 ### Added
 - **What's New** — the latest release highlights, right on the home page.
