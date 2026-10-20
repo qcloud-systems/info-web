@@ -17,7 +17,7 @@ The format is based on [Semantic Versioning](https://semver.org/).
   logs only), what visitors' browsers fetch from other services, and visitor
   rights. Health-data and wearable-integration terms belonged to a separate
   project and were removed.
-- Brand marketing services are announced as now available on the home page.
+- Roadmap: Brand marketing services added as planned.
 
 ### Removed
 - The optional web analytics setting, which was never enabled.

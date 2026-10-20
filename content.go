@@ -194,6 +194,11 @@ func site() Site {
 func roadmap() []RoadmapItem {
 	return []RoadmapItem{
 		{
+			Title: "Brand marketing services",
+			Desc:  "A future package for businesses establishing their brand online: a domain registered in the business's own name and a branded landing page.",
+			Stage: stagePlanned,
+		},
+		{
 			Title: "QCS service status",
 			Desc:  "Status for QCS's own services, alongside the upstream providers already tracked.",
 			Stage: stagePlanned,
