@@ -73,6 +73,36 @@ Use clear, descriptive commit messages:
 
 ---
 
+## Writing a Notice
+
+Notices are incident reports, maintenance windows, security advisories and service
+changes, published from Markdown files in `notices/`. See README.md for the file format.
+
+### Review checklist
+
+Every notice is checked for:
+
+- [ ] **Accuracy.** Dates, times and the affected services are correct, and the
+  timeline matches what actually happened.
+- [ ] **Safety.** No hostnames, IP addresses, account IDs, internal tool names or
+  other internal details, and nothing that would help an attacker. The build blocks
+  common secret formats, but it cannot catch everything.
+- [ ] **Category.** One of the approved categories: Incident, Maintenance, Security
+  Advisory or Service Change.
+- [ ] **Clarity.** A one-sentence `description` in the front matter, and a title that
+  says what happened, not just "Update".
+
+### Writing style
+
+- Lead with what happened and who was affected, then explain.
+- Give times with a time zone, for example "14:05–14:40 UTC".
+- Use plain language a non-engineer can follow.
+- One notice per event. When the situation changes, update the existing notice
+  (its updated date changes automatically) rather than posting a new one.
+- Say what is being done to prevent it happening again, once that is known.
+
+---
+
 ## Pull Request Process
 
 1. Fork the repository.
