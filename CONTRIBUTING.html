@@ -55,6 +55,31 @@
 
     <hr>
 
+    <h2>Writing a Notice</h2>
+    <p>
+      Notices are incident reports, maintenance windows, security advisories and service changes,
+      published on the <a href="/notices/">Notices</a> page.
+    </p>
+
+    <h3>Review checklist</h3>
+    <ul>
+      <li><strong>Accuracy.</strong> Dates, times and the affected services are correct, and the timeline matches what actually happened.</li>
+      <li><strong>Safety.</strong> No hostnames, IP addresses, account IDs, internal tool names or other internal details, and nothing that would help an attacker. The build blocks common secret formats, but it cannot catch everything.</li>
+      <li><strong>Category.</strong> One of the approved categories: Incident, Maintenance, Security Advisory or Service Change.</li>
+      <li><strong>Clarity.</strong> A one-sentence description, and a title that says what happened, not just "Update".</li>
+    </ul>
+
+    <h3>Writing style</h3>
+    <ul>
+      <li>Lead with what happened and who was affected, then explain.</li>
+      <li>Give times with a time zone, for example "14:05–14:40 UTC".</li>
+      <li>Use plain language a non-engineer can follow.</li>
+      <li>One notice per event. When the situation changes, update the existing notice rather than posting a new one.</li>
+      <li>Say what is being done to prevent it happening again, once that is known.</li>
+    </ul>
+
+    <hr>
+
     <h2>Pull Request Process</h2>
     <ol>
       <li>Fork the repository.</li>
